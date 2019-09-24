@@ -1,15 +1,18 @@
 //Drake Young
+#include "fonts.h"
 
 
-void drawDYCredits(int x, int y, GLuint texid)
+void drawDY_Credits(int x, int y)
 {
-    //show vv picture
-    static foat angle = 0.0f;
-    float fx = float x;
-    floafy = (float)y;
-    double g = 0.0;
-    g += sin(angle) * 10.0f;
-    fx += g;
-    fy += g + 2.0;
-    angle += 0.5;
-    glColor3ub(250
+    Rect D;
+    
+    unsigned int c = 0x00ffff44;
+
+    D.bot = x;   
+    D.left = y;
+    D.center = 200;
+
+    ggprint8b(&D, 0, c, "Drake Young");
+}
+
+
