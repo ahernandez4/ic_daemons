@@ -47,7 +47,7 @@ const float gravity = -0.2f;
 //funcion prototypes
 int deltaTime();
 //
-extern void tjcredits(int x, int y);
+extern void tjcredits(int x, int y);//,GLuint texid);
 class Image {
     public:
         int width, height;
@@ -96,7 +96,7 @@ class Image {
 Image img[3] = {
 "images/shift.gif",
 "images/castlemap.gif",
-"images/tj.jpeg" };
+"images/tj.jpg" };
 
 struct PlayerOne{
     int x;
