@@ -604,6 +604,7 @@ void render(void)
     ggprint8b(&r, 16, c, "frame: %i", g.walkFrame);
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
     if(g.displayCredits) {
+        drawDY_Credits(100, 250);
     	tjcredits(250,80);
     	showAH(400,80);
     	displayCD(250, 120);
