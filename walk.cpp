@@ -19,6 +19,9 @@
 #include "fonts.h"
 #include <iostream>
 
+//extern
+extern void showAH(int x, int y);
+//
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -600,7 +603,8 @@ void render(void)
     ggprint8b(&r, 16, c, "frame: %i", g.walkFrame);
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
     if(g.displayCredits) {
-    tjcredits(250,80);
+    	tjcredits(250,80);
+    	showAH(400,80);
     }
 
 }
