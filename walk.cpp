@@ -7,7 +7,6 @@
 //images courtesy: http://games.ucla.edu/resource/walk-cycles/
 //
 //NOTES: WIP
-// using map that is 2400 by 2400 with 800x600 viewport
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -126,6 +125,7 @@ class Timers {
 
 class Global {
     public:
+	int displayCredits;
         int done;
         int xres, yres;
         int walk;
@@ -439,6 +439,9 @@ int checkKeys(XEvent *e)
         case XK_Escape:
             return 1;
             break;
+	case XK_c:
+	    g.displayCredits ^=1;
+	    break;
     }
     return 0;
 }
