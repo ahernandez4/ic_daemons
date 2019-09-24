@@ -8,9 +8,9 @@ void drawDY_Credits(int x, int y)
     
     unsigned int c = 0x00ffff44;
 
-    D.bot = x;   
-    D.left = y;
-    D.center = 200;
+    D.bot = y;   
+    D.left = x;
+    D.center = 0;
 
     ggprint8b(&D, 0, c, "Drake Young");
 }
