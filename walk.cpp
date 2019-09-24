@@ -20,6 +20,7 @@
 #include <iostream>
 
 //extern
+extern void drawDY_Credits(int x, int y);
 extern void showAH(int x, int y);
 extern void displayCD(int x, int y);
 
