@@ -42,7 +42,7 @@ const float gravity = -0.2f;
 //funcion prototypes
 int deltaTime();
 //
-
+extern void tjcredits(int x, int y);
 class Image {
     public:
         int width, height;
@@ -88,9 +88,10 @@ class Image {
         }
 };
 
-Image img[2] = {
+Image img[3] = {
 "images/shift.gif",
-"images/castlemap.gif" };
+"images/castlemap.gif",
+"images/tj.jpeg" };
 
 struct PlayerOne{
     int x;
@@ -441,6 +442,7 @@ int checkKeys(XEvent *e)
             break;
 	case XK_c:
 	    g.displayCredits ^=1;
+        //extern void tjcredits(int x, int y);
 	    break;
     }
     return 0;
@@ -597,6 +599,10 @@ void render(void)
     ggprint8b(&r, 16, c, "left arrow  <- walk left");
     ggprint8b(&r, 16, c, "frame: %i", g.walkFrame);
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
+    if(g.displayCredits) {
+    tjcredits(250,80);
+    }
+
 }
 
 int deltaTime()
