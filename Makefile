@@ -3,8 +3,10 @@ LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 
 all: walk 
 
-walk: walk.cpp drakeY.cpp
-	g++ $(CFLAGS) walk.cpp drakeY.cpp libggfonts.a -Wall -Wextra $(LFLAGS) -o walk drakeY
+
+walk: walk.cpp
+	g++ $(CFLAGS) walk.cpp codyD.cpp tawficJ.cpp alejandroH.cpp drakeY.cpp libggfonts.a -Wall -Wextra $(LFLAGS) -owalk
+
 
 clean:
 	rm -f drakeY
