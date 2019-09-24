@@ -19,9 +19,14 @@
 #include "fonts.h"
 #include <iostream>
 
+<<<<<<< HEAD
 //extern
 extern void showAH(int x, int y);
 //
+=======
+extern void displayCD(int x, int y);
+
+>>>>>>> 246aa1939ecf28012e926be497c8bab2819e35d7
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -605,7 +610,9 @@ void render(void)
     if(g.displayCredits) {
     	tjcredits(250,80);
     	showAH(400,80);
+    	displayCD(250, 120);
     }
+
 
 }
 
