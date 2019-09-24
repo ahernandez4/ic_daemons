@@ -1,0 +1,4 @@
+////////software to make tiles and maps///////
+https://www.mapeditor.org/
+/////tutorial on making tiles///////////
+https://www.gamefromscratch.com/post/2015/10/14/Tiled-Map-Editor-Tutorial-Series.aspx
