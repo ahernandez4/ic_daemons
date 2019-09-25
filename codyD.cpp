@@ -1,4 +1,15 @@
-//Cody Davis
+/* Cody Davis
+ * CMPS 3350
+ * 
+ * function: displayCD(int x, int y) 
+ * description: meant to display name using ggprint8b
+ *      x and y input is given to center the box in
+ *      the desired location. see ggprint8b for more
+ *      information on proper use.
+ *
+ *
+*/
+
 #include "fonts.h"
 
 void displayCD(int x, int y)
@@ -8,6 +19,7 @@ void displayCD(int x, int y)
     r.bot = y;
     r.left = x;
     r.center = 0;
-    
-    ggprint8b(&r, advance, 0x00ffff44, "Cody Davis");
+    unsigned int color = 0x000000ff 
+
+    ggprint8b(&r, advance, color, "Cody Davis");
 }
