@@ -19,7 +19,7 @@ void displayCD(int x, int y)
     r.bot = y;
     r.left = x;
     r.center = 0;
-    unsigned int color = 0x000000ff 
+    unsigned int color = 0x000000ff; 
 
     ggprint8b(&r, advance, color, "Cody Davis");
 }
