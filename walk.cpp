@@ -604,11 +604,13 @@ void render(void)
     ggprint8b(&r, 16, c, "left arrow  <- walk left");
     ggprint8b(&r, 16, c, "frame: %i", g.walkFrame);
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
+    
+    //this is for drawing names on screen for credits on "c" button press
     if(g.displayCredits) {
-        drawDY_Credits(350, 350);
-    	tjcredits(350,366);
-    	showAH(350,378);
-    	displayCD(350, 394);
+        drawDY_Credits(350, 300);
+    	tjcredits(350,316);
+    	showAH(350,332);
+    	displayCD(350, 348);
     }
 
 
