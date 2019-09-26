@@ -1,6 +1,11 @@
-//Alejandro Hernandez
+/* Alejandro Hernandez
+ * CMPS 3350
+ * function displayAlejandroH(int x, int y)
+ * description: displays name using ggprint8b at x,y location
+ *
+ */
 #include "fonts.h"
-void showAH(int x, int y)
+void displayAlejandroH(int x, int y)
 {
 	Rect r;
 	r.bot = y;

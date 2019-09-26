@@ -21,7 +21,7 @@
 
 //extern
 extern void drawDY_Credits(int x, int y);
-extern void showAH(int x, int y);
+extern void displayAlejandroH(int x, int y);
 extern void displayCD(int x, int y);
 
 //defined types
@@ -299,7 +299,6 @@ unsigned char *buildAlphaData(Image *img) //
 
 void initOpengl(void)
 {
-    std::cout << "inside initOpengl" << std::endl;
     //OpenGL initialization
     //glViewport(800, 600, 800*2, 600*2);
     glViewport(0, 0, 800, 600);
@@ -346,21 +345,18 @@ void initOpengl(void)
     //unlink("./images/walk.ppm");
     //-------------------------------------------------------------------------
     //background
-    std::cout << "starting background texture" << std::endl;
     glBindTexture(GL_TEXTURE_2D, g.backgroundTexture);
     //
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     w = img[1].width;
     h = img[1].height;
-    std::cout << "starting glTexteimgage2D" << std::endl;
     //maybe we dont need to build alpha
     //unsigned char *bgData = buildAlphaData(&img[1]); 
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, 
                 GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
     //free(bgData);//no need if we did not build alpha channel
     //-------------------------------------------------------------------------
-    std::cout << "exiting initOpengl" << std::endl;
 }
 
 void init() {
@@ -538,7 +534,7 @@ void render(void)
 {
     Rect r;
     //Clear the screen
-    glClearColor(0.1, 0.1, 0.1, 1.0);
+    glColor3f(1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     float cx = g.xres/2.0;
     float cy = g.yres/2.0;
@@ -609,7 +605,7 @@ void render(void)
     if(g.displayCredits) {
         drawDY_Credits(350, 300);
     	tjcredits(350,316);
-    	showAH(350,332);
+    	displayAlejandroH(350,332);
     	displayCD(350, 348);
     }
 
