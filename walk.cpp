@@ -21,7 +21,7 @@
 
 //extern
 extern void drawDY_Credits(int x, int y);
-extern void displayAlejandroH(int x, int y);
+extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 
 //defined types
@@ -93,10 +93,11 @@ class Image {
         }
 };
 
-Image img[3] = {
+Image img[4] = {
 "images/shift.gif",
 "images/castlemap.gif",
-"images/tj.jpg" };
+"images/tj.jpg",
+"images/fakeMario.png" };
 
 struct PlayerOne{
     int x;
@@ -141,6 +142,7 @@ class Global {
         GLuint walkTexture;
         //added
         GLuint backgroundTexture;
+        GLuint fakeMarioTexture;
         Vec box[20];
         Global() {
             movebyte = 0;
@@ -328,6 +330,7 @@ void initOpengl(void)
     //create opengl texture elements
     glGenTextures(1, &g.walkTexture);
     glGenTextures(1, &g.backgroundTexture);
+    glGenTextures(1, &g.fakeMarioTexture);
     //-------------------------------------------------------------------------
     //silhouette
     //this is similar to a sprite graphic
@@ -356,7 +359,20 @@ void initOpengl(void)
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, 
                 GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
     //free(bgData);//no need if we did not build alpha channel
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
+
+    glBindTexture(GL_TEXTURE_2D, g.fakeMarioTexture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    w = img[3].width;
+    h = img[3].height;
+    //
+    //must build a new set of data...
+    unsigned char *marioData = buildAlphaData(&img[3]);	
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, marioData);
+    //free(walkData);
+    free(marioData);
 }
 
 void init() {
@@ -605,7 +621,7 @@ void render(void)
     if(g.displayCredits) {
         drawDY_Credits(350, 300);
     	tjcredits(350,316);
-    	displayAlejandroH(350,332);
+    	displayAlejandroH(350,332,g.fakeMarioTexture);
     	displayCD(350, 348);
     }
 
