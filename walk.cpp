@@ -21,7 +21,7 @@
 
 //extern
 extern void drawDY_Credits(int x, int y);
-extern void showAH(int x, int y);
+extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 
 //defined types
@@ -93,10 +93,11 @@ class Image {
         }
 };
 
-Image img[3] = {
+Image img[4] = {
 "images/shift.gif",
 "images/castlemap.gif",
-"images/tj.jpg" };
+"images/tj.jpg",
+"images/fakeMario.png" };
 
 struct PlayerOne{
     int x;
@@ -141,6 +142,7 @@ class Global {
         GLuint walkTexture;
         //added
         GLuint backgroundTexture;
+        GLuint fakeMarioTexture;
         Vec box[20];
         Global() {
             movebyte = 0;
@@ -299,7 +301,6 @@ unsigned char *buildAlphaData(Image *img) //
 
 void initOpengl(void)
 {
-    std::cout << "inside initOpengl" << std::endl;
     //OpenGL initialization
     //glViewport(800, 600, 800*2, 600*2);
     glViewport(0, 0, 800, 600);
@@ -329,6 +330,7 @@ void initOpengl(void)
     //create opengl texture elements
     glGenTextures(1, &g.walkTexture);
     glGenTextures(1, &g.backgroundTexture);
+    glGenTextures(1, &g.fakeMarioTexture);
     //-------------------------------------------------------------------------
     //silhouette
     //this is similar to a sprite graphic
@@ -346,21 +348,31 @@ void initOpengl(void)
     //unlink("./images/walk.ppm");
     //-------------------------------------------------------------------------
     //background
-    std::cout << "starting background texture" << std::endl;
     glBindTexture(GL_TEXTURE_2D, g.backgroundTexture);
     //
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     w = img[1].width;
     h = img[1].height;
-    std::cout << "starting glTexteimgage2D" << std::endl;
     //maybe we dont need to build alpha
     //unsigned char *bgData = buildAlphaData(&img[1]); 
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, 
                 GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
     //free(bgData);//no need if we did not build alpha channel
-    //-------------------------------------------------------------------------
-    std::cout << "exiting initOpengl" << std::endl;
+    //----------------------------------------------------------------------
+
+    glBindTexture(GL_TEXTURE_2D, g.fakeMarioTexture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    w = img[3].width;
+    h = img[3].height;
+    //
+    //must build a new set of data...
+    unsigned char *marioData = buildAlphaData(&img[3]);	
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, marioData);
+    //free(walkData);
+    free(marioData);
 }
 
 void init() {
@@ -538,7 +550,7 @@ void render(void)
 {
     Rect r;
     //Clear the screen
-    glClearColor(0.1, 0.1, 0.1, 1.0);
+    glColor3f(1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     float cx = g.xres/2.0;
     float cy = g.yres/2.0;
@@ -597,18 +609,19 @@ void render(void)
     r.bot = g.yres - 20;
     r.left = 10;
     r.center = 0;
-    ggprint8b(&r, 16, c, "W   Walk cycle");
-    ggprint8b(&r, 16, c, "+   faster");
-    ggprint8b(&r, 16, c, "-   slower");
-    ggprint8b(&r, 16, c, "right arrow -> walk right");
-    ggprint8b(&r, 16, c, "left arrow  <- walk left");
-    ggprint8b(&r, 16, c, "frame: %i", g.walkFrame);
+    ggprint8b(&r, 16, c, "w   move up");
+    ggprint8b(&r, 16, c, "s   walk down");
+    ggprint8b(&r, 16, c, "d   walk right");
+    ggprint8b(&r, 16, c, "a   walk left");
+    ggprint8b(&r, 16, c, "c   display credits");
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
+    
+    //this is for drawing names on screen for credits on "c" button press
     if(g.displayCredits) {
-        drawDY_Credits(100, 250);
-    	tjcredits(250,80);
-    	showAH(400,80);
-    	displayCD(250, 120);
+        drawDY_Credits(350, 300);
+    	tjcredits(350,316);
+    	displayAlejandroH(350,332,g.fakeMarioTexture);
+    	displayCD(350, 348);
     }
 
 

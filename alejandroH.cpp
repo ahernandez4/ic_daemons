@@ -1,11 +1,35 @@
-//Alejandro Hernandez
+/* Alejandro Hernandez
+ * CMPS 3350
+ * function displayAlejandroH(int x, int y)
+ * description: displays name using ggprint8b at x,y location
+ *
+ */
+#include <GL/glx.h>
 #include "fonts.h"
-void showAH(int x, int y)
+void displayAlejandroH(int x, int y, GLuint atexture)
 {
-	Rect r;
+	int myx = x + 100;
+    int myy = y + 10;
+    Rect r;
 	r.bot = y;
-	r.left = x;
+	r.left = myx;
 	r.center = 0;
-	ggprint8b(&r, 16, 0x00ffff44,"Alejandro Hernandez");	
-	//ggprint8b(&r, 16, 0x00ff0000,"Alejandro Hernandez");	
+	ggprint8b(&r, 32, 0x00ffff44,"Alejandro Hernandez");	
+    glColor3f(1.0,1.0,1.0);
+    glEnable(GL_ALPHA_TEST);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, atexture);
+    glBegin(GL_QUADS);
+    //0,1|0,0|1,0|1,1
+    glTexCoord2f(0.0f,      1.0f);
+    glVertex2i(myx, myy);
+    glTexCoord2f(0.0f,      0.0f);    
+    glVertex2i(myx, myy+64);
+    glTexCoord2f(1.0f,      0.0f);    
+    glVertex2i(myx+64, myy+64);
+    glTexCoord2f(1.0f,      1.0f);    
+    glVertex2i(myx+64, myy);
+    glEnd();
+    glPopMatrix();
+
 }
