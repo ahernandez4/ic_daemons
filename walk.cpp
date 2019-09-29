@@ -409,13 +409,19 @@ void checkMouse(XEvent *e)
 int checkKeys(XEvent *e)
 {
     //keyboard input?
-    g.movebyte = 0;
+    //g.movebyte = 0;
     timers.recordTime(&timers.time2);
     static int shift=0;
-    if (e->type != KeyRelease && e->type != KeyPress)
+    if (e->type != KeyRelease && e->type != KeyPress) {
+        g.movebyte = 0;
         return 0;
+    }
+    if(e->type == KeyPress){
+        //unsigned int some_e = (int)e->xkey.keycode; troubleshoot
+    }
     int key = (XLookupKeysym(&e->xkey, 0) & 0x0000ffff);
     if (e->type == KeyRelease) {
+        g.movebyte = 0;
         if (key == XK_Shift_L || key == XK_Shift_R)
             shift = 0;
         return 0;
@@ -543,7 +549,7 @@ void physics(void)
     }
     player.x += incx;
     player.y += incy;
-    g.movebyte = 0;
+    //g.movebyte = 0;
 }
 
 void render(void)
@@ -609,12 +615,11 @@ void render(void)
     r.bot = g.yres - 20;
     r.left = 10;
     r.center = 0;
-    ggprint8b(&r, 16, c, "W   Walk cycle");
-    ggprint8b(&r, 16, c, "+   faster");
-    ggprint8b(&r, 16, c, "-   slower");
-    ggprint8b(&r, 16, c, "right arrow -> walk right");
-    ggprint8b(&r, 16, c, "left arrow  <- walk left");
-    ggprint8b(&r, 16, c, "frame: %i", g.walkFrame);
+    ggprint8b(&r, 16, c, "w    walk up");
+    ggprint8b(&r, 16, c, "a    walk left");
+    ggprint8b(&r, 16, c, "s    walk down");
+    ggprint8b(&r, 16, c, "d    walk right");
+    ggprint8b(&r, 16, c, "c    show credits");
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
     
     //this is for drawing names on screen for credits on "c" button press
