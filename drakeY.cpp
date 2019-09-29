@@ -4,8 +4,8 @@
 //3350
 //date:    fall 2019
 //
-//Location for My code added to segFault 
-//group project
+//Description: Location for My code 
+//added to segFault group project
 //
 //NOTES: WIP
 
