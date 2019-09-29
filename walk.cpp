@@ -609,12 +609,11 @@ void render(void)
     r.bot = g.yres - 20;
     r.left = 10;
     r.center = 0;
-    ggprint8b(&r, 16, c, "W   Walk cycle");
-    ggprint8b(&r, 16, c, "+   faster");
-    ggprint8b(&r, 16, c, "-   slower");
-    ggprint8b(&r, 16, c, "right arrow -> walk right");
-    ggprint8b(&r, 16, c, "left arrow  <- walk left");
-    ggprint8b(&r, 16, c, "frame: %i", g.walkFrame);
+    ggprint8b(&r, 16, c, "w   move up");
+    ggprint8b(&r, 16, c, "s   walk down");
+    ggprint8b(&r, 16, c, "d   walk right");
+    ggprint8b(&r, 16, c, "a   walk left");
+    ggprint8b(&r, 16, c, "c   display credits");
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
     
     //this is for drawing names on screen for credits on "c" button press
