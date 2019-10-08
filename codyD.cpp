@@ -11,6 +11,10 @@
 */
 
 #include "fonts.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+extern int odinGetTime();
 
 void displayCD(int x, int y)
 {
@@ -20,6 +24,25 @@ void displayCD(int x, int y)
     r.left = x;
     r.center = 0;
     unsigned int color = 0x00ffff44; 
-
+    
     ggprint8b(&r, advance, color, "Cody Davis");
 }
+/*void timePlayD(int x = 0, int y = 0)
+{
+
+    Rect r;
+    int advance = 0;
+    r.bot = y;
+    r.left = x;
+    r.center = 0;
+    int time = 0;
+    unsigned int color = 0x00ffff44;
+
+    time = odinGetTime();
+    std::string tmp;
+    tmp = time;
+    std::cout << tmp;
+    //ggprint8b(&r, advance, color, (char)tmp);
+    
+    
+}*/

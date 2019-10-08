@@ -20,6 +20,7 @@
 //The program will contact a web server with host and page, and receive
 //back the page requested or other information.
 //
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -50,7 +51,7 @@
 //added int
 const int MAX_READ_ERRORS = 100;
 
-int main(int argc, char *argv[]){
+int odinGetTime(){
 
 	BIO *ssl_setup_bio(void);
 	void show_cert_data(SSL *ssl, BIO *outbio, const char *hostname);
@@ -67,17 +68,17 @@ int main(int argc, char *argv[]){
     char req[1000];
     int req_len;
 	//char hostname[256] = "www.google.com";
-    char hostname[256] = "https://www.cs.csub.edu/~ahernandez2/3350/game/highscores.php";
-	char pagename[256] = "";
+    char hostname[256] = "odin.cs.csub.edu";
+	char pagename[256] = "/~ahernandez2/3350/game/highscores.php";
     int port = PORT;
     int bytes, nreads, nerrs;
     char buf[256];
 	int ret;
 	//Get any command-line arguments.
-	if (argc > 1)
-		strcpy(hostname, argv[1]);
-	if (argc > 2)
-		strcpy(pagename, argv[2]);
+	//if (argc > 1)
+	//	strcpy(hostname, argv[1]);
+	//if (argc > 2)
+	//	strcpy(pagename, argv[2]);
 
 	//Setup the SSL BIO
 	outbio = ssl_setup_bio();
@@ -98,8 +99,8 @@ int main(int argc, char *argv[]){
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = *(long*)(host->h_addr);
     if (connect(sd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-        BIO_printf(outbio, "%s: Cannot connect to host %s [%s] on port %d.\n", 
-        argv[0], hostname, inet_ntoa(addr.sin_addr), port);
+        //BIO_printf(outbio, "%s: Cannot connect to host %s [%s] on port %d.\n", 
+        //argv[0], hostname, inet_ntoa(addr.sin_addr), port);
     }
 	//Connect using the SSL certificate.
     ssl = SSL_new(ctx); 
@@ -107,7 +108,7 @@ int main(int argc, char *argv[]){
     SSL_connect(ssl);
 	//
 	//Show the certificate data
-	show_cert_data(ssl, outbio, hostname);	
+//	show_cert_data(ssl, outbio, hostname);	
 	//A non-blocking socket will make the ssl_read() not block.
 	set_to_non_blocking(sd);
 	//Send the http request to the host server.
@@ -135,8 +136,25 @@ int main(int argc, char *argv[]){
 	nreads = 1;
 	//Allow for some read errors to happen, while getting the complete data.
 	nerrs = 0;
+    char timeP[2];
+    int timeNum = 0;
 	while (bytes >= 0 && nerrs < MAX_READ_ERRORS) {
-        write(STDOUT_FILENO, buf, bytes);
+//        write(STDOUT_FILENO, buf, bytes);
+       // std::cout << "start of buff";
+      //  std::cout << buf << " line 145";
+     //   std::cout << "end of buff";
+        for(int i = 0; i < 255; i++) {
+            if(buf[i] == '*') {
+                timeP[0] = buf[i + 1];
+                timeP[1] = buf[i + 2];
+                break;
+            }
+        }
+        
+        //timeNum = (int)timeP;
+        //timeNum = atoi(timeP);
+        sscanf(timeP, "%d", &timeNum);
+
         memset(buf, '\0', sizeof(buf));
 		++nreads;
         bytes = SSL_read(ssl, buf, sizeof(buf));
@@ -147,12 +165,15 @@ int main(int argc, char *argv[]){
 		//A slight pause can cause fewer reads to be needed.
 		usleep(20000);
     }
-	printf("\nn calls to ssl_read(): %i\n", nreads); fflush(stdout);
+//	printf("\nn calls to ssl_read(): %i\n", nreads); fflush(stdout);
 	//Cleanup.
     SSL_free(ssl);
     close(sd);
     SSL_CTX_free(ctx);
-	return 0;
+   // std::cout << "right here " << std::endl;
+   // std::cout << timeP << std::endl;
+   // std::cout << timeNum;
+	return timeNum;
 }
 
 BIO *ssl_setup_bio(void)
