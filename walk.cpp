@@ -7,6 +7,7 @@
 //images courtesy: http://games.ucla.edu/resource/walk-cycles/
 //
 //NOTES: WIP
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,6 +19,8 @@
 #include <GL/glx.h>
 #include "fonts.h"
 #include <iostream>
+
+using namespace std;
 
 //extern
 extern void drawDY_Credits(int x, int y);
@@ -112,6 +115,8 @@ class Timers {
         double physicsRate;
         double oobillion;
         struct timespec timeStart, timeEnd, timeCurrent, time1, time2;
+        struct timespec playTimeBegin;
+        struct timespec playTimeEnd; 
         struct timespec walkTime;
         Timers() {
             physicsRate = 1.0 / 30.0;
@@ -133,6 +138,8 @@ class Timers {
 class Global {
     public:
 	int displayCredits;
+	//int startTime;
+    int displayTime;
         int done;
         int xres, yres;
         int walk;
@@ -265,6 +272,10 @@ int main(void)
         render();
         x11.swapBuffers();
     }
+	//timers.recordTime(&timers.playTimeEnd);
+    //double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
+						//&timers.playTimeEnd);
+	// send timmeSpan to php
     cleanup_fonts();
     return 0;
 }
@@ -378,8 +389,34 @@ void initOpengl(void)
 void init() {
     player.x = 250;
     player.y = 80;
-    player.moveSpeed = 10; 
+    player.moveSpeed = 10;
+    timers.recordTime(&timers.playTimeBegin);   
 }
+
+/*void playStart()
+{
+	timers.recordTime(&timers.playTimeBegin);
+
+}
+*/
+
+void playTime(int x, int y)
+{
+	
+    Rect D;
+    unsigned int c = 0x00ffff44;
+
+    D.bot = y;
+    D.left = x;
+    D.center = 0;
+
+	timers.recordTime(&timers.playTimeEnd);
+	double timeSpan = timers.timeDiff(&timers.playTimeBegin, &timers.playTimeEnd);
+
+	cout << "Time: " << timeSpan << endl;
+    ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
+}
+
 
 void checkMouse(XEvent *e)
 {
@@ -437,6 +474,13 @@ int checkKeys(XEvent *e)
             break;
         case XK_d:
             g.movebyte = g.movebyte | 16;
+            break;
+		case XK_j:
+			//g.startTime ^=1;
+			break;
+        case XK_t:
+            g.displayTime ^= 1;
+            //playTimeRecord();
             break;
         case XK_Left:
             break;
@@ -623,6 +667,16 @@ void render(void)
     	displayAlejandroH(350,332,g.fakeMarioTexture);
     	displayCD(350, 348);
     }
+
+    //Display Time elapsed during gameplay button = "t"
+    if (g.displayTime) {
+        playTime(500,500);
+	}
+
+	/* if (g.startTime)
+		playStart();
+	*/
+
 
 
 }
