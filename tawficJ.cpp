@@ -1,6 +1,10 @@
 //Tawfic Jobah
 //My project file
-
+//4 steps to debugging 
+//recongnize the bug
+//isolate
+//identify
+//fix
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
