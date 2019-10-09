@@ -13,6 +13,13 @@
 #include "fonts.h"
 #include <iostream>
 
+struct enemy{
+    int x;
+    int y;
+    int moveSpeed;
+    int health;
+
+} enemy;
 
 void tjcredits(int x, int y) //, GLuint texid)
 {
@@ -20,10 +27,7 @@ void tjcredits(int x, int y) //, GLuint texid)
     r.bot = y;
     r.left = x;
     r.center = 0;
-
-
     ggprint8b(&r, 16, 0x00ffff44, "Tawfic Jobah");
-
     /*glPushMatrix();
     glTranslatef(x,y,0);
     glColor3f(1.0,1.0,1.0);
@@ -34,5 +38,12 @@ void tjcredits(int x, int y) //, GLuint texid)
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_ALPHA_TEST);
     */
-
 }
+void createEnemy()
+{
+    enemy.x = 220;
+    enemy.y = 80;
+    enemy.moveSpeed = 15;
+    enemy.health = 3;
+}
+
