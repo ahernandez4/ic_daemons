@@ -1,17 +1,17 @@
 //Tawfic Jobah
-//My indivisual project file
+//My project file
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
-#include <math.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
 #include "fonts.h"
 #include <iostream>
+#include <fstream>
 
 struct enemy{
     int x;
@@ -28,16 +28,6 @@ void tjcredits(int x, int y) //, GLuint texid)
     r.left = x;
     r.center = 0;
     ggprint8b(&r, 16, 0x00ffff44, "Tawfic Jobah");
-    /*glPushMatrix();
-    glTranslatef(x,y,0);
-    glColor3f(1.0,1.0,1.0);
-    glBindTexture(GL_TEXTURE_2D, texid);
-    glBegin(GL_QUADS);
-    glEnd();
-    glPopMatrix();
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_ALPHA_TEST);
-    */
 }
 void createEnemy()
 {
@@ -47,3 +37,19 @@ void createEnemy()
     enemy.health = 3;
 }
 
+void updatingTime(int time)
+{
+    //deletes file, to rewrite so it can be updated
+    if( remove( "highscores.txt" ) != 0 )
+        std::cout << "error deleting file\n";
+    else {
+        std::ofstream myfile ("highscores.txt");
+        if (myfile.is_open()) {
+            myfile << '*';
+            myfile << time;
+            myfile.close();
+        }
+        else
+            std::cout << "unable to open file\n";
+    }
+}
