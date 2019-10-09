@@ -2,7 +2,12 @@
  * CMPS 3350
  * function displayAlejandroH(int x, int y)
  * description: displays name using ggprint8b at x,y location
- *
+ * 4 steps to debugging
+ * 1: Reproduce the bug
+ * 2: Locate the bad code
+ * 3: Fix the code
+ * 4: Test the fix. And also test the whole program. Make sure
+ *    no new problems arrives
  */
 #include <GL/glx.h>
 #include "fonts.h"
