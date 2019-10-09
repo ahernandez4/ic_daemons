@@ -6,6 +6,16 @@
  *      x and y input is given to center the box in
  *      the desired location. see ggprint8b for more
  *      information on proper use.
+ * 
+ *  stages of debugging:
+ *
+ *  1)Identify - see what the problem is
+ *
+ *  2)Isolate - narrow the issue down to a single problem
+ *
+ *  3)fix - change the code to fix the problem
+ *
+ *  4)review - look back over the code and see if its fixe
  *
  *
 */
