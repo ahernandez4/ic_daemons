@@ -8,6 +8,12 @@
 //added to segFault group project
 //
 //NOTES: WIP
+//
+//Four Steps of debugging
+//1. Identify -Find the source of bug
+//2. Isolate  -Seperate buggy function from rest of code 
+//3. Fix      -Fix faulty code
+//4. Test     -Test the fix to ensure no new bugs are created
 
 #include "fonts.h"
 
