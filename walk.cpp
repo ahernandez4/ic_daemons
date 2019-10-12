@@ -26,7 +26,8 @@ using namespace std;
 extern void drawDY_Credits(int x, int y);
 extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
-
+extern void tjcredits(int x, int y);//,GLuint texid);
+extern int odinGetTime();
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -50,7 +51,7 @@ const float gravity = -0.2f;
 //funcion prototypes
 int deltaTime();
 //
-extern void tjcredits(int x, int y);//,GLuint texid);
+
 class Image {
     public:
         int width, height;
@@ -409,9 +410,11 @@ void playTime(int x, int y)
     D.bot = y;
     D.left = x;
     D.center = 0;
-
+    int oldTimePlayed= odinGetTime();
 	timers.recordTime(&timers.playTimeEnd);
+
 	double timeSpan = timers.timeDiff(&timers.playTimeBegin, &timers.playTimeEnd);
+    cout << "old time" << oldTimePlayed << endl;
 
 	cout << "Time: " << timeSpan << endl;
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
@@ -676,9 +679,6 @@ void render(void)
 	/* if (g.startTime)
 		playStart();
 	*/
-
-
-
 }
 
 int deltaTime()
