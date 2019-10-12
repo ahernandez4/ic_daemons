@@ -410,11 +410,12 @@ void playTime(int x, int y)
     D.bot = y;
     D.left = x;
     D.center = 0;
-    int oldTimePlayed= odinGetTime();
+    int oldTimePlayed = odinGetTime();
 	timers.recordTime(&timers.playTimeEnd);
 
 	double timeSpan = timers.timeDiff(&timers.playTimeBegin, &timers.playTimeEnd);
-    cout << "old time" << oldTimePlayed << endl;
+    timeSpan = oldTimePlayed + timeSpan;
+    //cout << "old time" << oldTimePlayed << endl;
 
 	cout << "Time: " << timeSpan << endl;
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
