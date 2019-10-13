@@ -40,15 +40,16 @@
 //added int
 const int MAX_READ_ERRORS = 100;
 
-int odinGetTime(){
-
+int odinGetTime2(){
     BIO *ssl_setup_bio(void);
+
     //void show_cert_data(SSL *ssl, BIO *outbio, const char *hostname);
     void set_to_non_blocking(const int sock);
     int sd;
     struct hostent *host;
     struct sockaddr_in addr;
     BIO *outbio = NULL;
+
     // fixed warning: invalid conversion from 'const SSL_METHOD*
     // added const
     const SSL_METHOD *method;
@@ -56,18 +57,21 @@ int odinGetTime(){
     SSL *ssl;
     char req[1000];
     int req_len;
+
+    
     //char hostname[256] = "www.google.com";
     //char integer_string[32];
-
     //sprintf(integer_string, "%d", time); 
     char hostname[256] = "odin.cs.csub.edu";
     char pagename[256] = "/~ahernandez2/3350/game/highscores.php";
     //char pagename[256] = "/~ahernandez2/3350/game/highscores.php?param=";
     //strcat(pagename, integer_string);
+
     int port = PORT;
     int bytes, nreads, nerrs;
     char buf[256];
     int ret;
+
     //Get any command-line arguments.
     //if (argc > 1)
     //	strcpy(hostname, argv[1]);
@@ -76,15 +80,18 @@ int odinGetTime(){
 
     //Setup the SSL BIO
     outbio = ssl_setup_bio();
+
     //Initialize the SSL library
     if (SSL_library_init() < 0) 
 	BIO_printf(outbio, "Could not initialize the OpenSSL library !\n");
     method = SSLv23_client_method();
     ctx = SSL_CTX_new(method);
     SSL_CTX_set_options(ctx, SSL_OP_NO_SSLv2);
+
     //next 2 lines of code are not currently needed.
     //SSL_MODE_AUTO_RETRY flag of the SSL_CTX_set_mode call.
     //SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
+    
     //Setup the socket used for connection.
     host = gethostbyname(hostname);
     sd = socket(AF_INET, SOCK_STREAM, 0);
@@ -92,20 +99,25 @@ int odinGetTime(){
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = *(long*)(host->h_addr);
+
     if (connect(sd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
 	//BIO_printf(outbio, "%s: Cannot connect to host %s [%s] on port %d.\n", 
 	//argv[0], hostname, inet_ntoa(addr.sin_addr), port);
     }
+
     //Connect using the SSL certificate.
     ssl = SSL_new(ctx); 
     SSL_set_fd(ssl, sd);
     SSL_connect(ssl);
-    //
+    
     //Show the certificate data
-    //	show_cert_data(ssl, outbio, hostname);	
+    //show_cert_data(ssl, outbio, hostname);	
     //A non-blocking socket will make the ssl_read() not block.
+
     set_to_non_blocking(sd);
+
     //Send the http request to the host server.
+    
     sprintf(req, "GET /%s HTTP/1.1\r\nHost: %s\r\nUser-Agent: %s\r\n\r\n",  
 	    pagename, hostname, USERAGENT);    
     req_len = strlen(req);
@@ -113,7 +125,7 @@ int odinGetTime(){
     if (ret <= 0)
 	fprintf(stderr, "ERROR: SSL_write\n"); 
     fflush(stderr);
-    //
+    
     //Get data returned from the server.
     //First, do priming read.
     //We can take this approach because our socket is non-blocking.
@@ -125,9 +137,11 @@ int odinGetTime(){
 	//A slight pause can cause fewer reads to be needed.
 	usleep(10000);
     }
+
     //A successful priming read was accomplished.
     //Now read all the data.
     nreads = 1;
+
     //Allow for some read errors to happen, while getting the complete data.
     nerrs = 0;
     char timeP[2];
@@ -152,6 +166,8 @@ int odinGetTime(){
 	//A slight pause can cause fewer reads to be needed.
 	usleep(20000);
     }
+
+
     //	printf("\nn calls to ssl_read(): %i\n", nreads); fflush(stdout);
     //Cleanup.
     SSL_free(ssl);
@@ -164,6 +180,9 @@ int odinGetTime(){
     //std::cout << "bullshit num " << timeP << std::endl;
     return t;
 }
+
+
+
 void odinPushTime(int time)
 {
     BIO *ssl_setup_bio(void);

@@ -28,6 +28,7 @@ extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
+
 //defined types
 typedef double Flt;
 typedef double Vec[3];
