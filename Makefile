@@ -6,7 +6,7 @@ LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 all: walk 
 
 
-walk: walk.cpp codyD.cpp tawficJ.cpp alejandroH.cpp drakeY.cpp
+walk: walk.cpp codyD.cpp tawficJ.cpp alejandroH.cpp drakeY.cpp lab3sget.cpp
 	g++ $(CFLAGS) walk.cpp lab3sget.cpp codyD.cpp tawficJ.cpp alejandroH.cpp drakeY.cpp libggfonts.a -Wall -Wextra $(LFLAGS) -owalk -lcrypto -lssl 
 	
 
