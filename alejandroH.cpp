@@ -11,13 +11,21 @@
  */
 #include <GL/glx.h>
 #include "fonts.h"
+//temporary fix globals
+int gMinutesPlayed;
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
-	int myx = x + 100;
-    int myy = y + 10;
+    //black screen
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.1,0.1,0.1,0.1);
+	//int myx = x;// old values = x + 100;
+    //int myy = y;//old valiues = y  + 10;
+    //know values
+    int resy = 600;
+    int resx = 800-64;
     Rect r;
 	r.bot = y;
-	r.left = myx;
+	r.left = x;
 	r.center = 0;
 	ggprint8b(&r, 32, 0x00ffff44,"Alejandro Hernandez");	
     glColor3f(1.0,1.0,1.0);
@@ -27,14 +35,30 @@ void displayAlejandroH(int x, int y, GLuint atexture)
     glBegin(GL_QUADS);
     //0,1|0,0|1,0|1,1
     glTexCoord2f(0.0f,      1.0f);
-    glVertex2i(myx, myy);
+    glVertex2i(resx, resy);
     glTexCoord2f(0.0f,      0.0f);    
-    glVertex2i(myx, myy+64);
+    glVertex2i(resx, resy+64);
     glTexCoord2f(1.0f,      0.0f);    
-    glVertex2i(myx+64, myy+64);
+    glVertex2i(resx+64, resy+64);
     glTexCoord2f(1.0f,      1.0f);    
-    glVertex2i(myx+64, myy);
+    glVertex2i(resx+64, resy);
     glEnd();
     glPopMatrix();
+	r.bot = y-50;
+	r.left = x;
+    if(gMinutesPlayed > 0){
+	    ggprint8b(&r, 32, 0x00ffff44,
+        "Your total played time: %d minutes",gMinutesPlayed);	
+    }
+    else {
+	    ggprint8b(&r, 32, 0x00ffff44,
+        "Your total played time: 55 minutes");	
 
+    }
+
+}
+//temporary fix
+void passGlobalValues2Alex(int& min)
+{
+    gMinutesPlayed = min;
 }

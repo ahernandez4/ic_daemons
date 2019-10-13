@@ -28,6 +28,7 @@ extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
+extern void passGlobalValues2Alex(int& min);//temporary fix
 
 //defined types
 typedef double Flt;
@@ -99,10 +100,10 @@ class Image {
 };
 
 Image img[4] = {
-"images/shift.gif",
-"images/castlemap.gif",
-"images/tj.jpg",
-"images/fakeMario.png" };
+    "images/shift.gif",
+    "images/castlemap.gif",
+    "images/tj.jpg",
+    "images/fakeMario.png" };
 
 struct PlayerOne{
     int x;
@@ -139,9 +140,9 @@ class Timers {
 
 class Global {
     public:
-	int displayCredits;
-	//int startTime;
-    int displayTime;
+        int displayCredits;
+        //int startTime;
+        int displayTime;
         int done;
         int xres, yres;
         int walk;
@@ -152,6 +153,8 @@ class Global {
         //added
         GLuint backgroundTexture;
         GLuint fakeMarioTexture;
+        //playtime
+        int minutesPlayed;
         Vec box[20];
         Global() {
             movebyte = 0;
@@ -274,10 +277,10 @@ int main(void)
         render();
         x11.swapBuffers();
     }
-	//timers.recordTime(&timers.playTimeEnd);
+    //timers.recordTime(&timers.playTimeEnd);
     //double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
-						//&timers.playTimeEnd);
-	// send timmeSpan to php
+    //&timers.playTimeEnd);
+    // send timmeSpan to php
     cleanup_fonts();
     return 0;
 }
@@ -370,7 +373,7 @@ void initOpengl(void)
     //maybe we dont need to build alpha
     //unsigned char *bgData = buildAlphaData(&img[1]); 
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, 
-                GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
+            GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
     //free(bgData);//no need if we did not build alpha channel
     //----------------------------------------------------------------------
 
@@ -393,18 +396,19 @@ void init() {
     player.y = 80;
     player.moveSpeed = 10;
     timers.recordTime(&timers.playTimeBegin);   
+    passGlobalValues2Alex(g.minutesPlayed);//temporary fix
 }
 
 /*void playStart()
-{
-	timers.recordTime(&timers.playTimeBegin);
+  {
+  timers.recordTime(&timers.playTimeBegin);
 
-}
-*/
+  }
+ */
 
 void playTime(int x, int y)
 {
-	
+
     Rect D;
     unsigned int c = 0x00ffff44;
 
@@ -412,13 +416,14 @@ void playTime(int x, int y)
     D.left = x;
     D.center = 0;
     int oldTimePlayed = odinGetTime();
-	timers.recordTime(&timers.playTimeEnd);
+    timers.recordTime(&timers.playTimeEnd);
 
-	double timeSpan = timers.timeDiff(&timers.playTimeBegin, &timers.playTimeEnd);
+    double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
+    &timers.playTimeEnd);
     timeSpan = oldTimePlayed + timeSpan;
     //cout << "old time" << oldTimePlayed << endl;
-
-	cout << "Time: " << timeSpan << endl;
+    //g.minutesPlayed = round(timeSpan/60);
+    cout << "Time: " << timeSpan << endl;
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
 }
 
@@ -480,9 +485,9 @@ int checkKeys(XEvent *e)
         case XK_d:
             g.movebyte = g.movebyte | 16;
             break;
-		case XK_j:
-			//g.startTime ^=1;
-			break;
+        case XK_j:
+            //g.startTime ^=1;
+            break;
         case XK_t:
             g.displayTime ^= 1;
             //playTimeRecord();
@@ -506,10 +511,10 @@ int checkKeys(XEvent *e)
         case XK_Escape:
             return 1;
             break;
-	case XK_c:
-	    g.displayCredits ^=1;
-        //extern void tjcredits(int x, int y);
-	    break;
+        case XK_c:
+            g.displayCredits ^=1;
+            //extern void tjcredits(int x, int y);
+            break;
     }
     return 0;
 }
@@ -580,7 +585,7 @@ void physics(void)
         //when time is up, advance the frame.
         timers.recordTime(&timers.timeCurrent);
         double timeSpan = timers.timeDiff(&timers.walkTime, 
-        &timers.timeCurrent);
+                &timers.timeCurrent);
         if (timeSpan > g.delay*3) {//reset when standing after a delay
             //advance
             //++g.walkFrame;
@@ -664,29 +669,29 @@ void render(void)
     ggprint8b(&r, 16, c, "a   walk left");
     ggprint8b(&r, 16, c, "c   display credits");
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
-    
+
     //this is for drawing names on screen for credits on "c" button press
     if(g.displayCredits) {
+        displayAlejandroH(350,332,g.fakeMarioTexture);
         drawDY_Credits(350, 300);
-    	tjcredits(350,316);
-    	displayAlejandroH(350,332,g.fakeMarioTexture);
-    	displayCD(350, 348);
+        tjcredits(350,316);
+        displayCD(350, 348);
     }
 
     //Display Time elapsed during gameplay button = "t"
     if (g.displayTime) {
         playTime(500,500);
-	}
+    }
 
-	/* if (g.startTime)
-		playStart();
-	*/
+    /* if (g.startTime)
+       playStart();
+     */
 }
 
 int deltaTime()
 {
     int time = (int) (timers.timeDiff(&timers.time1
-    , &timers.time2) + 0.5);
+                , &timers.time2) + 0.5);
     timers.recordTime(&timers.time1);
     return time;
 }
