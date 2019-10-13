@@ -42,6 +42,8 @@
 const int MAX_READ_ERRORS = 100;
 //inlcudes for odinGetTime() end here
 
+//this is for the timePlayD
+int odinGetTime();
 
 /*this code is for displaying my name to screen using ggprint function
  * this is called from within main
@@ -72,7 +74,7 @@ void displayCD(int x, int y)
  * -------------> currently not working <---------------------
  */
 
-/*void timePlayD(int x = 0, int y = 0)
+void displayOdinTime(int x = 0, int y = 0)
 {
 
     Rect r;
@@ -84,13 +86,10 @@ void displayCD(int x, int y)
     unsigned int color = 0x00ffff44;
 
     time = odinGetTime();
-    std::string tmp;
-    tmp = time;
-    std::cout << tmp;
-    //ggprint8b(&r, advance, color, (char)tmp);
+    ggprint8b(&r, advance, color, "%d", time );
     
     
-}*/
+}
 
 
 /* this function gets time from the odin server and uses PHP to access
