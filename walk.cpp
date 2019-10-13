@@ -28,7 +28,7 @@ extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
-
+extern void odinPushTime(int time);
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -417,6 +417,7 @@ void playTime(int x, int y)
 	double timeSpan = timers.timeDiff(&timers.playTimeBegin, &timers.playTimeEnd);
     timeSpan = oldTimePlayed + timeSpan;
     //cout << "old time" << oldTimePlayed << endl;
+    odinPushTime(timeSpan);
 
 	cout << "Time: " << timeSpan << endl;
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);

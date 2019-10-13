@@ -183,7 +183,7 @@ int odinGetTime2(){
 
 
 
-void odinPushTime(int time)
+/*void odinPushTime(int time)
 {
     BIO *ssl_setup_bio(void);
     //void show_cert_data(SSL *ssl, BIO *outbio, const char *hostname);
@@ -311,7 +311,7 @@ void odinPushTime(int time)
     //int t = atoi(timeP);
     //std::cout << "testing this shit num" << t << std::endl; 
     //return timeNum;
-}
+}*/
 
 BIO *ssl_setup_bio(void)
 {
