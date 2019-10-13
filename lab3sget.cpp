@@ -161,11 +161,11 @@ int odinGetTime(){
     // std::cout << timeP << std::endl;
     // std::cout << timeNum;
     int t = atoi(timeP);
-    std::cout << "bullshit num " << timeP << std::endl;
+    //std::cout << "bullshit num " << timeP << std::endl;
     return t;
 }
-int odinPushTime(int time){
-
+void odinPushTime(int time)
+{
     BIO *ssl_setup_bio(void);
     //void show_cert_data(SSL *ssl, BIO *outbio, const char *hostname);
     void set_to_non_blocking(const int sock);
@@ -186,7 +186,7 @@ int odinPushTime(int time){
     sprintf(integer_string, "%d", time); 
     char hostname[256] = "odin.cs.csub.edu";
     //char pagename[256] = "/~ahernandez2/3350/game/highscores.php";
-    char pagename[256] = "/~ahernandez2/3350/game/highscores.php?param=";
+    char pagename[256] = "/~ahernandez2/3350/game/highscores.php?newtime=*";
 	//puts pagename with the time
     strcat(pagename, integer_string);
     int port = PORT;
@@ -196,9 +196,6 @@ int odinPushTime(int time){
     //Get any command-line arguments.
     //if (argc > 1)
     //	strcpy(hostname, argv[1]);
-    //if (argc > 2)
-    //	strcpy(pagename, argv[2]);
-
     //Setup the SSL BIO
     outbio = ssl_setup_bio();
     //Initialize the SSL library
@@ -258,7 +255,7 @@ int odinPushTime(int time){
     char timeP[2];
     int timeNum = 0;
     while (bytes >= 0 && nerrs < MAX_READ_ERRORS) {
-	//        write(STDOUT_FILENO, buf, bytes);
+	        write(STDOUT_FILENO, buf, bytes);
 	// std::cout << "start of buff";
 	//  std::cout << buf << " line 145";
 	//   std::cout << "end of buff";
@@ -294,7 +291,7 @@ int odinPushTime(int time){
     // std::cout << timeNum;
     //int t = atoi(timeP);
     //std::cout << "testing this shit num" << t << std::endl; 
-    return timeNum;
+    //return timeNum;
 }
 
 BIO *ssl_setup_bio(void)
