@@ -51,8 +51,9 @@ void displayAlejandroH(int x, int y, GLuint atexture)
         "Your total played time: %d minutes",gMinutesPlayed);	
     }
     else {
+        //less than 1 minute placeholder
 	    ggprint8b(&r, 32, 0x00ffff44,
-        "Your total played time: 55 minutes");	
+        "Your total played time: less than 1 minute");	
 
     }
 

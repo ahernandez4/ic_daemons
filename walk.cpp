@@ -422,7 +422,8 @@ void playTime(int x, int y)
     &timers.playTimeEnd);
     timeSpan = oldTimePlayed + timeSpan;
     //cout << "old time" << oldTimePlayed << endl;
-    //g.minutesPlayed = round(timeSpan/60);
+    g.minutesPlayed = round(timeSpan/60);
+    passGlobalValues2Alex(g.minutesPlayed);//temporary fix
     cout << "Time: " << timeSpan << endl;
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
 }
