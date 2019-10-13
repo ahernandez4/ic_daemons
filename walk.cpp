@@ -22,13 +22,15 @@
 
 using namespace std;
 
-//extern
+//external defines for functions
 extern void drawDY_Credits(int x, int y);
 extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
 extern void odinPushTime(int time);
+extern void displayOdinTime();
+
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -666,6 +668,9 @@ void render(void)
     ggprint8b(&r, 16, c, "c   display credits");
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
     
+    //displaying time to screen from server
+    displayOdinTime();
+
     //this is for drawing names on screen for credits on "c" button press
     if(g.displayCredits) {
         drawDY_Credits(350, 300);

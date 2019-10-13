@@ -17,7 +17,6 @@
  *
  *  4)review - look back over the code and see if its fixe
  *
- *
 */
 
 #include "fonts.h"
@@ -70,25 +69,20 @@ void displayCD(int x, int y)
  * the drawing to screen.
  * 
  * Output: no ouput it just displays the text to screen and exits
- *
- * -------------> currently not working <---------------------
  */
 
-void displayOdinTime(int x = 0, int y = 0)
+void displayOdinTime()
 {
-
     Rect r;
     int advance = 0;
-    r.bot = y;
-    r.left = x;
+    r.bot = 484;
+    r.left = 10;
     r.center = 0;
     int time = 0;
-    unsigned int color = 0x00ffff44;
-
+    unsigned int color = 0xFEEDFEED;
     time = odinGetTime();
-    ggprint8b(&r, advance, color, "%d", time );
-    
-    
+
+    ggprint8b(&r, advance, color, "Current time played: %d min.", time );   
 }
 
 
@@ -185,7 +179,7 @@ int odinGetTime(){
     ret = SSL_write(ssl, req, req_len);
     if (ret <= 0)
         fprintf(stderr, "ERROR: SSL_write\n");
-fflush(stderr);
+    fflush(stderr);
 
     //Get data returned from the server.
     //First, do priming read.
