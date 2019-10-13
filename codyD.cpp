@@ -43,6 +43,10 @@ const int MAX_READ_ERRORS = 100;
 //inlcudes for odinGetTime() end here
 
 
+/*this code is for displaying my name to screen using ggprint function
+ * this is called from within main
+*/
+
 void displayCD(int x, int y)
 {
     Rect r;
@@ -54,6 +58,19 @@ void displayCD(int x, int y)
     
     ggprint8b(&r, advance, color, "Cody Davis");
 }
+
+
+/* This fucntion is for displaying time to screen after pulling
+ * current runtime from the server through the odinGetTime()
+ * function is called and returns the value from the server.
+ *
+ * Input: takes in x and y coordinates that provide the location for
+ * the drawing to screen.
+ * 
+ * Output: no ouput it just displays the text to screen and exits
+ *
+ * -------------> currently not working <---------------------
+ */
 
 /*void timePlayD(int x = 0, int y = 0)
 {
@@ -75,6 +92,17 @@ void displayCD(int x, int y)
     
 }*/
 
+
+/* this function gets time from the odin server and uses PHP to access
+ * a text file on the public HTML.
+ *
+ * Input: there is no input needed we hard coded contacting only odin
+ * this is the only server we need to contact so no sense in using 
+ * command line
+ *
+ * int: the output "t" is a time for the time played that is currently on the 
+ * txt in the public HTML.
+*/
 
 int odinGetTime(){
     BIO *ssl_setup_bio(void);
