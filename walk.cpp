@@ -157,6 +157,7 @@ class Global {
         GLuint fakeMarioTexture;
         //playtime
         int minutesPlayed;
+	int secondsCounter;
         Vec box[20];
         Global() {
             movebyte = 0;
@@ -400,6 +401,7 @@ void init() {
     player.moveSpeed = 10;
     timers.recordTime(&timers.playTimeBegin);   
     g.minutesPlayed = odinGetTime();
+    g.secondsCounter = g.minutesPlayed * 60;
     passGlobalValues2Alex(&g.minutesPlayed);//temporary fix
 }
 
