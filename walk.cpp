@@ -28,6 +28,7 @@ extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
+extern void odinPushTime(int);
 extern void passGlobalValues2Alex(int& min);//temporary fix
 
 //defined types
@@ -281,6 +282,7 @@ int main(void)
     //double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
     //&timers.playTimeEnd);
     // send timmeSpan to php
+    odinPushTime(g.minutesPlayed);
     cleanup_fonts();
     return 0;
 }
@@ -396,6 +398,7 @@ void init() {
     player.y = 80;
     player.moveSpeed = 10;
     timers.recordTime(&timers.playTimeBegin);   
+    g.minutesPlayed = odinGetTime();
     passGlobalValues2Alex(g.minutesPlayed);//temporary fix
 }
 
@@ -415,7 +418,8 @@ void playTime(int x, int y)
     D.bot = y;
     D.left = x;
     D.center = 0;
-    int oldTimePlayed = odinGetTime();
+    //int oldTimePlayed = odinGetTime();
+    int oldTimePlayed = g.minutesPlayed * 60;
     timers.recordTime(&timers.playTimeEnd);
 
     double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
