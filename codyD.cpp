@@ -17,7 +17,6 @@
  *
  *  4)review - look back over the code and see if its fixe
  *
- *
 */
 
 #include "fonts.h"
@@ -42,6 +41,12 @@
 const int MAX_READ_ERRORS = 100;
 //inlcudes for odinGetTime() end here
 
+//this is for the timePlayD
+int odinGetTime();
+
+/*this code is for displaying my name to screen using ggprint function
+ * this is called from within main
+*/
 
 void displayCD(int x, int y)
 {
@@ -55,26 +60,42 @@ void displayCD(int x, int y)
     ggprint8b(&r, advance, color, "Cody Davis");
 }
 
-/*void timePlayD(int x = 0, int y = 0)
-{
 
+/* This fucntion is for displaying time to screen after pulling
+ * current runtime from the server through the odinGetTime()
+ * function is called and returns the value from the server.
+ *
+ * Input: takes in x and y coordinates that provide the location for
+ * the drawing to screen.
+ * 
+ * Output: no ouput it just displays the text to screen and exits
+ */
+
+void displayOdinTime()
+{
     Rect r;
     int advance = 0;
-    r.bot = y;
-    r.left = x;
+    r.bot = 484;
+    r.left = 10;
     r.center = 0;
     int time = 0;
-    unsigned int color = 0x00ffff44;
-
+    unsigned int color = 0xFEEDFEED;
     time = odinGetTime();
-    std::string tmp;
-    tmp = time;
-    std::cout << tmp;
-    //ggprint8b(&r, advance, color, (char)tmp);
-    
-    
-}*/
 
+    ggprint8b(&r, advance, color, "Current time played: %d min.", time );   
+}
+
+
+/* this function gets time from the odin server and uses PHP to access
+ * a text file on the public HTML.
+ *
+ * Input: there is no input needed we hard coded contacting only odin
+ * this is the only server we need to contact so no sense in using 
+ * command line
+ *
+ * int: the output "t" is a time for the time played that is currently on the 
+ * txt in the public HTML.
+*/
 
 int odinGetTime(){
     BIO *ssl_setup_bio(void);
@@ -158,7 +179,7 @@ int odinGetTime(){
     ret = SSL_write(ssl, req, req_len);
     if (ret <= 0)
         fprintf(stderr, "ERROR: SSL_write\n");
-fflush(stderr);
+    fflush(stderr);
 
     //Get data returned from the server.
     //First, do priming read.

@@ -22,14 +22,15 @@
 
 using namespace std;
 
-//extern
+//external defines for functions
 extern void drawDY_Credits(int x, int y);
 extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
-extern void odinPushTime(int);
 extern void passGlobalValues2Alex(int& min);//temporary fix
+extern void odinPushTime(int time);
+extern void displayOdinTime();
 
 //defined types
 typedef double Flt;
@@ -429,6 +430,7 @@ void playTime(int x, int y)
     g.minutesPlayed = round(timeSpan/60);
     passGlobalValues2Alex(g.minutesPlayed);//temporary fix
     cout << "Time: " << timeSpan << endl;
+    //odinPushTime(timeSpan);
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
 }
 
@@ -674,6 +676,8 @@ void render(void)
     ggprint8b(&r, 16, c, "a   walk left");
     ggprint8b(&r, 16, c, "c   display credits");
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
+    //displaying time to screen from server
+    displayOdinTime();
 
     //this is for drawing names on screen for credits on "c" button press
     if(g.displayCredits) {
