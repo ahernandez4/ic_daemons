@@ -421,13 +421,16 @@ void playTime(int x, int y)
     D.bot = y;
     D.left = x;
     D.center = 0;
+    //old stuff for ref
     //int oldTimePlayed = odinGetTime();
-    int oldTimePlayed = g.minutesPlayed * 60;
+    //int oldTimePlayed = g.minutesPlayed * 60;
     timers.recordTime(&timers.playTimeEnd);
 
     double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
     &timers.playTimeEnd);
-    timeSpan = oldTimePlayed + timeSpan;
+    //old stuff
+    //timeSpan = oldTimePlayed + timeSpan;
+    timeSpan = timeSpan + g.secondsCounter;
     //cout << "old time" << oldTimePlayed << endl;
     g.minutesPlayed = round(timeSpan/60);
     cout << "Time: " << timeSpan << endl;
