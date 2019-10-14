@@ -12,9 +12,13 @@
 #include <GL/glx.h>
 #include "fonts.h"
 //temporary fix globals
-int gMinutesPlayed;
+int* minutesPlayedPtr = NULL;
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
+    if(minutesPlayedPtr == NULL){
+        *minutesPlayedPtr = 0;
+    }
+
     //black screen
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.1,0.1,0.1,0.1);
@@ -46,9 +50,9 @@ void displayAlejandroH(int x, int y, GLuint atexture)
     glPopMatrix();
 	r.bot = y-50;
 	r.left = x;
-    if(gMinutesPlayed > 0){
+    if(*minutesPlayedPtr > 0){
 	    ggprint8b(&r, 32, 0x00ffff44,
-        "Your total played time: %d minutes",gMinutesPlayed);	
+        "Your total played time: %d minutes",*minutesPlayedPtr);	
     }
     else {
         //less than 1 minute placeholder
@@ -59,7 +63,7 @@ void displayAlejandroH(int x, int y, GLuint atexture)
 
 }
 //temporary fix
-void passGlobalValues2Alex(int& min)
+void passGlobalValues2Alex(int* min)
 {
-    gMinutesPlayed = min;
+    minutesPlayedPtr = min;
 }

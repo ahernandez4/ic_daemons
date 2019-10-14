@@ -28,7 +28,7 @@ extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
-extern void passGlobalValues2Alex(int& min);//temporary fix
+extern void passGlobalValues2Alex(int* min);//temporary fix
 extern void odinPushTime(int time);
 extern void displayOdinTime();
 
@@ -400,7 +400,7 @@ void init() {
     player.moveSpeed = 10;
     timers.recordTime(&timers.playTimeBegin);   
     g.minutesPlayed = odinGetTime();
-    passGlobalValues2Alex(g.minutesPlayed);//temporary fix
+    passGlobalValues2Alex(&g.minutesPlayed);//temporary fix
 }
 
 /*void playStart()
@@ -428,7 +428,6 @@ void playTime(int x, int y)
     timeSpan = oldTimePlayed + timeSpan;
     //cout << "old time" << oldTimePlayed << endl;
     g.minutesPlayed = round(timeSpan/60);
-    passGlobalValues2Alex(g.minutesPlayed);//temporary fix
     cout << "Time: " << timeSpan << endl;
     //odinPushTime(timeSpan);
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
