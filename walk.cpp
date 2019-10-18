@@ -280,10 +280,6 @@ int main(void)
         render();
         x11.swapBuffers();
     }
-    //timers.recordTime(&timers.playTimeEnd);
-    //double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
-    //&timers.playTimeEnd);
-    // send timmeSpan to php
     odinPushTime(g.minutesPlayed);
     cleanup_fonts();
     return 0;
@@ -405,12 +401,6 @@ void init() {
     passGlobalValues2Alex(&g.minutesPlayed);//temporary fix
 }
 
-/*void playStart()
-  {
-  timers.recordTime(&timers.playTimeBegin);
-
-  }
- */
 
 void playTime(int x, int y)
 {
@@ -421,20 +411,13 @@ void playTime(int x, int y)
     D.bot = y;
     D.left = x;
     D.center = 0;
-    //old stuff for ref
-    //int oldTimePlayed = odinGetTime();
-    //int oldTimePlayed = g.minutesPlayed * 60;
     timers.recordTime(&timers.playTimeEnd);
 
     double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
     &timers.playTimeEnd);
-    //old stuff
-    //timeSpan = oldTimePlayed + timeSpan;
     timeSpan = timeSpan + g.secondsCounter;
-    //cout << "old time" << oldTimePlayed << endl;
     g.minutesPlayed = round(timeSpan/60);
     cout << "Time: " << timeSpan << endl;
-    //odinPushTime(timeSpan);
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
 }
 
@@ -497,11 +480,9 @@ int checkKeys(XEvent *e)
             g.movebyte = g.movebyte | 16;
             break;
         case XK_j:
-            //g.startTime ^=1;
             break;
         case XK_t:
             g.displayTime ^= 1;
-            //playTimeRecord();
             break;
         case XK_Left:
             break;
@@ -512,19 +493,14 @@ int checkKeys(XEvent *e)
         case XK_Down:
             break;
         case XK_equal:
-            //g.delay -= 0.005;
-            //if (g.delay < 0.005)
-            //	g.delay = 0.005;
             break;
         case XK_minus:
-            //g.delay += 0.005;
             break;
         case XK_Escape:
             return 1;
             break;
         case XK_c:
             g.displayCredits ^=1;
-            //extern void tjcredits(int x, int y);
             break;
     }
     return 0;
@@ -597,12 +573,8 @@ void physics(void)
         timers.recordTime(&timers.timeCurrent);
         double timeSpan = timers.timeDiff(&timers.walkTime, 
                 &timers.timeCurrent);
-        if (timeSpan > g.delay*3) {//reset when standing after a delay
-            //advance
-            //++g.walkFrame;
-            //if (g.walkFrame >= 16)
-            //	g.walkFrame -= 16;
-            g.walkFrame = 0;
+        if (timeSpan > g.delay*3) {
+	    g.walkFrame = 0;
             timers.recordTime(&timers.walkTime);
         }
     }
@@ -695,10 +667,6 @@ void render(void)
     if (g.displayTime) {
         playTime(500,500);
     }
-
-    /* if (g.startTime)
-       playStart();
-     */
 }
 
 int deltaTime()
@@ -709,7 +677,3 @@ int deltaTime()
     return time;
 }
 
-//void initTime(struct timespec time1) 
-//{
-//    clock_gettime(CLOCK_REALTIME, &time1);
-//}

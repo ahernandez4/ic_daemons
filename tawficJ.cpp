@@ -82,30 +82,24 @@ void odinPushTime(int time)
     struct hostent *host;
     struct sockaddr_in addr;
     BIO *outbio = NULL;
-    // fixed warning: invalid conversion from 'const SSL_METHOD*
     // added const
     const SSL_METHOD *method;
     SSL_CTX *ctx;
     SSL *ssl;
     char req[1000];
     int req_len;
-    //char hostname[256] = "www.google.com";
     char integer_string[32];
     //converts int time to a char arr
     sprintf(integer_string, "%d", time); 
+    
     char hostname[256] = "odin.cs.csub.edu";
-    //char pagename[256] = "/~ahernandez2/3350/game/highscores.php";
     char pagename[256] = "/~ahernandez2/3350/game/highscores.php?newtime=*";
-    //puts pagename with the time
     strcat(pagename, integer_string);
     int port = PORT;
     int bytes, nreads, nerrs;
     char buf[256];
     int ret;
-    //Get any command-line arguments.
-    //if (argc > 1)
-    //	strcpy(hostname, argv[1]);
-    //Setup the SSL BIO
+    
     outbio = ssl_setup_bio();
     //Initialize the SSL library
     if (SSL_library_init() < 0) 
@@ -165,10 +159,7 @@ void odinPushTime(int time)
     int timeNum = 0;
     while (bytes >= 0 && nerrs < MAX_READ_ERRORS) {
         write(STDOUT_FILENO, buf, bytes);
-        // std::cout << "start of buff";
-        //  std::cout << buf << " line 145";
-        //   std::cout << "end of buff";
-        for(int i = 0; i < 255; i++) {
+                for(int i = 0; i < 255; i++) {
             if(buf[i] == '*') {
                 timeP[0] = buf[i + 1];
                 timeP[1] = buf[i + 2];
@@ -176,10 +167,7 @@ void odinPushTime(int time)
             }
         }
 
-        //timeNum = (int)timeP;
-        //timeNum = atoi(timeP);
         sscanf(timeP, "%d", &timeNum);
-
         memset(buf, '\0', sizeof(buf));
         ++nreads;
         bytes = SSL_read(ssl, buf, sizeof(buf));
@@ -195,11 +183,5 @@ void odinPushTime(int time)
     SSL_free(ssl);
     close(sd);
     SSL_CTX_free(ctx);
-    // std::cout << "right here " << std::endl;
-    // std::cout << timeP << std::endl;
-    // std::cout << timeNum;
-    //int t = atoi(timeP);
-    //std::cout << "testing this shit num" << t << std::endl; 
-    //return timeNum;
-}
+    }
 
