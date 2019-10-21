@@ -11,8 +11,15 @@
  */
 #include <GL/glx.h>
 #include "fonts.h"
+#include <iostream>
 //temporary fix globals
-int* minutesPlayedPtr = NULL;
+int* minutesPlayedPtr;// = NULL;
+struct playerPtrs{
+    int* x = NULL;
+    int* y = NULL;
+    int* speed = NULL;
+} *playerptrs;
+//
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
     if (minutesPlayedPtr == NULL) {
@@ -59,10 +66,28 @@ void displayAlejandroH(int x, int y, GLuint atexture)
 	    ggprint8b(&r, 32, 0x00ffff44,
         "Your total played time: less than 1 minute");	
     }
+    std::cout << *(playerptrs->x) << std::endl;
 
 }
 //temporary fix
 void passGlobalValues2Alex(int* min)
 {
     minutesPlayedPtr = min;
+}
+void passPlayerPtrs2Alex(int* x, int* y, int*s)
+{
+    if(playerptrs == NULL)
+        return;
+    (playerptrs->x) = x;
+    (playerptrs->y) = y;
+    (playerptrs->speed) = s;
+}
+void initInternalAlexStuff()
+{
+    minutesPlayedPtr = NULL;
+    playerptrs = new playerPtrs();
+}
+void deallocAlexStuff()
+{
+    delete playerptrs;
 }
