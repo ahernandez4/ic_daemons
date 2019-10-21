@@ -7,7 +7,7 @@
  * 2: Locate the bad code
  * 3: Fix the code
  * 4: Test the fix. And also test the whole program. Make sure
- *    no new problems arrives
+ *    no new problems arise
  */
 #include <GL/glx.h>
 #include "fonts.h"
@@ -15,7 +15,7 @@
 int* minutesPlayedPtr = NULL;
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
-    if(minutesPlayedPtr == NULL){
+    if (minutesPlayedPtr == NULL) {
         *minutesPlayedPtr = 0;
     }
 
@@ -58,7 +58,6 @@ void displayAlejandroH(int x, int y, GLuint atexture)
         //less than 1 minute placeholder
 	    ggprint8b(&r, 32, 0x00ffff44,
         "Your total played time: less than 1 minute");	
-
     }
 
 }
