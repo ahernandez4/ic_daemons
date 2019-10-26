@@ -147,13 +147,13 @@ void drawMap(GLuint)
                 //must be glTex... followed by glVert..
                 //
                 glTexCoord2f(tx,      1.0f); 
-                glVertex2i(32*(cols+1)-16, 32*(ysmap+1)-16);
+                glVertex2i(32*(cols+0.5)-16, 32*(ysmap+0.5)-16);
                 glTexCoord2f(tx,      0.0f);    
-                glVertex2i(32*(cols+1)-16, 32*(ysmap+1)+16);
+                glVertex2i(32*(cols+0.5)-16, 32*(ysmap+0.5)+16);
                 glTexCoord2f(tx+.100, 0.0f);    
-                glVertex2i(32*(cols+1)+16, 32*(ysmap+1)+16);
+                glVertex2i(32*(cols+0.5)+16, 32*(ysmap+0.5)+16);
                 glTexCoord2f(tx+.100, 1.0f); 
-                glVertex2i(32*(cols+1)+16, 32*(ysmap+1)-16);
+                glVertex2i(32*(cols+0.5)+16, 32*(ysmap+0.5)-16);
                 glEnd();
                 //glPopMatrix();
                 //glDisable(GL_ALPHA_TEST);
