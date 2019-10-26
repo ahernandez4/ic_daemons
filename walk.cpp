@@ -675,8 +675,10 @@ void render(void)
     ggprint8b(&r, 16, c, "a   walk left");
     ggprint8b(&r, 16, c, "c   display credits");
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
+    
+
     //displaying time to screen from server
-    displayOdinTime();
+    //displayOdinTime();
 
     //this is for drawing names on screen for credits on "c" button press
     if(g.displayCredits) {
@@ -686,9 +688,13 @@ void render(void)
         displayCD(350, 348);
     }
 
+    if (!g.displayTime) {
+	ggprint8b(&r, 16, c, "press \"t\" to display time");
+    }
+
     //Display Time elapsed during gameplay button = "t"
     if (g.displayTime) {
-        playTime(500,500);
+        playTime(15,484);
     }
 }
 
