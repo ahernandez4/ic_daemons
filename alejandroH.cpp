@@ -98,7 +98,8 @@ void deallocAlexStuff()
 }
 void drawMap(GLuint mapTexture)
 {
-    float tx = 0.0;
+    //which tile to draw 0.0 for magenta tile
+    float tx = 0.40;
     //float ty = 0.0;
     //float 
     if(mapfileloaded == 0)
@@ -108,21 +109,21 @@ void drawMap(GLuint mapTexture)
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
-    //glColor4ub(255,255,255,255);
+    glBindTexture(GL_TEXTURE_2D, mapTexture);
+    glBegin(GL_QUADS);
+    glTexCoord2f(tx,      1.0f);
+    glVertex2i(0, 0);
+    glTexCoord2f(tx,      0.0f);
+    glVertex2i(0, 600);
+    glTexCoord2f(tx+0.1f,      0.0f);
+    glVertex2i(800, 600);
+    glTexCoord2f(tx+0.1f,      1.0f);
+    glVertex2i(800, 0);
+    glEnd();
+    glPushMatrix();
     //as long as logic works out
     //it doesnt matter which direction we draw
-    glBindTexture(GL_TEXTURE_2D, mapTexture);
-
-    glTexCoord2f(0.9f,      1.0f);
-    glVertex2i(0, 0);
-    glTexCoord2f(0.9f,      0.0f);
-    glVertex2i(0, 600);
-    glTexCoord2f(0.9f+0.1f,      0.0f);
-    glVertex2i(800, 600);
-    glTexCoord2f(0.9f+0.1f,      1.0f);
-    glVertex2i(800, 0);
-
-    glPushMatrix();
+    //drawing down-up and left-right
     for (int rows = MAP_TILE_ROWS -1; rows >= 0; rows--) {
         for (int cols = 0; cols < MAP_TILE_COLUMNS; cols++) {
             int ysmap = 149 - rows;
