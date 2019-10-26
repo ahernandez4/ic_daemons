@@ -410,7 +410,7 @@ void initOpengl(void)
 void init() {
     player.x = 250;
     player.y = 80;
-    player.moveSpeed = 10;
+    player.moveSpeed = 3.75;
     //load mapfile
     loadMapFile();
     timers.recordTime(&timers.playTimeBegin);   
@@ -517,8 +517,9 @@ int checkKeys(XEvent *e)
         case XK_Escape:
             return 1;
             break;
-        case XK_c:
+        case XK_c: 
             g.displayCredits ^=1;
+	    
             break;
     }
     return 0;
@@ -596,8 +597,8 @@ void physics(void)
             timers.recordTime(&timers.walkTime);
         }
     }
-    player.x += incx;
-    player.y += incy;
+    player.x += incx * player.moveSpeed;
+    player.y += incy * player.moveSpeed;
     g.movebyte = 0;
 }
 
@@ -682,10 +683,13 @@ void render(void)
 
     //this is for drawing names on screen for credits on "c" button press
     if(g.displayCredits) {
+	    
         displayAlejandroH(350,332,g.fakeMarioTexture);
         drawDY_Credits(350, 300);
         tjcredits(350,316);
         displayCD(350, 348);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.1,0.1,0.1,0.1);
     }
 
     //this is for drawing the prompt for time and logic is for displaying
