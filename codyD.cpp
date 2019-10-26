@@ -1,29 +1,12 @@
 /* Cody Davis
  * CMPS 3350
  * 
- * function: displayCD(int x, int y) 
- * description: meant to display name using ggprint8b
- *      x and y input is given to center the box in
- *      the desired location. see ggprint8b for more
- *      information on proper use.
- * 
- *  stages of debugging:
- *
- *  1)Identify - see what the problem is
- *
- *  2)Isolate - narrow the issue down to a single problem
- *
- *  3)fix - change the code to fix the problem
- *
- *  4)review - look back over the code and see if its fixe
- *
 */
 
 #include "fonts.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
-
 //below are all the inlcusions for odinGetTime() and anything needed
 //for establishing connections or the code used in general
 #include <arpa/inet.h>
@@ -44,9 +27,12 @@ const int MAX_READ_ERRORS = 100;
 //this is for the timePlayD
 int odinGetTime();
 
-/*this code is for displaying my name to screen using ggprint function
- * this is called from within main
-*/
+/* function: displayCD(int x, int y) 
+ * description: meant to display name using ggprint8b
+ *      x and y input is given to center the box in
+ *      the desired location. see ggprint8b for more
+ *      information on proper use.
+ */
 
 void displayCD(int x, int y)
 {
@@ -115,25 +101,14 @@ int odinGetTime(){
     char req[1000];
     int req_len;
 
-
-    //char hostname[256] = "www.google.com";
-    //char integer_string[32];
-    //sprintf(integer_string, "%d", time);
     char hostname[256] = "odin.cs.csub.edu";
     char pagename[256] = "/~ahernandez2/3350/game/highscores.php";
-    //char pagename[256] = "/~ahernandez2/3350/game/highscores.php?param=";
-    //strcat(pagename, integer_string);
 
     int port = PORT;
     int bytes, nreads, nerrs;
     char buf[256];
     int ret;
 
-    //Get any command-line arguments.
-    //if (argc > 1)
-    //  strcpy(hostname, argv[1]);
-    //if (argc > 2)
-    //Setup the SSL BIO
     outbio = ssl_setup_bio();
 
     //Initialize the SSL library
@@ -146,7 +121,6 @@ int odinGetTime(){
     //next 2 lines of code are not currently needed.
     //SSL_MODE_AUTO_RETRY flag of the SSL_CTX_set_mode call.
     //SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
-
     //Setup the socket used for connection.
     host = gethostbyname(hostname);
     sd = socket(AF_INET, SOCK_STREAM, 0);
@@ -156,8 +130,8 @@ int odinGetTime(){
     addr.sin_addr.s_addr = *(long*)(host->h_addr);
 
     if (connect(sd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-        //BIO_printf(outbio, "%s: Cannot connect to host %s [%s] on port %d.\n", 
-        //argv[0], hostname, inet_ntoa(addr.sin_addr), port);
+        BIO_printf(outbio, "%s: Cannot connect to host %s [%s] on port %d.\n", 
+        argv[0], hostname, inet_ntoa(addr.sin_addr), port);
     }
 
     //Connect using the SSL certificate.
@@ -165,20 +139,17 @@ int odinGetTime(){
     SSL_set_fd(ssl, sd);
     SSL_connect(ssl);
 
-    //Show the certificate data
-    //show_cert_data(ssl, outbio, hostname);    
-    //A non-blocking socket will make the ssl_read() not block.
-
     set_to_non_blocking(sd);
 
     //Send the http request to the host server.
-
     sprintf(req, "GET /%s HTTP/1.1\r\nHost: %s\r\nUser-Agent: %s\r\n\r\n",
             pagename, hostname, USERAGENT);
     req_len = strlen(req);
     ret = SSL_write(ssl, req, req_len);
-    if (ret <= 0)
+    if (ret <= 0) {
         fprintf(stderr, "ERROR: SSL_write\n");
+    }
+
     fflush(stderr);
 
     //Get data returned from the server.
@@ -221,16 +192,12 @@ int odinGetTime(){
         //A slight pause can cause fewer reads to be needed.
         usleep(20000);
     }
-    //printf("\nn calls to ssl_read(): %i\n", nreads); fflush(stdout);
-    //Cleanup.
+       
     SSL_free(ssl);
     close(sd);
     SSL_CTX_free(ctx);
-    // std::cout << "right here " << std::endl;
-    // std::cout << timeP << std::endl;
-    // std::cout << timeNum;
     int t = atoi(timeP);
-    //std::cout << "bullshit num " << timeP << std::endl;
+    
     return t;
 }
 
