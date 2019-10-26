@@ -74,7 +74,7 @@ void displayAlejandroH(int x, int y, GLuint atexture)
         ggprint8b(&r, 32, 0x00ffff44,
                 "Your total played time: less than 1 minute");	
     }
-    std::cout << *(playerptrs->x) << std::endl;
+    //std::cout << *(playerptrs->x) << std::endl;
 
 }
 //temporary fix
