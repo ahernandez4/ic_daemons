@@ -688,8 +688,9 @@ void render(void)
         drawDY_Credits(350, 300);
         tjcredits(350,316);
         displayCD(350, 348);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(0.1,0.1,0.1,0.1);
+	//this is broken
+//	glClear(GL_COLOR_BUFFER_BIT);
+//	glClearColor(0.1,0.1,0.1,0.1);
     }
 
     //this is for drawing the prompt for time and logic is for displaying
