@@ -634,7 +634,7 @@ void render(void)
     drawMap(g.tilemapTexture);
     glPushMatrix();
     //
-    float h = 32;
+    float h = 32/2;
     float w = h * 0.8;
     glPushMatrix();
     glColor3f(1.0, 1.0, 1.0);
