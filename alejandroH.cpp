@@ -34,11 +34,8 @@ void displayAlejandroH(int x, int y, GLuint atexture)
     }
 
     //black screen
-    glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.1,0.1,0.1,0.1);
-    //int myx = x;// old values = x + 100;
-    //int myy = y;//old valiues = y  + 10;
-    //know values
+    glClear(GL_COLOR_BUFFER_BIT);
     int resy = 600;
     int resx = 800-64;
     Rect r;
@@ -107,10 +104,8 @@ void drawMap(GLuint mapTexture)
     if(mapfileloaded == 0)
         return;
     //
-
-    glColor3f(1.0, 1.0, 1.0);
+    glClearColor(1.0,1.0,1.0,1.0);
     glClear(GL_COLOR_BUFFER_BIT);
-
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     //glColor4ub(255,255,255,255);
@@ -118,19 +113,16 @@ void drawMap(GLuint mapTexture)
     //it doesnt matter which direction we draw
     glBindTexture(GL_TEXTURE_2D, mapTexture);
 
-    glTexCoord2f(0.4f,      1.0f);
+    glTexCoord2f(0.9f,      1.0f);
     glVertex2i(0, 0);
-    glTexCoord2f(0.4f,      0.0f);
+    glTexCoord2f(0.9f,      0.0f);
     glVertex2i(0, 600);
-    glTexCoord2f(0.4f+0.1f,      0.0f);
+    glTexCoord2f(0.9f+0.1f,      0.0f);
     glVertex2i(800, 600);
-    glTexCoord2f(0.4f+0.1f,      1.0f);
+    glTexCoord2f(0.9f+0.1f,      1.0f);
     glVertex2i(800, 0);
 
-
     glPushMatrix();
-    glColor3f(1.0, 1.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
     for (int rows = MAP_TILE_ROWS -1; rows >= 0; rows--) {
         for (int cols = 0; cols < MAP_TILE_COLUMNS; cols++) {
             int ysmap = 149 - rows;
@@ -156,8 +148,6 @@ void drawMap(GLuint mapTexture)
                 glTexCoord2f(tx+.100, 1.0f); 
                 glVertex2i(32*(cols+0.5)+16, 32*(ysmap+0.5)-16);
                 glEnd();
-                //glPopMatrix();
-                //glDisable(GL_ALPHA_TEST);
             }
         }
     }
@@ -167,8 +157,7 @@ void drawMap(GLuint mapTexture)
 }
 void loadMapFile()
 {
-    //MAP_TILE_ROWS][MAP_TILE_COLUMNS];
-
+    //MAP_TILE_ROWS MAP_TILE_COLUMNS;
     mapfileloaded = 1; //we loaded the map
     //
     std::ifstream mapifile;
@@ -191,8 +180,5 @@ void loadMapFile()
         }
     }
     mapifile.close();
-    //for (int i = 0; i < 100; i++) {
-    //    std::cout << maparray[148][i] << " " << std::endl;
-    //}
 }
 
