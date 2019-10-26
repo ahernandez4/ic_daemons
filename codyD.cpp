@@ -75,9 +75,7 @@ void displayOdinTime()
 /* this function gets time from the odin server and uses PHP to access
  * a text file on the public HTML.
  *
- * Input: there is no input needed we hard coded contacting only odin
- * this is the only server we need to contact so no sense in using 
- * command line
+ * 
  *
  * int: the output "t" is a time for the time played that is currently on the 
  * txt in the public HTML.
@@ -130,8 +128,8 @@ int odinGetTime(){
     addr.sin_addr.s_addr = *(long*)(host->h_addr);
 
     if (connect(sd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-        BIO_printf(outbio, "%s: Cannot connect to host %s [%s] on port %d.\n", 
-        argv[0], hostname, inet_ntoa(addr.sin_addr), port);
+       // BIO_printf(outbio, "%s: Cannot connect to host %s [%s] on port %d.\n", 
+       // argv[0], hostname, inet_ntoa(addr.sin_addr), port);
     }
 
     //Connect using the SSL certificate.
