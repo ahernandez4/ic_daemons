@@ -31,7 +31,8 @@ extern int odinGetTime();
 extern void passGlobalValues2Alex(int* min);//temporary fix
 extern void odinPushTime(int time);
 extern void displayOdinTime();
-
+extern void drawMap(GLuint);
+extern void loadMapFile();
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -101,11 +102,12 @@ class Image {
         }
 };
 
-Image img[4] = {
+Image img[5] = {
     "images/shift.gif",
     "images/castlemap.gif",
     "images/tj.jpg",
-    "images/fakeMario.png" };
+    "images/fakeMario.png",
+    "images/tilemap.png" };
 
 struct PlayerOne{
     int x;
@@ -151,10 +153,12 @@ class Global {
         int walkFrame;
         double delay;
         char movebyte;
+        //textures
         GLuint walkTexture;
         //added
         GLuint backgroundTexture;
         GLuint fakeMarioTexture;
+        GLuint tilemapTexture;
         //playtime
         int minutesPlayed;
 	int secondsCounter;
@@ -362,7 +366,7 @@ void initOpengl(void)
             GL_RGBA, GL_UNSIGNED_BYTE, walkData);
     //free(walkData);
     //unlink("./images/walk.ppm");
-    //-------------------------------------------------------------------------
+    //----------------------------------------------------------------------
     //background
     glBindTexture(GL_TEXTURE_2D, g.backgroundTexture);
     //
@@ -377,6 +381,18 @@ void initOpengl(void)
     //free(bgData);//no need if we did not build alpha channel
     //----------------------------------------------------------------------
 
+    //----------------------------------------------------------------------
+    glBindTexture(GL_TEXTURE_2D, g.tilemapTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    w = img[4].width;
+    h = img[4].height;
+    unsigned char *tileMapData = buildAlphaData(&img[4]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, tileMapData);
+    //delete
+    free(tileMapData);
+    //----------------------------------------------------------------------
     glBindTexture(GL_TEXTURE_2D, g.fakeMarioTexture);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
@@ -395,6 +411,8 @@ void init() {
     player.x = 250;
     player.y = 80;
     player.moveSpeed = 10;
+    //load mapfile
+    loadMapFile();
     timers.recordTime(&timers.playTimeBegin);   
     g.minutesPlayed = odinGetTime();
     g.secondsCounter = g.minutesPlayed * 60;
@@ -596,6 +614,8 @@ void render(void)
     //my background
     //something about texture location from 0,0 to 1,1
     //int which part of the map
+    //remove this
+    /*
     glBindTexture(GL_TEXTURE_2D, g.backgroundTexture);
     glBegin(GL_QUADS);
     //0,1|0,0|1,0|1,1
@@ -608,6 +628,9 @@ void render(void)
     glTexCoord2f(1.0f,      1.0f);    
     glVertex2i(800, 0);
     glEnd();
+    //to this
+    */
+    drawMap(g.tilemapTexture);
     glPushMatrix();
     //
     float h = 32;
