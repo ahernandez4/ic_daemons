@@ -688,6 +688,8 @@ void render(void)
         displayCD(350, 348);
     }
 
+    //this is for drawing the prompt for time and logic is for displaying
+    //while time is not displayed and while not in credits screen
     if (!g.displayTime && !g.displayCredits) {
 	ggprint8b(&r, 16, c, "press \"t\" to display time");
     }
