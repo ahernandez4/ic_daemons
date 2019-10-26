@@ -688,7 +688,7 @@ void render(void)
         displayCD(350, 348);
     }
 
-    if (!g.displayTime) {
+    if (!g.displayTime && !g.displayCredits) {
 	ggprint8b(&r, 16, c, "press \"t\" to display time");
     }
 
