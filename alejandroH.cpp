@@ -99,7 +99,7 @@ void deallocAlexStuff()
 {
     delete playerptrs;
 }
-void drawMap(GLuint)
+void drawMap(GLuint mapTexture)
 {
     float tx = 0.0;
     //float ty = 0.0;
@@ -116,6 +116,7 @@ void drawMap(GLuint)
     //glColor4ub(255,255,255,255);
     //as long as logic works out
     //it doesnt matter which direction we draw
+    glBindTexture(GL_TEXTURE_2D, mapTexture);
 
     glTexCoord2f(0.4f,      1.0f);
     glVertex2i(0, 0);
@@ -135,7 +136,7 @@ void drawMap(GLuint)
             int ysmap = 149 - rows;
             char c = '0';
             c = maparray[rows][cols];
-            //maybe switch to a switch(c){ statement
+            //maybe switch to a switch(c) statement
             //
             if(c != '0') {
                 int ix = ((int) c) - 49;
@@ -159,39 +160,39 @@ void drawMap(GLuint)
                 //glDisable(GL_ALPHA_TEST);
             }
         }
-        }
-        glPopMatrix();
-
-        //
     }
-    void loadMapFile()
-    {
-        //MAP_TILE_ROWS][MAP_TILE_COLUMNS];
+    glPopMatrix();
 
-        mapfileloaded = 1; //we loaded the map
+    //
+}
+void loadMapFile()
+{
+    //MAP_TILE_ROWS][MAP_TILE_COLUMNS];
+
+    mapfileloaded = 1; //we loaded the map
+    //
+    std::ifstream mapifile;
+    mapifile.open("map.txt",std::ifstream::in);
+    //while we havent reached end of file
+    char character;
+    int row = 0, col = 0;
+    while (!mapifile.eof()) {
         //
-        std::ifstream mapifile;
-        mapifile.open("map.txt",std::ifstream::in);
-        //while we havent reached end of file
-        char character;
-        int row = 0, col = 0;
-        while (!mapifile.eof()) {
-            //
-            mapifile.get(character);
-            //check character is within range
-            if ((character < 58 && character > 47) || 
-                    (character < 91 && character > 64) ||
-                    (character < 123 && character > 96)) {
-                if(col >=MAP_TILE_COLUMNS) {
-                    col = 0;
-                    row++;
-                }
-                maparray[row][col++] = character;
+        mapifile.get(character);
+        //check character is within range
+        if ((character < 58 && character > 47) || 
+                (character < 91 && character > 64) ||
+                (character < 123 && character > 96)) {
+            if(col >=MAP_TILE_COLUMNS) {
+                col = 0;
+                row++;
             }
+            maparray[row][col++] = character;
         }
-        mapifile.close();
-        //for (int i = 0; i < 100; i++) {
-        //    std::cout << maparray[148][i] << " " << std::endl;
-        //}
     }
+    mapifile.close();
+    //for (int i = 0; i < 100; i++) {
+    //    std::cout << maparray[148][i] << " " << std::endl;
+    //}
+}
 
