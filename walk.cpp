@@ -103,7 +103,7 @@ class Image {
 };
 
 Image img[5] = {
-    "images/shift.gif",
+    "images/girl.png",
     "images/castlemap.gif",
     "images/tj.jpg",
     "images/fakeMario.png",
@@ -644,11 +644,11 @@ void render(void)
     glColor4ub(255,255,255,255);
     int ix = g.walkFrame % 5;
     int iy = 0;
-    if (g.walkFrame >= 8)
+    if (g.walkFrame >= 3)
         iy = 1;
     //float tx = (float)ix / 7.0;
     //float ty = (float)iy / 2.0;
-    tx = (float)ix / 7.0;
+    tx = (float)ix / 2.0;
     ty = (float)iy / 2.0;
     glBegin(GL_QUADS);
     //must be glTex... followed by glVert..
@@ -656,9 +656,9 @@ void render(void)
     glVertex2i(cx-w +player.x, cy-h +player.y);
     glTexCoord2f(tx,      ty);    
     glVertex2i(cx-w +player.x, cy+h +player.y);
-    glTexCoord2f(tx+.125, ty);    
+    glTexCoord2f(tx+.5, ty);    
     glVertex2i(cx+w +player.x, cy+h +player.y);
-    glTexCoord2f(tx+.125, ty+.5); 
+    glTexCoord2f(tx+.5, ty+.5); 
     glVertex2i(cx+w +player.x, cy-h +player.y);
     glEnd();
     glPopMatrix();
