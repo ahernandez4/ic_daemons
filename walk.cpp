@@ -23,6 +23,7 @@
 using namespace std;
 
 //external defines for functions
+extern void enemy();
 extern void drawDY_Credits(int x, int y);
 extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
@@ -408,11 +409,12 @@ void initOpengl(void)
 }
 
 void init() {
-    player.x = 250;
-    player.y = 80;
+    player.x = -380;
+    player.y = -67;
     player.moveSpeed = 3.75;
     //load mapfile
     loadMapFile();
+    enemy();
     timers.recordTime(&timers.playTimeBegin);   
     g.minutesPlayed = odinGetTime();
     g.secondsCounter = g.minutesPlayed * 60;

@@ -33,13 +33,31 @@
 const int MAX_READ_ERRORS = 100;
 //inlcudes for odinGetTime() end here
 
-struct enemy{
+struct enem{
     int x;
     int y;
     int moveSpeed;
     int health;
 
-} enemy;
+}en;
+void enemy()
+{
+    float r = 0.0f; //RED
+    float g = 0.0f; //GREEN
+    float b = 0.0f; //BLUE
+
+    //glClear(GL_COLOR_BUFFER_BIT);
+    //glClearColor(r, g, b, 255.0f);
+
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 1.0, 0.0); //You can set RGB color for you vertex
+    glVertex2f(-0.5f, 0.5f);
+    glVertex2f(0.5f, 0.5f);
+    glVertex2f(0.5f, -0.5f);
+    glVertex2f(-0.5f, -0.5f);
+    glEnd();
+
+}
 
 void tjcredits(int x, int y) //, GLuint texid)
 {
@@ -51,10 +69,10 @@ void tjcredits(int x, int y) //, GLuint texid)
 }
 void createEnemy()
 {
-    enemy.x = 220;
-    enemy.y = 80;
-    enemy.moveSpeed = 15;
-    enemy.health = 3;
+    en.x = 220;
+    en.y = 80;
+    en.moveSpeed = 15;
+    en.health = 3;
 }
 
 void updatingTime(int time)
