@@ -23,6 +23,7 @@
 using namespace std;
 
 //external defines for functions
+extern bool collision(int x, int y);
 extern void enemy();
 extern void drawDY_Credits(int x, int y);
 extern void displayAlejandroH(int x, int y, GLuint);
@@ -162,7 +163,7 @@ class Global {
         GLuint tilemapTexture;
         //playtime
         int minutesPlayed;
-	int secondsCounter;
+	    int secondsCounter;
         Vec box[20];
         Global() {
             movebyte = 0;
@@ -487,18 +488,26 @@ int checkKeys(XEvent *e)
     }
     (void)shift;
     switch (key) {
-        case XK_w:
-            g.movebyte = g.movebyte | 2;
-            break;
-        case XK_a:
-            g.movebyte = g.movebyte | 4;
-            break;
-        case XK_s:
-            g.movebyte = g.movebyte | 8;
-            break;
-        case XK_d:
-            g.movebyte = g.movebyte | 16;
-            break;
+        case XK_w://up for some reason up wont go up
+            if(collision(player.x,player.y))
+                break;
+            else
+                g.movebyte = g.movebyte | 2;
+        case XK_a://left
+            if(collision(player.x, player.y))
+                break;
+            else
+                g.movebyte = g.movebyte | 4;
+        case XK_s://down moves down and right at the same time
+            if(collision(player.x, player.y))
+                break;
+            else
+                g.movebyte = g.movebyte | 8;
+        case XK_d://right
+            if(collision(player.x, player.y))
+                break;
+            else
+                g.movebyte = g.movebyte | 16;
         case XK_j:
             break;
         case XK_t:
