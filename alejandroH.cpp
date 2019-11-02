@@ -11,9 +11,8 @@
  */
 #include <GL/glx.h>
 #include "fonts.h"
-#include <iostream>
 #include <fstream> 
-#include <string> //maybe remove
+#include <string>
 //temporary fix globals
 #define MAP_TILE_ROWS 150
 #define MAP_TILE_COLUMNS 250
@@ -71,7 +70,6 @@ void displayAlejandroH(int x, int y, GLuint atexture)
         ggprint8b(&r, 32, 0x00ffff44,
                 "Your total played time: less than 1 minute");	
     }
-    //std::cout << *(playerptrs->x) << std::endl;
 
 }
 //temporary fix
@@ -100,11 +98,8 @@ void drawMap(GLuint mapTexture)
 {
     //which tile to draw 0.0 for magenta tile
     float tx = 0.40;
-    //float ty = 0.0;
-    //float 
     if(mapfileloaded == 0)
         return;
-    //
     glClearColor(1.0,1.0,1.0,1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_ALPHA_TEST);
@@ -160,14 +155,25 @@ void loadMapFile()
 {
     //MAP_TILE_ROWS MAP_TILE_COLUMNS;
     mapfileloaded = 1; //we loaded the map
-    //
+    //char readtags[256];
+    std::string line;    
     std::ifstream mapifile;
-    mapifile.open("map.txt",std::ifstream::in);
+    //mapifile.open("map.txt",std::ifstream::in);
+    mapifile.open("map.tmx",std::ifstream::in);
     //while we havent reached end of file
     char character;
     int row = 0, col = 0;
+    bool foundData = false;
     while (!mapifile.eof()) {
         //
+        while (!foundData) {
+            mapifile >> line;
+            if(line.compare("<data")==0){
+                foundData = true;
+                //read the last token to discard
+                mapifile >> line;
+            }
+        }
         mapifile.get(character);
         //check character is within range
         if ((character < 58 && character > 47) || 
