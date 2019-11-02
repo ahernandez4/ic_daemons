@@ -33,6 +33,7 @@
 const int MAX_READ_ERRORS = 100;
 //inlcudes for odinGetTime() end here
 
+extern unsigned char maparray[150][250];
 struct enem{
     int x;
     int y;
@@ -40,6 +41,16 @@ struct enem{
     int health;
 
 }en;
+
+bool collision(int x, int y)
+{
+    if (maparray[x][y] == '2') {
+        std::cout << maparray[x][y] << std::endl;
+        return true;
+    }
+    else 
+        return false;
+}
 void enemy()
 {
     float r = 0.0f; //RED
