@@ -160,14 +160,29 @@ void loadMapFile()
 {
     //MAP_TILE_ROWS MAP_TILE_COLUMNS;
     mapfileloaded = 1; //we loaded the map
-    //
+    //char readtags[256];
+    std::string line;    
     std::ifstream mapifile;
-    mapifile.open("map.txt",std::ifstream::in);
+    //mapifile.open("map.txt",std::ifstream::in);
+    mapifile.open("map.tmx",std::ifstream::in);
     //while we havent reached end of file
     char character;
     int row = 0, col = 0;
+    bool foundData = false;
     while (!mapifile.eof()) {
         //
+        while (!foundData) {
+            //std::getline(mapifile,line);
+            mapifile >> line;
+            //std::getline(mapifile, line);
+            std::cout << line << std::endl;
+            if(line.compare("<data")==0){
+                foundData = true;
+                //read the last token to discard
+                mapifile >> line;
+                std::cout << line << std::endl;
+            }
+        }
         mapifile.get(character);
         //check character is within range
         if ((character < 58 && character > 47) || 
@@ -181,5 +196,8 @@ void loadMapFile()
         }
     }
     mapifile.close();
+    //test
+    for (int i = 0; i < 10; i++)
+        std::cout << maparray[0][i] << std::endl;
 }
 
