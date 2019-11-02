@@ -155,7 +155,6 @@ void loadMapFile()
 {
     //MAP_TILE_ROWS MAP_TILE_COLUMNS;
     mapfileloaded = 1; //we loaded the map
-    //char readtags[256];
     std::string line;    
     std::ifstream mapifile;
     mapifile.open("map.tmx",std::ifstream::in);
