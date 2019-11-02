@@ -11,9 +11,8 @@
  */
 #include <GL/glx.h>
 #include "fonts.h"
-#include <iostream>
 #include <fstream> 
-#include <string> //maybe remove
+#include <string>
 //temporary fix globals
 #define MAP_TILE_ROWS 150
 #define MAP_TILE_COLUMNS 250
@@ -71,7 +70,6 @@ void displayAlejandroH(int x, int y, GLuint atexture)
         ggprint8b(&r, 32, 0x00ffff44,
                 "Your total played time: less than 1 minute");	
     }
-    //std::cout << *(playerptrs->x) << std::endl;
 
 }
 //temporary fix
@@ -100,11 +98,8 @@ void drawMap(GLuint mapTexture)
 {
     //which tile to draw 0.0 for magenta tile
     float tx = 0.40;
-    //float ty = 0.0;
-    //float 
     if(mapfileloaded == 0)
         return;
-    //
     glClearColor(1.0,1.0,1.0,1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_ALPHA_TEST);
@@ -172,15 +167,11 @@ void loadMapFile()
     while (!mapifile.eof()) {
         //
         while (!foundData) {
-            //std::getline(mapifile,line);
             mapifile >> line;
-            //std::getline(mapifile, line);
-            std::cout << line << std::endl;
             if(line.compare("<data")==0){
                 foundData = true;
                 //read the last token to discard
                 mapifile >> line;
-                std::cout << line << std::endl;
             }
         }
         mapifile.get(character);
@@ -196,8 +187,5 @@ void loadMapFile()
         }
     }
     mapifile.close();
-    //test
-    for (int i = 0; i < 10; i++)
-        std::cout << maparray[0][i] << std::endl;
 }
 
