@@ -158,7 +158,6 @@ void loadMapFile()
     //char readtags[256];
     std::string line;    
     std::ifstream mapifile;
-    //mapifile.open("map.txt",std::ifstream::in);
     mapifile.open("map.tmx",std::ifstream::in);
     //while we havent reached end of file
     char character;
