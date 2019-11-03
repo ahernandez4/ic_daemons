@@ -25,7 +25,12 @@ using namespace std;
 //external defines for functions
 extern bool collision(int x, int y);
 extern void enemy();
+
+//Drake Code
 extern void drawDY_Credits(int x, int y);
+extern int playTime(int x, int y);
+extern void beginTime();
+
 extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
@@ -35,6 +40,7 @@ extern void odinPushTime(int time);
 extern void displayOdinTime();
 extern void drawMap(GLuint);
 extern void loadMapFile();
+
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -119,13 +125,14 @@ struct PlayerOne{
 
 //-----------------------------------------------------------------------------
 //Setup timers
+
 class Timers {
     public:
         double physicsRate;
         double oobillion;
         struct timespec timeStart, timeEnd, timeCurrent, time1, time2;
-        struct timespec playTimeBegin;
-        struct timespec playTimeEnd; 
+        //struct timespec playTimeBegin;
+        //struct timespec playTimeEnd; 
         struct timespec walkTime;
         Timers() {
             physicsRate = 1.0 / 30.0;
@@ -142,6 +149,7 @@ class Timers {
             clock_gettime(CLOCK_REALTIME, t);
         }
 } timers;
+
 //-----------------------------------------------------------------------------
 
 class Global {
@@ -416,13 +424,16 @@ void init() {
     //load mapfile
     loadMapFile();
     enemy();
-    timers.recordTime(&timers.playTimeBegin);   
+
+    //timers.recordTime(&timers.playTimeBegin);
+    beginTime(); 
+
     g.minutesPlayed = odinGetTime();
     g.secondsCounter = g.minutesPlayed * 60;
     passGlobalValues2Alex(&g.minutesPlayed);//temporary fix
 }
 
-
+/*
 void playTime(int x, int y)
 {
 
@@ -441,7 +452,7 @@ void playTime(int x, int y)
     cout << "Time: " << timeSpan << endl;
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
 }
-
+*/
 
 void checkMouse(XEvent *e)
 {
@@ -712,7 +723,8 @@ void render(void)
 
     //Display Time elapsed during gameplay button = "t"
     if (g.displayTime) {
-        playTime(15,484);
+        playTime(15,484); 
+        g.minutesPlayed = playTime(0,0);
     }
 }
 
