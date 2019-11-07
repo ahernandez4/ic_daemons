@@ -418,8 +418,10 @@ void initOpengl(void)
 }
 
 void init() {
-    player.x = -380;
-    player.y = -67;
+    //player.x = 48;
+    //player.y = 288;
+    player.x = 48;
+    player.y = 224;
     player.moveSpeed = 3.75;
     //load mapfile
     loadMapFile();
@@ -630,8 +632,9 @@ void render(void)
     //Clear the screen
     glColor3f(1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
-    float cx = g.xres/2.0;
-    float cy = g.yres/2.0;
+    //remove this: old way to put character in the middle
+    //float cx = g.xres/2.0;
+    //float cy = g.yres/2.0;
     //will use later
     float tx, ty;
     //my background
@@ -676,13 +679,13 @@ void render(void)
     glBegin(GL_QUADS);
     //must be glTex... followed by glVert..
     glTexCoord2f(tx,      ty+.5); 
-    glVertex2i(cx-w +player.x, cy-h +player.y);
+    glVertex2i(player.x-w, player.y-h);
     glTexCoord2f(tx,      ty);    
-    glVertex2i(cx-w +player.x, cy+h +player.y);
+    glVertex2i(player.x-w, player.y+h);
     glTexCoord2f(tx+.5, ty);    
-    glVertex2i(cx+w +player.x, cy+h +player.y);
+    glVertex2i(player.x+w, player.y+h);
     glTexCoord2f(tx+.5, ty+.5); 
-    glVertex2i(cx+w +player.x, cy-h +player.y);
+    glVertex2i(player.x+w, player.y-h);
     glEnd();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
