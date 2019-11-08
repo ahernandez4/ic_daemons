@@ -502,25 +502,17 @@ int checkKeys(XEvent *e)
     (void)shift;
     switch (key) {
         case XK_w://up for some reason up wont go up
-            if(collision(player.x,player.y))
-                break;
-            else
-                g.movebyte = g.movebyte | 2;
+            g.movebyte = g.movebyte | 2;
+            break;
         case XK_a://left
-            if(collision(player.x, player.y))
-                break;
-            else
-                g.movebyte = g.movebyte | 4;
+            g.movebyte = g.movebyte | 4;
+            break;
         case XK_s://down moves down and right at the same time
-            if(collision(player.x, player.y))
-                break;
-            else
-                g.movebyte = g.movebyte | 8;
+            g.movebyte = g.movebyte | 8;
+            break;
         case XK_d://right
-            if(collision(player.x, player.y))
-                break;
-            else
-                g.movebyte = g.movebyte | 16;
+            g.movebyte = g.movebyte | 16;
+            break;
         case XK_j:
             break;
         case XK_t:
@@ -621,8 +613,20 @@ void physics(void)
             timers.recordTime(&timers.walkTime);
         }
     }
-    player.x += incx * player.moveSpeed;
-    player.y += incy * player.moveSpeed;
+    incx*=player.moveSpeed;
+    incy*=player.moveSpeed;
+    /*
+    //check x
+    if(!collision(player.x+incx, player.y))
+        player.x += incx;
+    //check y
+    if(!collision(player.x, player.y+incy))
+        player.y += incy;
+    */ 
+    //temporary   
+    player.x += incx;
+    player.y += incy;
+    //end temp
     g.movebyte = 0;
 }
 
