@@ -39,7 +39,7 @@ extern void deallocAlexStuff();
 extern void initInternalAlexStuff();
 extern void passGlobalValues2Alex(int* min);//temporary fix
 extern void passPlayerPtrs2Alex(int*,int*,int*);
-extern void checkPlayerPos(int*);
+extern void checkPlayerPos();
 extern void odinPushTime(int time);
 extern void displayOdinTime();
 extern void drawMap(GLuint);
@@ -704,7 +704,7 @@ void render(void)
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_ALPHA_TEST);
     //
-    checkPlayerPos(&player.x);
+    checkPlayerPos();
     //
     unsigned int c = 0x00ffff44;
     r.bot = g.yres - 20;

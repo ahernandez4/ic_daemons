@@ -201,7 +201,7 @@ void moveMapFocus(int lateral, int vertical)
     glOrtho(800*x,800*(x+1),600*y,600*(y+1),-1,1);
 }
 
-void checkPlayerPos(int *x)
+void checkPlayerPos()
 {
     static int prevx = 0;
     static int prevy = 0;
