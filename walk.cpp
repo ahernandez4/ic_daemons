@@ -35,7 +35,11 @@ extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
+extern void deallocAlexStuff();
+extern void initInternalAlexStuff();
 extern void passGlobalValues2Alex(int* min);//temporary fix
+extern void passPlayerPtrs2Alex(int*,int*,int*);
+extern void checkPlayerPos(int*);
 extern void odinPushTime(int time);
 extern void displayOdinTime();
 extern void drawMap(GLuint);
@@ -294,6 +298,7 @@ int main(void)
         render();
         x11.swapBuffers();
     }
+    deallocAlexStuff();
     odinPushTime(g.minutesPlayed);
     cleanup_fonts();
     return 0;
@@ -423,6 +428,10 @@ void init() {
     player.x = 48;
     player.y = 224;
     player.moveSpeed = 3.75;
+    //
+    initInternalAlexStuff();
+    passPlayerPtrs2Alex(&player.x,&player.y,&player.moveSpeed);
+    //
     //load mapfile
     loadMapFile();
     enemy();
@@ -694,6 +703,8 @@ void render(void)
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_ALPHA_TEST);
+    //
+    checkPlayerPos(&player.x);
     //
     unsigned int c = 0x00ffff44;
     r.bot = g.yres - 20;

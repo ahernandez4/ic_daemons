@@ -20,12 +20,15 @@ int* minutesPlayedPtr;// = NULL;
 //make sure we load the map before trying to use it
 static int mapfileloaded = 0;
 unsigned char maparray[MAP_TILE_ROWS][MAP_TILE_COLUMNS];
-struct playerPtrs{
+struct PlayerPtrs{
     int* x = NULL;
     int* y = NULL;
     int* speed = NULL;
-} *playerptrs;
-//
+};//
+//temporary fix
+static PlayerPtrs *playerptrs = NULL;
+static int *playerptrsx = 0;
+static int *playerptrsy = 0;
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
     if (minutesPlayedPtr == NULL) {
@@ -72,7 +75,6 @@ void displayAlejandroH(int x, int y, GLuint atexture)
     }
 
 }
-//temporary fix
 void passGlobalValues2Alex(int* min)
 {
     minutesPlayedPtr = min;
@@ -81,14 +83,17 @@ void passPlayerPtrs2Alex(int* x, int* y, int*s)
 {
     if(playerptrs == NULL)
         return;
-    (playerptrs->x) = x;
-    (playerptrs->y) = y;
-    (playerptrs->speed) = s;
+
+    playerptrs->x = x;
+    playerptrs->y = y;
+    playerptrs->speed = s;
+    playerptrsx = x;
+    playerptrsy = y;
 }
 void initInternalAlexStuff()
 {
     minutesPlayedPtr = NULL;
-    playerptrs = new playerPtrs();
+    playerptrs = new PlayerPtrs();
 }
 void deallocAlexStuff()
 {
@@ -187,3 +192,25 @@ void loadMapFile()
     mapifile.close();
 }
 
+void moveMapFocus(int lateral, int vertical)
+{
+    int x = lateral;
+    int y = vertical;
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glOrtho(800*x,800*(x+1),600*y,600*(y+1),-1,1);
+}
+
+void checkPlayerPos(int *x)
+{
+    static int prevx = 0;
+    static int prevy = 0;
+    //because *(playerptrs-x) gives me segfault
+    int mapx = (int) *(playerptrsx) / 800;
+    int mapy = (int) *(playerptrsy) / 600;
+    if((prevx==mapx) && (prevy==mapy))
+        return;
+    moveMapFocus(mapx,mapy);
+    prevx = mapx;
+    prevy = mapy;
+}
