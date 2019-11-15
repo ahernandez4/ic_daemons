@@ -29,6 +29,31 @@ struct PlayerPtrs{
 static PlayerPtrs *playerptrs = NULL;
 static int *playerptrsx = 0;
 static int *playerptrsy = 0;
+// This is my Friday code
+// ~~~~~
+// ~~~~~
+//
+class AlexGlobal{
+    private:
+    int *x,*y;
+    static AlexGlobal * instance;
+    AlexGlobal() {
+        x = nullptr;
+        y = nullptr;
+    }
+    AlexGlobal(AlexGlobal const& copy);
+    AlexGlobal & operator = (AlexGlobal const& copy);
+    public:
+    static AlexGlobal *GetInstance(){
+        if(!instance){
+            instance = new AlexGlobal();
+        }
+        return instance;
+    }
+};
+AlexGlobal* AlexGlobal::instance = 0;
+AlexGlobal * ag = AlexGlobal::GetInstance();
+//to here
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
     if (minutesPlayedPtr == NULL) {
