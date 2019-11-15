@@ -44,8 +44,10 @@ struct enem{
 
 bool collision(int x, int y)
 {
+    x = x/32;
+    y = y/32;
     if (maparray[x][y] == '2') {
-        std::cout << maparray[x][y] << std::endl;
+        std::cout << x << " " << y << std::endl;
         return true;
     }
     else 
@@ -53,13 +55,6 @@ bool collision(int x, int y)
 }
 void enemy()
 {
-    float r = 0.0f; //RED
-    float g = 0.0f; //GREEN
-    float b = 0.0f; //BLUE
-
-    //glClear(GL_COLOR_BUFFER_BIT);
-    //glClearColor(r, g, b, 255.0f);
-
     glBegin(GL_QUADS);
     glColor3f(0.0, 1.0, 0.0); //You can set RGB color for you vertex
     glVertex2f(-0.5f, 0.5f);

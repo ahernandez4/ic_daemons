@@ -624,17 +624,17 @@ void physics(void)
     }
     incx*=player.moveSpeed;
     incy*=player.moveSpeed;
-    /*
+    
     //check x
-    if(!collision(player.x+incx, player.y))
+    if(!collision(player.x+incx + 10, player.y))
         player.x += incx;
     //check y
-    if(!collision(player.x, player.y+incy))
+    if(!collision(player.x, player.y+incy + 10 ))
         player.y += incy;
-    */ 
+    
     //temporary   
-    player.x += incx;
-    player.y += incy;
+    //player.x += incx;
+    //player.y += incy;
     //end temp
     g.movebyte = 0;
 }
