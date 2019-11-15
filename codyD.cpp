@@ -24,6 +24,13 @@
 const int MAX_READ_ERRORS = 100;
 //inlcudes for odinGetTime() end here
 
+//This is mh Friday code
+//~~~~~~~~
+//~~~~~~~~
+//MADE A BOOBOO and my changes got overwritten
+
+
+
 //this is for the timePlayD
 int odinGetTime();
 
