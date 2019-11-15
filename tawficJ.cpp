@@ -44,6 +44,8 @@ struct enem{
 
 bool collision(int x, int y)
 {
+    //this is my friday code
+    //changed a few things in main to check for the collison
     x = x/32;
     y = y/32;
     if (maparray[x][y] == '2') {
