@@ -427,7 +427,8 @@ void init() {
     //player.y = 288;
     player.x = 80;
     player.y = 240;
-    player.moveSpeed = 3.75;
+    //player.moveSpeed = 3.75;
+    player.moveSpeed = 1;
     //
     initInternalAlexStuff();
     passPlayerPtrs2Alex(&player.x,&player.y,&player.moveSpeed);
@@ -625,15 +626,17 @@ void physics(void)
     incy*=player.moveSpeed;
     
     //check x
+    /*
     if(!collision(player.x+incx + 10, player.y))
         player.x += incx;
     //check y
     if(!collision(player.x, player.y+incy + 10 ))
         player.y += incy;
     
+    */
     //temporary   
-    //player.x += incx;
-    //player.y += incy;
+    player.x += incx;
+    player.y += incy;
     //end temp
     g.movebyte = 0;
 }
@@ -672,14 +675,14 @@ void render(void)
     glPushMatrix();
     //
     float h = 32/2;
-    float w = h * 0.8;
+    float w = 32/2;//h * 0.8;
     glPushMatrix();
-    glColor3f(1.0, 1.0, 1.0);
-    glBindTexture(GL_TEXTURE_2D, g.walkTexture);
+    //glColor3f(1.0, 1.0, 1.0);
+    //glBindTexture(GL_TEXTURE_2D, g.walkTexture);
     //
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glColor4ub(255,255,255,255);
+    //glEnable(GL_ALPHA_TEST);
+    //glAlphaFunc(GL_GREATER, 0.0f);
+    //glColor4ub(255,255,255,255);
     int ix = g.walkFrame % 5;
     int iy = 0;
     if (g.walkFrame >= 3)
@@ -688,15 +691,17 @@ void render(void)
     //float ty = (float)iy / 2.0;
     tx = (float)ix / 2.0;
     ty = (float)iy / 2.0;
+    glColor3f(0.8, 0.8, 0.6);
+
     glBegin(GL_QUADS);
     //must be glTex... followed by glVert..
-    glTexCoord2f(tx,      ty+.5); 
+    //glTexCoord2f(tx,      ty+.5); 
     glVertex2i(player.x-w, player.y-h);
-    glTexCoord2f(tx,      ty);    
+    //glTexCoord2f(tx,      ty);    
     glVertex2i(player.x-w, player.y+h);
-    glTexCoord2f(tx+.5, ty);    
+    //glTexCoord2f(tx+.5, ty);    
     glVertex2i(player.x+w, player.y+h);
-    glTexCoord2f(tx+.5, ty+.5); 
+    //glTexCoord2f(tx+.5, ty+.5); 
     glVertex2i(player.x+w, player.y-h);
     glEnd();
     glPopMatrix();
