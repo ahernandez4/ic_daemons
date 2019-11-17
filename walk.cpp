@@ -26,10 +26,12 @@ using namespace std;
 extern bool collision(int x, int y);
 extern void enemy();
 
-//Drake Code
 extern void drawDY_Credits(int x, int y);
 extern int playTime(int x, int y);
 extern void beginTime();
+extern void pauseGame();
+extern void pausePlus();
+
 extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
@@ -159,9 +161,12 @@ class Timers {
 
 class Global {
     public:
+        int pause;
+        int howToPlay;
+        int displayScore;
         int displayCredits;
         //int startTime;
-        int displayTime;
+        //int displayTime;
         int done;
         int xres, yres;
         int walk;
@@ -179,6 +184,9 @@ class Global {
 	    int secondsCounter;
         Vec box[20];
         Global() {
+            displayScore=0;
+            howToPlay=0;
+            pause=0;
             movebyte = 0;
             done=0;
             xres=800;
@@ -523,10 +531,25 @@ int checkKeys(XEvent *e)
         case XK_d://right
             g.movebyte = g.movebyte | 16;
             break;
-        case XK_j:
+        case XK_p:
+            g.pause ^= 1;
+            if (!g.pause) {
+                g.displayScore=0;
+                g.displayCredits=0;
+                g.howToPlay=0;
+            }
             break;
-        case XK_t:
-            g.displayTime ^= 1;
+        case XK_h:
+            if (g.pause)
+                g.howToPlay ^=1;
+            break;
+        case XK_v:
+            if (g.pause)
+                g.displayScore ^= 1;
+            break;
+        case XK_c:
+            if (g.pause) 
+                g.displayCredits ^=1;
             break;
         case XK_Left:
             break;
@@ -543,9 +566,6 @@ int checkKeys(XEvent *e)
         case XK_Escape:
             return 1;
             break;
-        case XK_c: 
-            g.displayCredits ^=1;
-	    break;
     }
     return 0;
 }
@@ -639,9 +659,12 @@ void physics(void)
     g.movebyte = 0;
 }
 
-void render(void)
+//Drake took code from the beginning of the render function
+//To render th map and character here
+//The purpose was to make the rnder function more concise
+void renderGame()
 {
-    Rect r;
+	//Rect r;
     //Clear the screen
     glColor3f(1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -691,13 +714,13 @@ void render(void)
     ty = (float)iy / 2.0;
     glBegin(GL_QUADS);
     //must be glTex... followed by glVert..
-    glTexCoord2f(tx,      ty+.5); 
+    glTexCoord2f(tx,      ty+.5);
     glVertex2i(player.x-w, player.y-h);
-    glTexCoord2f(tx,      ty);    
+    glTexCoord2f(tx,      ty);
     glVertex2i(player.x-w, player.y+h);
-    glTexCoord2f(tx+.5, ty);    
+    glTexCoord2f(tx+.5, ty);
     glVertex2i(player.x+w, player.y+h);
-    glTexCoord2f(tx+.5, ty+.5); 
+    glTexCoord2f(tx+.5, ty+.5);
     glVertex2i(player.x+w, player.y-h);
     glEnd();
     glPopMatrix();
@@ -705,7 +728,10 @@ void render(void)
     glDisable(GL_ALPHA_TEST);
     //
     checkPlayerPos();
-    //
+	//
+/*
+	This code moved to diplayInstructions()	
+
     unsigned int c = 0x00ffff44;
     r.bot = g.yres - 20;
     r.left = 10;
@@ -715,17 +741,60 @@ void render(void)
     ggprint8b(&r, 16, c, "d   walk right");
     ggprint8b(&r, 16, c, "a   walk left");
     ggprint8b(&r, 16, c, "c   display credits");
-    ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y); 
+    ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
+
+*/
+
+}
+
+void displayInstructions() 
+{
+	Rect r;
+	unsigned int c = 0x00119944;
+    r.bot = g.yres - 20;
+    r.left = 350;
+    r.center = 0;
+    ggprint8b(&r, 16, c, "w   move up");
+    ggprint8b(&r, 16, c, "s   walk down");
+    ggprint8b(&r, 16, c, "d   walk right");
+    ggprint8b(&r, 16, c, "a   walk left");
+    //ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
+
+
+}
+
+void render(void)
+{
+	renderGame();
 
     //this is for drawing names on screen for credits on "c" button press
-    if(g.displayCredits) {	    
-        displayAlejandroH(350,332,g.fakeMarioTexture);
-        drawDY_Credits(350, 300);
-        tjcredits(350,316);
-        displayCD(350, 348);
+    if (g.pause) {
+        pauseGame();
+		if (g.displayCredits) {
+            g.howToPlay =0;
+            g.displayScore=0;
+        	displayAlejandroH(350, 575, g.fakeMarioTexture);
+        	drawDY_Credits(350, 556);
+        	tjcredits(350, 537);
+        	displayCD(350, 518);
+			pausePlus();
+    	}
+        if (g.howToPlay) {
+            g.displayCredits = 0;
+            g.displayScore =0;
+            displayInstructions();
+            pausePlus();
+        }
+        if (g.displayScore) {
+            g.displayCredits = 0;
+            g.howToPlay = 0;
+            displayTimeUI(g.displayScore, g.displayCredits);
+            pausePlus();
+        }
     }
 
-    displayTimeUI(g.displayTime, g.displayCredits);
+    
+    //displayTimeUI(g.displayTime, g.displayCredits);
 /*
     //this is for drawing the prompt for time and logic is for displaying
     //while time is not displayed and while not in credits screen
