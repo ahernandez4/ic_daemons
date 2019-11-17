@@ -13,13 +13,17 @@
 #include "fonts.h"
 #include <fstream> 
 #include <string>
-//temporary fix globals
+#include <stdlib.h>
+#include <sstream>
+#ifdef DEBUG_A
+#include <iostream>
+#endif
 #define MAP_TILE_ROWS 150
 #define MAP_TILE_COLUMNS 250
 int* minutesPlayedPtr;// = NULL;
 //make sure we load the map before trying to use it
 static int mapfileloaded = 0;
-unsigned char maparray[MAP_TILE_ROWS][MAP_TILE_COLUMNS];
+unsigned int maparray[MAP_TILE_ROWS][MAP_TILE_COLUMNS];
 struct PlayerPtrs{
     int* x = NULL;
     int* y = NULL;
@@ -30,26 +34,23 @@ static PlayerPtrs *playerptrs = NULL;
 static int *playerptrsx = 0;
 static int *playerptrsy = 0;
 // This is my Friday code
-// ~~~~~
-// ~~~~~
-//
 class AlexGlobal{
     private:
-    int *x,*y;
-    static AlexGlobal * instance;
-    AlexGlobal() {
-        x = nullptr;
-        y = nullptr;
-    }
-    AlexGlobal(AlexGlobal const& copy);
-    AlexGlobal & operator = (AlexGlobal const& copy);
-    public:
-    static AlexGlobal *GetInstance(){
-        if(!instance){
-            instance = new AlexGlobal();
+        int *x,*y;
+        static AlexGlobal * instance;
+        AlexGlobal() {
+            x = nullptr;
+            y = nullptr;
         }
-        return instance;
-    }
+        AlexGlobal(AlexGlobal const& copy);
+        AlexGlobal & operator = (AlexGlobal const& copy);
+    public:
+        static AlexGlobal *GetInstance(){
+            if(!instance){
+                instance = new AlexGlobal();
+            }
+            return instance;
+        }
 };
 AlexGlobal* AlexGlobal::instance = 0;
 AlexGlobal * ag = AlexGlobal::GetInstance();
@@ -152,13 +153,11 @@ void drawMap(GLuint mapTexture)
     for (int rows = MAP_TILE_ROWS -1; rows >= 0; rows--) {
         for (int cols = 0; cols < MAP_TILE_COLUMNS; cols++) {
             int ysmap = 149 - rows;
-            char c = '0';
+            int c = 0;
             c = maparray[rows][cols];
-            //maybe switch to a switch(c) statement
             //
-            if(c != '0') {
-                int ix = ((int) c) - 49;
-                //int iy = 0;
+            //if(c != '0') {
+                int ix = c;
                 tx = (float)ix / 10.0;
                 //once we have multiple rows of tiles
                 //ty = (float)iy / 2.0;
@@ -174,11 +173,14 @@ void drawMap(GLuint mapTexture)
                 glTexCoord2f(tx+.100, 1.0f); 
                 glVertex2i(32*(cols+0.5)+16, 32*(ysmap+0.5)-16);
                 glEnd();
-            }
+            //}
         }
     }
     glPopMatrix();
-
+    for(int i = 0; i < 10; i++)
+    {
+        std::cout << maparray[i][0] << std::endl;
+    }
     //
 }
 void loadMapFile()
@@ -189,30 +191,38 @@ void loadMapFile()
     std::ifstream mapifile;
     mapifile.open("map.tmx",std::ifstream::in);
     //while we havent reached end of file
-    char character;
-    int row = 0, col = 0;
+    int tileint = 0;
+    int row = 0;//, col = 0;
     bool foundData = false;
     while (!mapifile.eof()) {
         //
         while (!foundData) {
             mapifile >> line;
+            //getline(mapifile, line);
+            //std::cout << line << std::endl;
             if(line.compare("<data")==0){
                 foundData = true;
                 //read the last token to discard
                 mapifile >> line;
             }
         }
-        mapifile.get(character);
-        //check character is within range
-        if ((character < 58 && character > 47) || 
-                (character < 91 && character > 64) ||
-                (character < 123 && character > 96)) {
-            if(col >=MAP_TILE_COLUMNS) {
-                col = 0;
-                row++;
-            }
-            maparray[row][col++] = character;
+        mapifile >> line;
+        for (unsigned int i = 0; i < line.length(); i++) {
+            if(line[i] == ',')
+                line[i] = ' ';
         }
+#ifdef DEBUG_A        
+        //std::cout << line << std::endl;
+#endif      
+        //check make sure we don't try to insert overrage of rows
+        if (row < MAP_TILE_ROWS) {
+            std::stringstream ss(line);
+            for(int i = 0; i < MAP_TILE_COLUMNS; i++){
+                ss >> tileint;
+                maparray[row][i] = tileint;
+            }
+        }
+        row++;
     }
     mapifile.close();
 }

@@ -31,9 +31,11 @@
 #define USERAGENT "CMPS-3350"
 #define PORT 443
 const int MAX_READ_ERRORS = 100;
+
 //inlcudes for odinGetTime() end here
 
-extern unsigned char maparray[150][250];
+//extern unsigned char maparray[150][250];
+extern unsigned int maparray[150][250];
 struct enem{
     int x;
     int y;
