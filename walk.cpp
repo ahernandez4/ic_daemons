@@ -544,8 +544,7 @@ int checkKeys(XEvent *e)
             break;
         case XK_c: 
             g.displayCredits ^=1;
-	    
-            break;
+	    break;
     }
     return 0;
 }
@@ -715,11 +714,7 @@ void render(void)
     ggprint8b(&r, 16, c, "d   walk right");
     ggprint8b(&r, 16, c, "a   walk left");
     ggprint8b(&r, 16, c, "c   display credits");
-    ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
-    
-
-    //displaying time to screen from server
-    //displayOdinTime();
+    ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y); 
 
     //this is for drawing names on screen for credits on "c" button press
     if(g.displayCredits) {
@@ -728,9 +723,6 @@ void render(void)
         drawDY_Credits(350, 300);
         tjcredits(350,316);
         displayCD(350, 348);
-	//this is broken
-//	glClear(GL_COLOR_BUFFER_BIT);
-//	glClearColor(0.1,0.1,0.1,0.1);
     }
 
     //this is for drawing the prompt for time and logic is for displaying
