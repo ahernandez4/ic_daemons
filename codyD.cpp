@@ -23,12 +23,31 @@
 #define PORT 443
 const int MAX_READ_ERRORS = 100;
 //inlcudes for odinGetTime() end here
+extern int playTime(int x, int y);
+
+
 
 //This is mh Friday code
 //~~~~~~~~
 //~~~~~~~~
-//MADE A BOOBOO and my changes got overwritten
-
+//this function is used for putting the minutes played to screen 
+void displayTimeUI(int displayTime, int displayCredits) {	
+    Rect r;
+    int x = 15;
+    int y = 484;
+    int advance = 0;
+    r.bot = y;
+    r.left = x;
+    r.center = 0;
+    unsigned int color = 0x00ffff44; 
+    
+    if (!displayTime && !displayCredits) {	
+    	ggprint8b(&r, advance, color, "press \"t\" to display time");
+    }    
+    if (displayTime && !displayCredits) {	
+	playTime(15, 484);
+    }
+}
 
 
 //this is for the timePlayD
@@ -74,7 +93,7 @@ void displayOdinTime()
     int time = 0;
     unsigned int color = 0xFEEDFEED;
     time = odinGetTime();
-
+    
     ggprint8b(&r, advance, color, "Current time played: %d min.", time );   
 }
 

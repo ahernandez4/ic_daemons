@@ -86,17 +86,14 @@ int playTime(int x, int y)
     timers2.recordTime(&timers2.playTimeEnd);
 
 	int minutesPlayed;
-    //COMMENTED OUT DUE TO WARNING
-    //PLEASE FIX BEFORE UNCOMMENTING
-  //  int secondsCounter;
+    //int secondsCounter;
 
     double timeSpan = timers2.timeDiff(&timers2.playTimeBegin, 
     &timers2.playTimeEnd);
-    //COMMENTED OUT DUE TO WARNING
-    //PLEASE FIX BEFORE UNCOMMENTING
-   // timeSpan = timeSpan + secondsCounter;
+    //timeSpan = timeSpan + secondsCounter;
     minutesPlayed = round(timeSpan/60);
-    cout << "Time: " << timeSpan << endl;
+    //cout << "Time: " << timeSpan << endl;
+	glColor3f(0.0f,1.0f,0.0f); 
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
 
     return minutesPlayed;
@@ -125,5 +122,50 @@ void reticle()
     glVertex3f( 1.0f,-1.0f, 0.0f);
     glVertex3f(-1.0f,-1.0f, 0.0f);
     glEnd();
+}
+
+//This code written on Friday, November 15th
+
+//This funtion will clear the screen and show user the menu
+void pauseGame()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_QUADS);
+ 	glColor3f(0.0f,0.0f,0.0f);   
+    glVertex2i(0, 0);        
+    glVertex2i(0, 600);
+    glVertex2i(800, 600);   
+    glVertex2i(800, 0);
+    glEnd();
+
+	glColor3f(1.0f,0.0f,0.0f); 
+    playTime(750, 580);
+
+	Rect r;
+	r.bot =  575;
+    r.left = 10;
+    r.center = 0;
+    ggprint8b(&r, 32, 0x00887766, "Enter the Pungeon");
+    ggprint8b(&r, 16, 0x008877aa, "[p] - return to game");
+    ggprint8b(&r, 16, 0x008877aa, "[c] - view credits");
+    ggprint8b(&r, 16, 0x008877aa, "[h] - how to play");
+    ggprint8b(&r, 16, 0x008877aa, "[v] - view scores");
+    ggprint8b(&r, 16, 0x008877aa, "[q] - return to main");
+}
+
+
+void pausePlus()
+{
+	Rect r;
+    r.bot =  575;
+    r.left = 10;
+    r.center = 0;
+    ggprint8b(&r, 32, 0x00887766, "Enter the Pungeon");
+    ggprint8b(&r, 16, 0x008877aa, "[p] - return to game");
+    ggprint8b(&r, 16, 0x008877aa, "[c] - view credits");
+    ggprint8b(&r, 16, 0x008877aa, "[h] - how to play");
+    ggprint8b(&r, 16, 0x008877aa, "[v] - view scores");
+    ggprint8b(&r, 16, 0x008877aa, "[q] - return to main");
 }
 
