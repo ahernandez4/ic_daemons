@@ -729,6 +729,15 @@ void renderGame()
     //
     checkPlayerPos();
 	//
+    
+	Rect r;
+    unsigned int c =  0x00ffff44;
+    r.bot = g.yres - 20;
+    r.left = 10;
+    r.center = 0; 
+    ggprint8b(&r, 16, c, "[p] - pause game");
+
+
 /*
 	This code moved to diplayInstructions()	
 
@@ -773,10 +782,10 @@ void render(void)
 		if (g.displayCredits) {
             g.howToPlay =0;
             g.displayScore=0;
-        	displayAlejandroH(350, 575, g.fakeMarioTexture);
+        	displayAlejandroH(350, 518, g.fakeMarioTexture);
         	drawDY_Credits(350, 556);
         	tjcredits(350, 537);
-        	displayCD(350, 518);
+        	displayCD(350, 575);
 			pausePlus();
     	}
         if (g.howToPlay) {
