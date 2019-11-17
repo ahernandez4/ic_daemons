@@ -157,7 +157,7 @@ void drawMap(GLuint mapTexture)
             c = maparray[rows][cols];
             //
             //if(c != '0') {
-                int ix = c;
+                int ix = c-1;
                 tx = (float)ix / 10.0;
                 //once we have multiple rows of tiles
                 //ty = (float)iy / 2.0;
@@ -177,10 +177,13 @@ void drawMap(GLuint mapTexture)
         }
     }
     glPopMatrix();
+
+#ifdef DEBUG_A        
     for(int i = 0; i < 10; i++)
     {
         std::cout << maparray[i][0] << std::endl;
     }
+#endif    
     //
 }
 void loadMapFile()
