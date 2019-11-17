@@ -86,11 +86,15 @@ int playTime(int x, int y)
     timers2.recordTime(&timers2.playTimeEnd);
 
 	int minutesPlayed;
-    int secondsCounter;
+    //COMMENTED OUT DUE TO WARNING
+    //PLEASE FIX BEFORE UNCOMMENTING
+  //  int secondsCounter;
 
     double timeSpan = timers2.timeDiff(&timers2.playTimeBegin, 
     &timers2.playTimeEnd);
-    timeSpan = timeSpan + secondsCounter;
+    //COMMENTED OUT DUE TO WARNING
+    //PLEASE FIX BEFORE UNCOMMENTING
+   // timeSpan = timeSpan + secondsCounter;
     minutesPlayed = round(timeSpan/60);
     cout << "Time: " << timeSpan << endl;
     ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
