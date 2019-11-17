@@ -30,7 +30,6 @@ extern void enemy();
 extern void drawDY_Credits(int x, int y);
 extern int playTime(int x, int y);
 extern void beginTime();
-
 extern void displayAlejandroH(int x, int y, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
@@ -44,6 +43,8 @@ extern void odinPushTime(int time);
 extern void displayOdinTime();
 extern void drawMap(GLuint);
 extern void loadMapFile();
+extern void displayTimeUI(int displayTime, int displayCredits);
+
 
 //defined types
 typedef double Flt;
@@ -717,14 +718,15 @@ void render(void)
     ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y); 
 
     //this is for drawing names on screen for credits on "c" button press
-    if(g.displayCredits) {
-	    
+    if(g.displayCredits) {	    
         displayAlejandroH(350,332,g.fakeMarioTexture);
         drawDY_Credits(350, 300);
         tjcredits(350,316);
         displayCD(350, 348);
     }
 
+    displayTimeUI(g.displayTime, g.displayCredits);
+/*
     //this is for drawing the prompt for time and logic is for displaying
     //while time is not displayed and while not in credits screen
     if (!g.displayTime && !g.displayCredits) {
@@ -736,6 +738,7 @@ void render(void)
         playTime(15,484); 
         g.minutesPlayed = playTime(0,0);
     }
+*/
 }
 
 int deltaTime()
