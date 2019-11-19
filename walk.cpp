@@ -434,7 +434,7 @@ void initOpengl(void)
 void init() {
     //player.x = 48;
     //player.y = 288;
-    player.x = 80;
+    player.x = 112;
     player.y = 240;
     player.moveSpeed = 3.75;
     //
