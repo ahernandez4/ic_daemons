@@ -3,7 +3,8 @@ class GameScene{
 	int playerx;
 	int playery;
     public:
-	GameScene(int*,int*);
+    GameScene(){}
+	//GameScene(int*,int*);
 	virtual ~GameScene(){};
 	//virtual Update();
 	virtual void Draw() = 0;

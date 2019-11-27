@@ -36,13 +36,15 @@ static int *playerptrsx = 0;
 static int *playerptrsy = 0;
 //MyScene
 class MyScene : public GameScene{
-    GLunit playertexture;
-    Rec *other;
-    Rec *player;
+    int *prev_playerx = nullptr;
+    int *prev_playery = nullptr;
+    GLuint playertexture;
+    Rect *other;
+    Rect *player;
     void Draw();
     public:
-    Game(int *x, int *y);
-}
+    MyScene(int *x, int *y);
+};
 
 
 // This is my Friday code
@@ -73,9 +75,13 @@ AlexGlobal * ag = AlexGlobal::GetInstance();
 //to here
 
 //GameScene definition
-Gamee::GameScene(int *x, int *y){
+//GameScene::GameScene(int *x, int *y){
    //
    
+//}
+MyScene::MyScene(int *x, int*y){
+    this->prev_playerx = x;
+    this->prev_playery = y;
 }
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
@@ -275,5 +281,5 @@ void checkPlayerPos()
     prevy = mapy;
 }
 void createScene(){
-    ag->mygs = new GameScene(ag->playerx,ag->playery);
+    ag->mygs = new MyScene(ag->playerx,ag->playery);
 }
