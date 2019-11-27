@@ -106,7 +106,7 @@ void movement()
 
 void renderRain()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
     
 	float w, h;
 
@@ -126,12 +126,12 @@ void renderRain()
     }
 }
 
-int makeItRain()
+void makeItRain()
 {
-	while (1) {
+        int x = rand() % 800;
+	    makeParticle(x, 800);
 		movement();
 		renderRain();
-	}
 }
 ////////////////////////////////////////////////////////////////////////////
 bool collision(int x, int y)
