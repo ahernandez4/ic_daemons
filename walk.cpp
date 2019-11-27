@@ -46,7 +46,7 @@ extern void displayOdinTime();
 extern void drawMap(GLuint);
 extern void loadMapFile();
 extern void displayTimeUI(int displayTime, int displayCredits);
-
+extern int makeItRain();
 
 //defined types
 typedef double Flt;
@@ -776,7 +776,6 @@ void displayInstructions()
 void render(void)
 {
 	renderGame();
-
     //this is for drawing names on screen for credits on "c" button press
     if (g.pause) {
         pauseGame();
@@ -804,6 +803,7 @@ void render(void)
     }
 
     
+    makeItRain();
     //displayTimeUI(g.displayTime, g.displayCredits);
 /*
     //this is for drawing the prompt for time and logic is for displaying

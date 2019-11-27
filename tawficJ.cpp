@@ -32,7 +32,6 @@
 #define PORT 443
 const int MAX_READ_ERRORS = 100;
 
-//inlcudes for odinGetTime() end here
 
 //extern unsigned char maparray[150][250];
 extern unsigned int maparray[150][250];
@@ -43,15 +42,106 @@ struct enem{
     int health;
 
 }en;
+////////////////////TRYING TO MAKE IT RAIN////////////////////////////////
+struct Vec {
+    float x, y, z;
+};
+const int MAX_PARTICLES = 100000;
+const float GRAVITY     = 0.1;
 
+
+struct Shape {
+    float width, height;
+    float radius;
+    Vec center;
+};
+struct Particle {
+    Shape s;
+    Vec velocity;
+};
+
+class Global2 {
+    public:
+        int xres, yres;
+        Particle particle[MAX_PARTICLES];
+        int n;
+        Global2();
+} t;
+
+Global2::Global2()
+{
+    xres = 800;
+    yres = 600;
+    n = 0;
+}
+
+void makeParticle(int x, int y)
+{
+    //Add a particle to the particle system.
+    //
+    if (t.n >= MAX_PARTICLES)
+        return;
+    //std::cout << "makeParticle() " << x << " " << y << std::endl;
+    //set position of particle
+    Particle *p = &t.particle[t.n];
+    p->s.center.x = x;
+    p->s.center.y = y;
+    p->velocity.y = -0.2;
+    p->velocity.y =  ((double)rand()/ (double)RAND_MAX)- .5;
+    p->velocity.x =  ((double)rand()/ (double)RAND_MAX)- .5 + .6;
+
+    ++t.n;
+}
+void movement()
+{ 
+    if (t.n <= 0)
+        return;
+    for(int i = 0; i<t.n; i++){
+        Particle *p = &t.particle[i];
+        p->s.center.x += p->velocity.x;
+        p->s.center.y += p->velocity.y;
+        p->velocity.y -= GRAVITY;
+    }
+}
+
+void renderRain()
+{
+    //glClear(GL_COLOR_BUFFER_BIT);
+    
+	float w, h;
+
+    for(int i = 0; i < t.n; i++) {
+        //There is at least one particle to draw.
+        glPushMatrix();
+        glColor3ub(150,160,220 * i);
+        Vec *c = &t.particle[i].s.center;
+        w = h = 2;
+        glBegin(GL_QUADS);
+        glVertex2i(c->x-w, c->y-h);
+        glVertex2i(c->x-w, c->y+h);
+        glVertex2i(c->x+w, c->y+h);
+        glVertex2i(c->x+w, c->y-h);
+        glEnd();
+        glPopMatrix();
+    }
+}
+
+void makeItRain()
+{
+        int x = rand() % 800;
+	    makeParticle(x, 800);
+		movement();
+		renderRain();
+}
+////////////////////////////////////////////////////////////////////////////
 bool collision(int x, int y)
 {
     //this is my friday code
     //changed a few things in main to check for the collison
-    x = abs(x/32);
-    y = abs(y/32);
-    if (maparray[x][y] == '2' ) {
-        std::cout << x << " " << y << std::endl;
+    x = abs( (x/32));
+    y = abs( 150 - (y/32));
+    if (maparray[y][x] == 2 ) {
+        std::cout << y << " " << x << std::endl;
         return true;
     }
     else 
@@ -88,7 +178,7 @@ void createEnemy()
 void updatingTime(int time)
 {
     //deletes file, to rewrite so it can be updated
-    if( remove( "highscores.txt" ) != 0 )
+    if ( remove( "highscores.txt" ) != 0 )
         std::cout << "error deleting file\n";
     else {
         std::ofstream myfile ("highscores.txt");
