@@ -15,6 +15,7 @@
 #include <string>
 #include <stdlib.h>
 #include <sstream>
+#include "GameScene.h"
 #ifdef DEBUG_A
 #include <iostream>
 #endif
@@ -33,18 +34,36 @@ struct PlayerPtrs{
 static PlayerPtrs *playerptrs = NULL;
 static int *playerptrsx = 0;
 static int *playerptrsy = 0;
+//MyScene
+class MyScene : public GameScene{
+    int prev_playerx;
+    int prev_playery;
+    GLuint playertexture;
+    Rect *other;
+    Rect *player;
+    //void Draw();
+    public:
+    MyScene(int *x, int *y);
+    void Draw();
+};
+
+
 // This is my Friday code
 class AlexGlobal{
     private:
-        int *x,*y;
         static AlexGlobal * instance;
         AlexGlobal() {
-            x = nullptr;
-            y = nullptr;
+            playerx = nullptr;
+            playery = nullptr;
+	    mygs = nullptr;
+
         }
         AlexGlobal(AlexGlobal const& copy);
         AlexGlobal & operator = (AlexGlobal const& copy);
     public:
+
+        int *playerx,*playery;
+	MyScene *mygs = nullptr;
         static AlexGlobal *GetInstance(){
             if(!instance){
                 instance = new AlexGlobal();
@@ -55,6 +74,19 @@ class AlexGlobal{
 AlexGlobal* AlexGlobal::instance = 0;
 AlexGlobal * ag = AlexGlobal::GetInstance();
 //to here
+
+//GameScene definition
+//GameScene::GameScene(int *x, int *y){
+   //
+   
+//}
+MyScene::MyScene(int *x, int*y){
+    this->prev_playerx = *x;
+    this->prev_playery = *y;
+}
+void MyScene::Draw(){
+    return;
+}
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
     if (minutesPlayedPtr == NULL) {
@@ -251,4 +283,7 @@ void checkPlayerPos()
     moveMapFocus(mapx,mapy);
     prevx = mapx;
     prevy = mapy;
+}
+void createScene(){
+    ag->mygs = new MyScene(ag->playerx,ag->playery);
 }
