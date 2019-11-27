@@ -36,14 +36,15 @@ static int *playerptrsx = 0;
 static int *playerptrsy = 0;
 //MyScene
 class MyScene : public GameScene{
-    int *prev_playerx = nullptr;
-    int *prev_playery = nullptr;
+    int prev_playerx;
+    int prev_playery;
     GLuint playertexture;
     Rect *other;
     Rect *player;
-    void Draw();
+    //void Draw();
     public:
     MyScene(int *x, int *y);
+    void Draw();
 };
 
 
@@ -80,8 +81,11 @@ AlexGlobal * ag = AlexGlobal::GetInstance();
    
 //}
 MyScene::MyScene(int *x, int*y){
-    this->prev_playerx = x;
-    this->prev_playery = y;
+    this->prev_playerx = *x;
+    this->prev_playery = *y;
+}
+void MyScene::Draw(){
+    return;
 }
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
