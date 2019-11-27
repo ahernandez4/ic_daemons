@@ -48,10 +48,10 @@ bool collision(int x, int y)
 {
     //this is my friday code
     //changed a few things in main to check for the collison
-    x = abs(x/32);
-    y = abs(y/32);
-    if (maparray[x][y] == '2' ) {
-        std::cout << x << " " << y << std::endl;
+    x = abs( (x/32));
+    y = abs( 150 - (y/32));
+    if (maparray[y][x] == 2 ) {
+        std::cout << y << " " << x << std::endl;
         return true;
     }
     else 
