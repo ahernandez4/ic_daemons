@@ -1,3 +1,6 @@
+#ifndef GAMESCENE_H
+#define GAMESCENE_H
+
 class GameScene{
     protected:
 	int playerx;
@@ -9,3 +12,4 @@ class GameScene{
 	//virtual Update();
 	virtual void Draw() = 0;
 };
+#endif

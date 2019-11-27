@@ -43,7 +43,7 @@ class MyScene : public GameScene{
     Rect *player;
     //void Draw();
     public:
-    MyScene(int *x, int *y);
+    MyScene(int *x, int *y, GLuint);
     void Draw();
 };
 
@@ -80,9 +80,10 @@ AlexGlobal * ag = AlexGlobal::GetInstance();
    //
    
 //}
-MyScene::MyScene(int *x, int*y){
+MyScene::MyScene(int *x, int*y,GLuint gltexture){
     this->prev_playerx = *x;
     this->prev_playery = *y;
+    this->playertexture = gltexture;
 }
 void MyScene::Draw(){
     return;
@@ -147,6 +148,8 @@ void passPlayerPtrs2Alex(int* x, int* y, int*s)
     playerptrs->speed = s;
     playerptrsx = x;
     playerptrsy = y;
+    ag->playerx = x;
+    ag->playery = y;
 }
 void initInternalAlexStuff()
 {
@@ -284,6 +287,7 @@ void checkPlayerPos()
     prevx = mapx;
     prevy = mapy;
 }
-void createScene(){
-    ag->mygs = new MyScene(ag->playerx,ag->playery);
+GameScene* createScene(GLuint atexture){
+    //ag->mygs = new MyScene(ag->playerx,ag->playery);
+    return new MyScene(ag->playerx,ag->playery,atexture);
 }
