@@ -17,6 +17,7 @@
 #include <sstream>
 #include "GameScene.h"
 #include "Enemy.h"
+#include <vector>
 #ifdef DEBUG_A
 #include <iostream>
 #endif
@@ -24,10 +25,14 @@
 #define MAP_TILE_COLUMNS 250
 //some forward declaration
 void moveMapFocus(int, int);
+void checkPlayerPos();
 int* minutesPlayedPtr;// = NULL;
 //make sure we load the map before trying to use it
 static int mapfileloaded = 0;
 unsigned int maparray[MAP_TILE_ROWS][MAP_TILE_COLUMNS];
+//externs
+extern std::vector<Enemy> enemies;
+extern GLuint texturearray[4];
 struct PlayerPtrs{
     int* x = NULL;
     int* y = NULL;
@@ -46,6 +51,7 @@ class MyScene : public GameScene{
     Rect *player;
     //void Draw();
     public:
+    bool deleteSoon;
     MyScene(int *x, int *y, GLuint[]);
     void Draw();
 };
@@ -58,15 +64,16 @@ class AlexGlobal{
         AlexGlobal() {
             playerx = nullptr;
             playery = nullptr;
-	    mygs = nullptr;
-
+            mygs = nullptr;
         }
         AlexGlobal(AlexGlobal const& copy);
         AlexGlobal & operator = (AlexGlobal const& copy);
     public:
-
-        int *playerx,*playery;
-	MyScene *mygs = nullptr;
+        int *playerx;
+        int *playery;
+        int mapcellx;
+        int mapcelly;
+        MyScene *mygs = nullptr;
         static AlexGlobal *GetInstance(){
             if(!instance){
                 instance = new AlexGlobal();
@@ -80,24 +87,31 @@ AlexGlobal * ag = AlexGlobal::GetInstance();
 
 //GameScene definition
 //GameScene::GameScene(int *x, int *y){
-   //
-   
+//
+
 //}
 MyScene::MyScene(int *x, int*y,GLuint gltexture[]){
     this->prev_playerx = *x;
     this->prev_playery = *y;
     //this->playertexture = gltexture;
     this->gltextures = gltexture;
-
+    *(ag->playerx) = 400;
+    *(ag->playery) = 300;
     moveMapFocus(0,0);
 }
-//maybe destructor
-MyScene::~MyScene(){
-    *(ag->playerx) = this->prev_playerx;
-    *(ag->playery) = this->prev_playery;
-    checkPlayerPos();
-}
 void MyScene::Draw(){
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_QUADS);
+    glColor3f(0.0f,0.0f,0.0f);
+    glVertex2i(0, 0);
+    glVertex2i(0, 600);
+    glVertex2i(800, 600);
+    glVertex2i(800, 0);
+    glEnd();
+
+    //glColor3f(1.0f,0.0f,0.0f);
+
     return;
 }
 //--------------------------------
@@ -165,6 +179,8 @@ void passPlayerPtrs2Alex(int* x, int* y, int*s)
     playerptrsy = y;
     ag->playerx = x;
     ag->playery = y;
+    ag->mapcelly = 0;
+    ag->mapcellx = 0;
 }
 void initInternalAlexStuff()
 {
@@ -207,22 +223,22 @@ void drawMap(GLuint mapTexture)
             c = maparray[rows][cols];
             //
             //if(c != '0') {
-                int ix = c-1;
-                tx = (float)ix / 10.0;
-                //once we have multiple rows of tiles
-                //ty = (float)iy / 2.0;
-                glBegin(GL_QUADS);
-                //must be glTex... followed by glVert..
-                //
-                glTexCoord2f(tx,      1.0f); 
-                glVertex2i(32*(cols+0.5)-16, 32*(ysmap+0.5)-16);
-                glTexCoord2f(tx,      0.0f);    
-                glVertex2i(32*(cols+0.5)-16, 32*(ysmap+0.5)+16);
-                glTexCoord2f(tx+.100, 0.0f);    
-                glVertex2i(32*(cols+0.5)+16, 32*(ysmap+0.5)+16);
-                glTexCoord2f(tx+.100, 1.0f); 
-                glVertex2i(32*(cols+0.5)+16, 32*(ysmap+0.5)-16);
-                glEnd();
+            int ix = c-1;
+            tx = (float)ix / 10.0;
+            //once we have multiple rows of tiles
+            //ty = (float)iy / 2.0;
+            glBegin(GL_QUADS);
+            //must be glTex... followed by glVert..
+            //
+            glTexCoord2f(tx,      1.0f); 
+            glVertex2i(32*(cols+0.5)-16, 32*(ysmap+0.5)-16);
+            glTexCoord2f(tx,      0.0f);    
+            glVertex2i(32*(cols+0.5)-16, 32*(ysmap+0.5)+16);
+            glTexCoord2f(tx+.100, 0.0f);    
+            glVertex2i(32*(cols+0.5)+16, 32*(ysmap+0.5)+16);
+            glTexCoord2f(tx+.100, 1.0f); 
+            glVertex2i(32*(cols+0.5)+16, 32*(ysmap+0.5)-16);
+            glEnd();
             //}
         }
     }
@@ -293,7 +309,6 @@ void checkPlayerPos()
 {
     static int prevx = 0;
     static int prevy = 0;
-    //because *(playerptrs-x) gives me segfault
     int mapx = (int) *(playerptrsx) / 800;
     int mapy = (int) *(playerptrsy) / 600;
     if((prevx==mapx) && (prevy==mapy))
@@ -301,8 +316,26 @@ void checkPlayerPos()
     moveMapFocus(mapx,mapy);
     prevx = mapx;
     prevy = mapy;
+    ag->mapcellx = mapx;
+    ag->mapcelly = mapy;
 }
 GameScene* createScene(GLuint atexture[]){
     //ag->mygs = new MyScene(ag->playerx,ag->playery);
     return new MyScene(ag->playerx,ag->playery,atexture);
+}
+GameScene* checkscene(GameScene* scene){
+    if (scene == nullptr)
+        return nullptr;
+    else if (scene->deleteSoon) {
+        *(ag->playerx) = scene->prev_playerx;
+        *(ag->playery) = scene->prev_playery;
+        checkPlayerPos();
+        delete scene;
+        return nullptr;
+    }
+    else
+        return scene;
+}
+void drawEnemies(){
+    return;
 }
