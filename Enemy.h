@@ -5,12 +5,13 @@ class Enemy{
     private:
     GLuint enemyTexture;
     public:
-    Enemy(GLuint atexture);
+    //Enemy(GLuint atexture);
     int health;
     int xpos;
     int ypos;
     void Draw();
     void Spawn(int x, int y);
+    bool Died();
 };
 
 #endif

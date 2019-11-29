@@ -19,7 +19,9 @@
 #include <GL/glx.h>
 #include "fonts.h"
 #include <iostream>
-
+#include "GameScene.h"
+#include "Enemy.h"
+#include <vector>
 using namespace std;
 
 //external defines for functions
@@ -31,8 +33,8 @@ extern int playTime(int x, int y);
 extern void beginTime();
 extern void pauseGame();
 extern void pausePlus();
-
-extern void displayAlejandroH(int x, int y, GLuint);
+extern void createScene(GLuint[]);
+extern void displayAlejandroH(int, int, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
 extern int odinGetTime();
@@ -71,7 +73,11 @@ const float gravity = -0.2f;
 //funcion prototypes
 int deltaTime();
 //
-
+//------------------
+GLuint texturearray[4];
+GameScene *currentscene;
+vector<Enemy> enemies;
+//------------------
 class Image {
     public:
         int width, height;
@@ -451,7 +457,12 @@ void init() {
 
     g.minutesPlayed = odinGetTime();
     g.secondsCounter = g.minutesPlayed * 60;
-    passGlobalValues2Alex(&g.minutesPlayed);//temporary fix
+    passGlobalValues2Alex(&g.minutesPlayed);
+    currentscene = nullptr;
+    texturearray[0] = g.walkTexture;
+    texturearray[1] = g.backgroundTexture;
+    texturearray[2] = g.fakeMarioTexture;
+    texturearray[3] = g.tilemapTexture;
 }
 
 /*
@@ -778,6 +789,7 @@ void render(void)
 	renderGame();
     //this is for drawing names on screen for credits on "c" button press
     if (g.pause) {
+        createScene(texturearray);
         pauseGame();
 		if (g.displayCredits) {
             g.howToPlay =0;

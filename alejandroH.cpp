@@ -16,11 +16,14 @@
 #include <stdlib.h>
 #include <sstream>
 #include "GameScene.h"
+#include "Enemy.h"
 #ifdef DEBUG_A
 #include <iostream>
 #endif
 #define MAP_TILE_ROWS 150
 #define MAP_TILE_COLUMNS 250
+//some forward declaration
+void moveMapFocus(int, int);
 int* minutesPlayedPtr;// = NULL;
 //make sure we load the map before trying to use it
 static int mapfileloaded = 0;
@@ -38,12 +41,12 @@ static int *playerptrsy = 0;
 class MyScene : public GameScene{
     int prev_playerx;
     int prev_playery;
-    GLuint playertexture;
+    GLuint *gltextures;
     Rect *other;
     Rect *player;
     //void Draw();
     public:
-    MyScene(int *x, int *y, GLuint);
+    MyScene(int *x, int *y, GLuint[]);
     void Draw();
 };
 
@@ -80,14 +83,26 @@ AlexGlobal * ag = AlexGlobal::GetInstance();
    //
    
 //}
-MyScene::MyScene(int *x, int*y,GLuint gltexture){
+MyScene::MyScene(int *x, int*y,GLuint gltexture[]){
     this->prev_playerx = *x;
     this->prev_playery = *y;
-    this->playertexture = gltexture;
+    //this->playertexture = gltexture;
+    this->gltextures = gltexture;
+
+    moveMapFocus(0,0);
+}
+//maybe destructor
+MyScene::~MyScene(){
+    *(ag->playerx) = this->prev_playerx;
+    *(ag->playery) = this->prev_playery;
+    checkPlayerPos();
 }
 void MyScene::Draw(){
     return;
 }
+//--------------------------------
+//
+
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
     if (minutesPlayedPtr == NULL) {
@@ -287,7 +302,7 @@ void checkPlayerPos()
     prevx = mapx;
     prevy = mapy;
 }
-GameScene* createScene(GLuint atexture){
+GameScene* createScene(GLuint atexture[]){
     //ag->mygs = new MyScene(ag->playerx,ag->playery);
     return new MyScene(ag->playerx,ag->playery,atexture);
 }
