@@ -28,6 +28,7 @@
 void moveMapFocus(int, int);
 void checkPlayerPos();
 void spawnEnemies(int,int);
+void drawEnemies();
 int* minutesPlayedPtr;// = NULL;
 //make sure we load the map before trying to use it
 static int mapfileloaded = 0;
@@ -41,7 +42,7 @@ int CONTAINS_ENEMIES[8][10] = {
     0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,1,0,0,0,0,0,
     0,0,0,1,0,1,0,0,0,0,
-    };
+};
 //externs
 extern std::vector<Enemy> enemies;
 extern bool collision(int,int);
@@ -62,7 +63,6 @@ class MyScene : public GameScene{
     GLuint *gltextures;
     Rect *other;
     Rect *player;
-    //void Draw();
     public:
     bool deleteSoon;
     MyScene(int *x, int *y, GLuint[]);
@@ -130,13 +130,30 @@ void MyScene::Draw(){
 
     return;
 }
-//--------------------------------
+//------------Enemy-------------
 void Enemy::Spawn(int x,int y){
     //return;
     this->xpos = x;
     this->ypos = y;
     this->health = 100;
     return;
+}
+void Enemy::Draw(){
+    //temp height and width
+    float h = 32/2;
+    float w = h*0.8;
+#ifdef DEBUG_A
+    std::cout << "my enemy x: " << this->xpos << std::endl;
+    std::cout << "my enemy y: " << this->ypos << std::endl;
+#endif
+    glColor3f(0.8, 0.8, 0.6);
+    glBegin(GL_QUADS);
+    glVertex2i(this->xpos-w, this->ypos-h);
+    glVertex2i(this->xpos-w, this->ypos+h);
+    glVertex2i(this->xpos+w, this->ypos+h);
+    glVertex2i(this->xpos+w, this->ypos-h);
+    glEnd();
+
 }
 
 //-------------------------------
@@ -268,7 +285,7 @@ void drawMap(GLuint mapTexture)
     glPopMatrix();
 
 #ifdef DEBUG_A
-//test map array
+    //test map array
     for(int i = 0; i < 10; i++)
     {
         std::cout << maparray[i][0] << std::endl;
@@ -325,7 +342,7 @@ void moveMapFocus(int lateral, int vertical)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glOrtho(800*x,800*(x+1),600*y,600*(y+1),-1,1);
-    spawnEnemies(x,y);
+    spawnEnemies(x,7-y);
 }
 
 void checkPlayerPos()
@@ -334,6 +351,9 @@ void checkPlayerPos()
     static int prevy = 0;
     int mapx = (int) *(playerptrsx) / 800;
     int mapy = (int) *(playerptrsy) / 600;
+    if(CONTAINS_ENEMIES[7-mapy][mapx]){
+        drawEnemies();
+    }
     if((prevx==mapx) && (prevy==mapy))
         return;
     moveMapFocus(mapx,mapy);
@@ -369,7 +389,7 @@ void spawnEnemies(int mapposx, int mapposy){
     if(CONTAINS_ENEMIES[mapposy][mapposx]){
         //we dont need/want to spawn at edge
         int offsetx = mapposx*800;
-        int offsety = mapposy*600;
+        int offsety = (7-mapposy)*600;
         for(unsigned int i = 0; i < enemies.size(); i++){
             int atx = (rand() % 700)+50;
             int aty = (rand() % 500)+50;
@@ -385,5 +405,8 @@ void spawnEnemies(int mapposx, int mapposy){
     return;
 }
 void drawEnemies(){
+    for (unsigned int i = 0; i < enemies.size(); i++) {
+        enemies[i].Draw();
+    }
     return;
 }
