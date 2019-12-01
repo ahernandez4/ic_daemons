@@ -439,10 +439,10 @@ void initOpengl(void)
 
 void init() {
     //player.x = 48;
-    //player.y = 288;
-    //player.x = 112;
-    player.x = 3328;
+    player.x = 128;
     player.y = 240;
+    //player.x = 3328;
+    //player.y = 240;
     player.moveSpeed = 3.75;
     //
     initInternalAlexStuff();

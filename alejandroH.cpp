@@ -14,6 +14,7 @@
 #include <fstream> 
 #include <string>
 #include <stdlib.h>
+#include <time.h>
 #include <sstream>
 #include "GameScene.h"
 #include "Enemy.h"
@@ -26,12 +27,24 @@
 //some forward declaration
 void moveMapFocus(int, int);
 void checkPlayerPos();
+void spawnEnemies(int,int);
 int* minutesPlayedPtr;// = NULL;
 //make sure we load the map before trying to use it
 static int mapfileloaded = 0;
 unsigned int maparray[MAP_TILE_ROWS][MAP_TILE_COLUMNS];
+int CONTAINS_ENEMIES[8][10] = {
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,1,0,0,0,0,0,
+    0,0,0,1,0,1,0,0,0,0,
+    };
 //externs
 extern std::vector<Enemy> enemies;
+extern bool collision(int,int);
 extern GLuint texturearray[4];
 struct PlayerPtrs{
     int* x = NULL;
@@ -84,12 +97,7 @@ class AlexGlobal{
 AlexGlobal* AlexGlobal::instance = 0;
 AlexGlobal * ag = AlexGlobal::GetInstance();
 //to here
-
-//GameScene definition
-//GameScene::GameScene(int *x, int *y){
-//
-
-//}
+//myscene function definitions
 MyScene::MyScene(int *x, int*y,GLuint gltexture[]){
     this->prev_playerx = *x;
     this->prev_playery = *y;
@@ -97,6 +105,14 @@ MyScene::MyScene(int *x, int*y,GLuint gltexture[]){
     this->gltextures = gltexture;
     *(ag->playerx) = 400;
     *(ag->playery) = 300;
+#ifdef DEBUG_A
+    std::cout << "myscene constructor(ag->player)" << std::endl;
+    std::cout << *(ag->playerx) << std::endl;
+    std::cout << *(ag->playery) << std::endl;
+    std::cout << "myscene constructor(myscene->pre_player)" << std::endl;
+    std::cout << (this->prev_playerx) << std::endl;
+    std::cout << (this->prev_playery) << std::endl;
+#endif
     moveMapFocus(0,0);
 }
 void MyScene::Draw(){
@@ -115,8 +131,15 @@ void MyScene::Draw(){
     return;
 }
 //--------------------------------
-//
+void Enemy::Spawn(int x,int y){
+    //return;
+    this->xpos = x;
+    this->ypos = y;
+    this->health = 100;
+    return;
+}
 
+//-------------------------------
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
     if (minutesPlayedPtr == NULL) {
@@ -244,7 +267,8 @@ void drawMap(GLuint mapTexture)
     }
     glPopMatrix();
 
-#ifdef DEBUG_A        
+#ifdef DEBUG_A
+//test map array
     for(int i = 0; i < 10; i++)
     {
         std::cout << maparray[i][0] << std::endl;
@@ -267,8 +291,6 @@ void loadMapFile()
         //
         while (!foundData) {
             mapifile >> line;
-            //getline(mapifile, line);
-            //std::cout << line << std::endl;
             if(line.compare("<data")==0){
                 foundData = true;
                 //read the last token to discard
@@ -303,6 +325,7 @@ void moveMapFocus(int lateral, int vertical)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glOrtho(800*x,800*(x+1),600*y,600*(y+1),-1,1);
+    spawnEnemies(x,y);
 }
 
 void checkPlayerPos()
@@ -320,7 +343,6 @@ void checkPlayerPos()
     ag->mapcelly = mapy;
 }
 GameScene* createScene(GLuint atexture[]){
-    //ag->mygs = new MyScene(ag->playerx,ag->playery);
     return new MyScene(ag->playerx,ag->playery,atexture);
 }
 GameScene* checkscene(GameScene* scene){
@@ -335,6 +357,32 @@ GameScene* checkscene(GameScene* scene){
     }
     else
         return scene;
+}
+void spawnEnemies(int mapposx, int mapposy){
+    srand(time(NULL));
+    enemies.clear();
+    enemies.push_back(Enemy());
+    enemies.push_back(Enemy());
+    enemies.push_back(Enemy());
+    enemies.push_back(Enemy());
+    //only some areas spawn enemies
+    if(CONTAINS_ENEMIES[mapposy][mapposx]){
+        //we dont need/want to spawn at edge
+        int offsetx = mapposx*800;
+        int offsety = mapposy*600;
+        for(unsigned int i = 0; i < enemies.size(); i++){
+            int atx = (rand() % 700)+50;
+            int aty = (rand() % 500)+50;
+            enemies[i].Spawn(atx+offsetx, aty+offsety);
+            //and we dont want to spawn on top of collidable objects
+            while(collision(enemies[i].xpos,enemies[i].ypos)){
+                atx = (rand() % 700)+50;
+                aty = (rand() % 500)+50;
+                enemies[i].Spawn(atx+offsetx, aty+offsety);
+            }
+        }
+    }
+    return;
 }
 void drawEnemies(){
     return;
