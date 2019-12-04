@@ -74,7 +74,7 @@ const float gravity = -0.2f;
 int deltaTime();
 //
 //------------------
-GLuint texturearray[4];
+GLuint texturearray[6];
 GameScene *currentscene;
 vector<Enemy> enemies;
 //------------------
@@ -123,12 +123,14 @@ class Image {
         }
 };
 
-Image img[5] = {
+Image img[7] = {
     "images/girl.png",
     "images/castlemap.gif",
     "images/tj.jpg",
     "images/fakeMario.png",
-    "images/tilemap.png" };
+    "images/tilemap.png",
+    "images/enemy.png",
+    "images/sword.png" };
 
 struct PlayerOne{
     int x;
@@ -185,6 +187,8 @@ class Global {
         GLuint backgroundTexture;
         GLuint fakeMarioTexture;
         GLuint tilemapTexture;
+        GLuint enemyTexture;
+        GLuint swordTexture;
         //playtime
         int minutesPlayed;
 	    int secondsCounter;
@@ -381,6 +385,8 @@ void initOpengl(void)
     glGenTextures(1, &g.walkTexture);
     glGenTextures(1, &g.backgroundTexture);
     glGenTextures(1, &g.fakeMarioTexture);
+    glGenTextures(1, &g.enemyTexture);
+    glGenTextures(1, &g.swordTexture);
     //-------------------------------------------------------------------------
     //silhouette
     //this is similar to a sprite graphic
@@ -435,6 +441,30 @@ void initOpengl(void)
             GL_RGBA, GL_UNSIGNED_BYTE, marioData);
     //free(walkData);
     free(marioData);
+    //-----------------------------------------------------------
+
+    glBindTexture(GL_TEXTURE_2D, g.enemyTexture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    w = img[5].width;
+    h = img[5].height;
+    //must build a new set of data...
+    unsigned char *enemyData = buildAlphaData(&img[5]);	
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
+    free(enemyData);
+    //-----------------------------------------------------------
+
+    glBindTexture(GL_TEXTURE_2D, g.swordTexture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    w = img[6].width;
+    h = img[6].height;
+    //must build a new set of data...
+    unsigned char *swordData = buildAlphaData(&img[6]);	
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, swordData);
+    free(swordData);
 }
 
 void init() {
@@ -463,6 +493,8 @@ void init() {
     texturearray[1] = g.backgroundTexture;
     texturearray[2] = g.fakeMarioTexture;
     texturearray[3] = g.tilemapTexture;
+    texturearray[4] = g.enemyTexture;
+    texturearray[5] = g.swordTexture;
 }
 
 /*

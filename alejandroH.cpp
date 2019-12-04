@@ -46,7 +46,7 @@ int CONTAINS_ENEMIES[8][10] = {
 //externs
 extern std::vector<Enemy> enemies;
 extern bool collision(int,int);
-extern GLuint texturearray[4];
+extern GLuint texturearray[5];
 struct PlayerPtrs{
     int* x = NULL;
     int* y = NULL;
@@ -136,6 +136,8 @@ void Enemy::Spawn(int x,int y){
     this->xpos = x;
     this->ypos = y;
     this->health = 100;
+    this->moving = false;
+    this->alive = true;//false;//true;
     return;
 }
 void Enemy::Draw(){
@@ -146,14 +148,37 @@ void Enemy::Draw(){
     std::cout << "my enemy x: " << this->xpos << std::endl;
     std::cout << "my enemy y: " << this->ypos << std::endl;
 #endif
-    glColor3f(0.8, 0.8, 0.6);
+    //glColor3f(0.8, 0.8, 0.6);
+    glColor3f(1.0,1.0,1.0);
+    glEnable(GL_ALPHA_TEST);
+    glBindTexture(GL_TEXTURE_2D, texturearray[4]);
     glBegin(GL_QUADS);
+    glTexCoord2f(0.0f,      1.0f);
     glVertex2i(this->xpos-w, this->ypos-h);
+    glTexCoord2f(0.0f,      0.0f);
     glVertex2i(this->xpos-w, this->ypos+h);
+    glTexCoord2f(1.0f,      0.0f);
     glVertex2i(this->xpos+w, this->ypos+h);
+    glTexCoord2f(1.0f,      1.0f);
     glVertex2i(this->xpos+w, this->ypos-h);
     glEnd();
+}
 
+
+bool Enemy::isMoving(){
+    return false;
+}
+bool Enemy::isAlive(){
+    return this->alive;
+}
+void Enemy::updatePosition(){
+    return;
+}
+void Enemy::hit(int h){
+    this->health -= h;
+    if(this->health <=0)
+        this->alive = false;
+    return;
 }
 
 //-------------------------------
@@ -387,10 +412,10 @@ void spawnEnemies(int mapposx, int mapposy){
     enemies.push_back(Enemy());
     //only some areas spawn enemies
     if(CONTAINS_ENEMIES[mapposy][mapposx]){
-        //we dont need/want to spawn at edge
         int offsetx = mapposx*800;
         int offsety = (7-mapposy)*600;
         for(unsigned int i = 0; i < enemies.size(); i++){
+            //we dont need/want to spawn at edge
             int atx = (rand() % 700)+50;
             int aty = (rand() % 500)+50;
             enemies[i].Spawn(atx+offsetx, aty+offsety);
@@ -406,7 +431,12 @@ void spawnEnemies(int mapposx, int mapposy){
 }
 void drawEnemies(){
     for (unsigned int i = 0; i < enemies.size(); i++) {
-        enemies[i].Draw();
+        if(enemies[i].isMoving()){
+            enemies[i].updatePosition();
+        }
+        if(enemies[i].isAlive()){
+            enemies[i].Draw();
+        }
     }
     return;
 }
