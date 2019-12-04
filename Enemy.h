@@ -4,14 +4,20 @@
 class Enemy{
     private:
     GLuint enemyTexture;
+    bool moving;
+    bool alive;
     public:
     //Enemy(GLuint atexture);
     int health;
     int xpos;
     int ypos;
+    bool isMoving();
+    bool isAlive();
     void Draw();
     void Spawn(int x, int y);
-    bool Died();
+    void updatePosition();
+    void hit(int h);
+    //bool Died();
 };
 
 #endif
