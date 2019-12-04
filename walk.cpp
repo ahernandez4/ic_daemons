@@ -74,7 +74,7 @@ const float gravity = -0.2f;
 int deltaTime();
 //
 //------------------
-GLuint texturearray[5];
+GLuint texturearray[6];
 GameScene *currentscene;
 vector<Enemy> enemies;
 //------------------
@@ -448,7 +448,6 @@ void initOpengl(void)
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     w = img[5].width;
     h = img[5].height;
-    //
     //must build a new set of data...
     unsigned char *enemyData = buildAlphaData(&img[5]);	
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
@@ -461,7 +460,6 @@ void initOpengl(void)
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     w = img[6].width;
     h = img[6].height;
-    //
     //must build a new set of data...
     unsigned char *swordData = buildAlphaData(&img[6]);	
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
@@ -496,6 +494,7 @@ void init() {
     texturearray[2] = g.fakeMarioTexture;
     texturearray[3] = g.tilemapTexture;
     texturearray[4] = g.enemyTexture;
+    texturearray[5] = g.swordTexture;
 }
 
 /*
