@@ -131,24 +131,6 @@ void MyScene::Draw(){
     return;
 }
 //------------Enemy-------------
-/*
-private:
-bool alive;
-bool moving;
-GLuint enemyTexture;
-
-//Enemy(GLuint atexture);
-int health;
-int xpos;
-int ypos;
-void Draw();
-void Spawn(int x, int y);
-bool isMoving();
-bool isAlive();
-void updatePosition();
-void hit(int h);
-
-*/
 void Enemy::Spawn(int x,int y){
     //return;
     this->xpos = x;
@@ -180,22 +162,6 @@ void Enemy::Draw(){
     glTexCoord2f(1.0f,      1.0f);
     glVertex2i(this->xpos+w, this->ypos-h);
     glEnd();
-/*
-    glColor3f(1.0,1.0,1.0);
-    glEnable(GL_ALPHA_TEST);
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, atexture);
-    glBegin(GL_QUADS);
-    //0,1|0,0|1,0|1,1
-    glTexCoord2f(0.0f,      1.0f);
-    glVertex2i(resx, resy);
-    glTexCoord2f(0.0f,      0.0f);    
-    glVertex2i(resx, resy+64);
-    glTexCoord2f(1.0f,      0.0f);    
-    glVertex2i(resx+64, resy+64);
-    glTexCoord2f(1.0f,      1.0f);    
-    glVertex2i(resx+64, resy);
-    glEnd();*/
 }
 
 
