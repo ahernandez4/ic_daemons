@@ -46,7 +46,7 @@ int CONTAINS_ENEMIES[8][10] = {
 //externs
 extern std::vector<Enemy> enemies;
 extern bool collision(int,int);
-extern GLuint texturearray[5];
+extern GLuint texturearray[6];
 struct PlayerPtrs{
     int* x = NULL;
     int* y = NULL;
@@ -116,8 +116,8 @@ MyScene::MyScene(int *x, int*y,GLuint gltexture[]){
     moveMapFocus(0,0);
 }
 void MyScene::Draw(){
+//here we draw the scene
     glClear(GL_COLOR_BUFFER_BIT);
-
     glBegin(GL_QUADS);
     glColor3f(0.0f,0.0f,0.0f);
     glVertex2i(0, 0);
