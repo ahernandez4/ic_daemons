@@ -145,8 +145,8 @@ void Enemy::Draw(){
     float h = 32/2;
     float w = h*0.8;
 #ifdef DEBUG_A
-    std::cout << "my enemy x: " << this->xpos << std::endl;
-    std::cout << "my enemy y: " << this->ypos << std::endl;
+    //std::cout << "my enemy x: " << this->xpos << std::endl;
+    //std::cout << "my enemy y: " << this->ypos << std::endl;
 #endif
     //glColor3f(0.8, 0.8, 0.6);
     glColor3f(1.0,1.0,1.0);
@@ -331,7 +331,7 @@ void drawMap(GLuint mapTexture)
     //test map array
     for(int i = 0; i < 10; i++)
     {
-        std::cout << maparray[i][0] << std::endl;
+        //std::cout << maparray[i][0] << std::endl;
     }
 #endif    
     //
@@ -523,6 +523,31 @@ void drawSword(int frame, int dir){
     }
 
 }
-void processAttack(){
+void processAttack(int dir){
+    int swordx = *(ag->playerx);
+    int swordy = *(ag->playery);
+    switch(dir){
+        case 0:
+        swordy += 32;
+        break;
+        case 1:
+        swordy -= 32;
+        break;
+        case 2:
+        swordx += 32;
+        break;
+        case 3:
+        swordx -= 32;
+        break;
+    }
+    for (unsigned int i = 0; i < enemies.size(); i++) {
+        if (enemies[i].isAlive() && 
+            enemies[i].checkAreaCollision(swordx-16,swordx+16,
+            swordy-16,swordy+16)) {
+        }
+#ifdef DEBUG_A
+        std::cout << "we hit an ememies" << std::endl;
+#endif
+    }
     return;
 }
