@@ -44,7 +44,7 @@ extern void passGlobalValues2Alex(int* min);//temporary fix
 extern void passPlayerPtrs2Alex(int*,int*,int*);
 extern void checkPlayerPos();
 extern void drawSword(int,int);
-extern void processAttack();
+extern void processAttack(int);
 extern void odinPushTime(int time);
 extern void displayOdinTime();
 extern void drawMap(GLuint);
@@ -747,7 +747,7 @@ void physics(void)
     //end temp
     g.movebyte = 0;
     if(g.needprocessattack){
-        processAttack();
+        processAttack(player.dir);
         g.needprocessattack = false;
     }
 }
