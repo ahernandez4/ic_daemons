@@ -77,12 +77,8 @@ Global2::Global2()
 
 void makeParticle(int x, int y)
 {
-    //Add a particle to the particle system.
-    //
     if (t.n >= MAX_PARTICLES)
         return;
-    //std::cout << "makeParticle() " << x << " " << y << std::endl;
-    //set position of particle
     Particle *p = &t.particle[t.n];
     p->s.center.x = x;
     p->s.center.y = y;
@@ -96,7 +92,7 @@ void movement()
 { 
     if (t.n <= 0)
         return;
-    for(int i = 0; i<t.n; i++){
+    for (int i = 0; i<t.n; i++) {
         Particle *p = &t.particle[i];
         p->s.center.x += p->velocity.x;
         p->s.center.y += p->velocity.y;
@@ -106,12 +102,10 @@ void movement()
 
 void renderRain()
 {
-    //glClear(GL_COLOR_BUFFER_BIT);
     
 	float w, h;
 
-    for(int i = 0; i < t.n; i++) {
-        //There is at least one particle to draw.
+    for (int i = 0; i < t.n; i++) {
         glPushMatrix();
         glColor3ub(150,160,220 * i);
         Vec *c = &t.particle[i].s.center;
@@ -133,11 +127,33 @@ void makeItRain()
 		movement();
 		renderRain();
 }
+void bulletMovement(int dir)
+{ 
+    if (t.n <= 0)
+        return;
+    for (int i = 0; i<t.n; i++) {
+        Particle *p = &t.particle[i];
+        p->s.center.x += p->velocity.x;
+        p->s.center.y += p->velocity.y;
+        if(dir == 0)//right
+            p->velocity.x += 20;
+        else if(dir == 1)//left
+            p->velocity.x -= 20;
+        else if(dir == 2)//up
+            p->velocity.y += 20;
+        else if(dir == 3)//down
+            p->velocity.y -= 20;
+    }
+}
+void bullet(int x, int y, int dir)
+{
+    makeParticle(x,y);
+    bulletMovement(dir);
+    renderRain();
+}
 ////////////////////////////////////////////////////////////////////////////
 bool collision(int x, int y)
 {
-    //this is my friday code
-    //changed a few things in main to check for the collison
     x = abs( (x/32));
     y = abs( 150 - (y/32));
     if (maparray[y][x] == 2 ) {
@@ -150,7 +166,7 @@ bool collision(int x, int y)
 void enemy()
 {
     glBegin(GL_QUADS);
-    glColor3f(0.0, 1.0, 0.0); //You can set RGB color for you vertex
+    glColor3f(0.0, 1.0, 0.0); 
     glVertex2f(-0.5f, 0.5f);
     glVertex2f(0.5f, 0.5f);
     glVertex2f(0.5f, -0.5f);
@@ -159,7 +175,7 @@ void enemy()
 
 }
 
-void tjcredits(int x, int y) //, GLuint texid)
+void tjcredits(int x, int y)
 {
     Rect r;
     r.bot = y;
@@ -177,7 +193,6 @@ void createEnemy()
 
 void updatingTime(int time)
 {
-    //deletes file, to rewrite so it can be updated
     if ( remove( "highscores.txt" ) != 0 )
         std::cout << "error deleting file\n";
     else {
