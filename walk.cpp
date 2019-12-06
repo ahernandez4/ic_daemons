@@ -44,6 +44,7 @@ extern void passGlobalValues2Alex(int* min);//temporary fix
 extern void passPlayerPtrs2Alex(int*,int*,int*);
 extern void checkPlayerPos();
 extern void drawSword(int,int);
+extern void processAttack();
 extern void odinPushTime(int time);
 extern void displayOdinTime();
 extern void drawMap(GLuint);
@@ -616,7 +617,7 @@ int checkKeys(XEvent *e)
                 g.displayCredits ^=1;
             break;
         case XK_x:
-            needprocessattack = true;
+            g.needprocessattack = true;
             g.depressx = 1;
             break;
         case XK_Left:
@@ -740,9 +741,9 @@ void physics(void)
     //player.y += incy;
     //end temp
     g.movebyte = 0;
-    if(needprocessattack){
+    if(g.needprocessattack){
         processAttack();
-        needprocessattack = false;
+        g.needprocessattack = false;
     }
 }
 

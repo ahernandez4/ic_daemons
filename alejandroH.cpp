@@ -523,6 +523,6 @@ void drawSword(int frame, int dir){
     }
 
 }
-void procesAttack(){
+void processAttack(){
     return;
 }
