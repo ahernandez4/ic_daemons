@@ -17,6 +17,7 @@ class Enemy{
     void Spawn(int x, int y);
     void updatePosition();
     void hit(int h);
+    bool checkAreaCollision(int x1,int x2,int y1,int y2);
     //bool Died();
 };
 

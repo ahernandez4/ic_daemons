@@ -180,7 +180,25 @@ void Enemy::hit(int h){
         this->alive = false;
     return;
 }
-
+bool Enemy::checkAreaCollision(int x1, int x2, int y1, int y2){
+    float h = 32/2;
+    float w = h*0.8;
+    if ((this->xpos - w > x1&&
+                this->xpos + w < x1) ||
+            (this->xpos - w < x2 &&
+             this->xpos + w > x2)) {
+        if ((this->ypos - h > y1&&
+                    this->ypos + h < y1) ||
+                (this->ypos - h < y2 &&
+                 this->ypos + h > y2)){
+            return true;
+        }
+    }
+    else{
+        return false;
+    }
+    return false;
+}
 //-------------------------------
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
@@ -504,4 +522,7 @@ void drawSword(int frame, int dir){
             break;
     }
 
+}
+void procesAttack(){
+    return;
 }

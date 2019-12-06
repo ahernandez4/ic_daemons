@@ -188,6 +188,7 @@ class Global {
         double delay;
         char movebyte;
         int depressx;
+        bool needprocessattack;
         //textures
         GLuint walkTexture;
         //added
@@ -615,6 +616,7 @@ int checkKeys(XEvent *e)
                 g.displayCredits ^=1;
             break;
         case XK_x:
+            needprocessattack = true;
             g.depressx = 1;
             break;
         case XK_Left:
@@ -738,6 +740,10 @@ void physics(void)
     //player.y += incy;
     //end temp
     g.movebyte = 0;
+    if(needprocessattack){
+        processAttack();
+        needprocessattack = false;
+    }
 }
 
 //Drake took code from the beginning of the render function
