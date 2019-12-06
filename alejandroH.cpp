@@ -116,7 +116,7 @@ MyScene::MyScene(int *x, int*y,GLuint gltexture[]){
     moveMapFocus(0,0);
 }
 void MyScene::Draw(){
-//here we draw the scene
+    //here we draw the scene
     glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_QUADS);
     glColor3f(0.0f,0.0f,0.0f);
@@ -439,4 +439,69 @@ void drawEnemies(){
         }
     }
     return;
+}
+
+void drawSword(int frame, int dir){
+    //return;
+    int posx = *(ag->playerx);// + 32;
+    int posy = *(ag->playery);// + 32;
+    int size = 16;
+    glColor3f(1.0,1.0,1.0);
+    glEnable(GL_ALPHA_TEST);
+    glBindTexture(GL_TEXTURE_2D, texturearray[5]);
+    switch(dir){
+        case 0:
+            posy += 32;
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,      1.0f);
+            glVertex2i(posx-(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(0.0f,      0.0f);
+            glVertex2i(posx-(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(1.0f,      0.0f);
+            glVertex2i(posx+(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(1.0f,      1.0f);
+            glVertex2i(posx+(size/(2-frame)), posy-(size/(2-frame)));
+            glEnd();
+            break;
+        case 1:
+            posy -=32;
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,      1.0f);
+            glVertex2i(posx+(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(0.0f,      0.0f);
+            glVertex2i(posx+(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(1.0f,      0.0f);
+            glVertex2i(posx-(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(1.0f,      1.0f);
+            glVertex2i(posx-(size/(2-frame)), posy+(size/(2-frame)));
+            glEnd();
+            break;
+        case 2:
+            posx += 32;
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,      1.0f);
+            glVertex2i(posx-(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(0.0f,      0.0f);
+            glVertex2i(posx+(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(1.0f,      0.0f);
+            glVertex2i(posx+(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(1.0f,      1.0f);
+            glVertex2i(posx-(size/(2-frame)), posy-(size/(2-frame)));
+            glEnd();
+            break;
+        case 3:
+            posx -= 32;
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,      1.0f);
+            glVertex2i(posx+(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(0.0f,      0.0f);
+            glVertex2i(posx-(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(1.0f,      0.0f);
+            glVertex2i(posx-(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(1.0f,      1.0f);
+            glVertex2i(posx+(size/(2-frame)), posy+(size/(2-frame)));
+            glEnd();
+            break;
+    }
+
 }
