@@ -46,7 +46,7 @@ int CONTAINS_ENEMIES[8][10] = {
 //externs
 extern std::vector<Enemy> enemies;
 extern bool collision(int,int);
-extern GLuint texturearray[5];
+extern GLuint texturearray[6];
 struct PlayerPtrs{
     int* x = NULL;
     int* y = NULL;
@@ -116,8 +116,8 @@ MyScene::MyScene(int *x, int*y,GLuint gltexture[]){
     moveMapFocus(0,0);
 }
 void MyScene::Draw(){
+    //here we draw the scene
     glClear(GL_COLOR_BUFFER_BIT);
-
     glBegin(GL_QUADS);
     glColor3f(0.0f,0.0f,0.0f);
     glVertex2i(0, 0);
@@ -180,7 +180,25 @@ void Enemy::hit(int h){
         this->alive = false;
     return;
 }
-
+bool Enemy::checkAreaCollision(int x1, int x2, int y1, int y2){
+    float h = 32/2;
+    float w = h*0.8;
+    if ((this->xpos - w > x1&&
+                this->xpos + w < x1) ||
+            (this->xpos - w < x2 &&
+             this->xpos + w > x2)) {
+        if ((this->ypos - h > y1&&
+                    this->ypos + h < y1) ||
+                (this->ypos - h < y2 &&
+                 this->ypos + h > y2)){
+            return true;
+        }
+    }
+    else{
+        return false;
+    }
+    return false;
+}
 //-------------------------------
 void displayAlejandroH(int x, int y, GLuint atexture)
 {
@@ -438,5 +456,73 @@ void drawEnemies(){
             enemies[i].Draw();
         }
     }
+    return;
+}
+
+void drawSword(int frame, int dir){
+    //return;
+    int posx = *(ag->playerx);// + 32;
+    int posy = *(ag->playery);// + 32;
+    int size = 16;
+    glColor3f(1.0,1.0,1.0);
+    glEnable(GL_ALPHA_TEST);
+    glBindTexture(GL_TEXTURE_2D, texturearray[5]);
+    switch(dir){
+        case 0:
+            posy += 32;
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,      1.0f);
+            glVertex2i(posx-(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(0.0f,      0.0f);
+            glVertex2i(posx-(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(1.0f,      0.0f);
+            glVertex2i(posx+(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(1.0f,      1.0f);
+            glVertex2i(posx+(size/(2-frame)), posy-(size/(2-frame)));
+            glEnd();
+            break;
+        case 1:
+            posy -=32;
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,      1.0f);
+            glVertex2i(posx+(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(0.0f,      0.0f);
+            glVertex2i(posx+(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(1.0f,      0.0f);
+            glVertex2i(posx-(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(1.0f,      1.0f);
+            glVertex2i(posx-(size/(2-frame)), posy+(size/(2-frame)));
+            glEnd();
+            break;
+        case 2:
+            posx += 32;
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,      1.0f);
+            glVertex2i(posx-(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(0.0f,      0.0f);
+            glVertex2i(posx+(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(1.0f,      0.0f);
+            glVertex2i(posx+(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(1.0f,      1.0f);
+            glVertex2i(posx-(size/(2-frame)), posy-(size/(2-frame)));
+            glEnd();
+            break;
+        case 3:
+            posx -= 32;
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,      1.0f);
+            glVertex2i(posx+(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(0.0f,      0.0f);
+            glVertex2i(posx-(size/(2-frame)), posy-(size/(2-frame)));
+            glTexCoord2f(1.0f,      0.0f);
+            glVertex2i(posx-(size/(2-frame)), posy+(size/(2-frame)));
+            glTexCoord2f(1.0f,      1.0f);
+            glVertex2i(posx+(size/(2-frame)), posy+(size/(2-frame)));
+            glEnd();
+            break;
+    }
+
+}
+void processAttack(){
     return;
 }

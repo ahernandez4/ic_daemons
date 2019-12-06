@@ -43,6 +43,8 @@ extern void initInternalAlexStuff();
 extern void passGlobalValues2Alex(int* min);//temporary fix
 extern void passPlayerPtrs2Alex(int*,int*,int*);
 extern void checkPlayerPos();
+extern void drawSword(int,int);
+extern void processAttack();
 extern void odinPushTime(int time);
 extern void displayOdinTime();
 extern void drawMap(GLuint);
@@ -133,9 +135,11 @@ Image img[7] = {
     "images/sword.png" };
 
 struct PlayerOne{
+    //north = 0, south = 1, east = 2, west = 3
     int x;
     int y;
     int moveSpeed;
+    int dir;
 } player;
 
 //-----------------------------------------------------------------------------
@@ -149,6 +153,7 @@ class Timers {
         //struct timespec playTimeBegin;
         //struct timespec playTimeEnd; 
         struct timespec walkTime;
+        struct timespec attackTime;
         Timers() {
             physicsRate = 1.0 / 30.0;
             oobillion = 1.0 / 1e9;
@@ -179,8 +184,12 @@ class Global {
         int xres, yres;
         int walk;
         int walkFrame;
+        //added
+        int atkframe;
         double delay;
         char movebyte;
+        int depressx;
+        bool needprocessattack;
         //textures
         GLuint walkTexture;
         //added
@@ -191,7 +200,7 @@ class Global {
         GLuint swordTexture;
         //playtime
         int minutesPlayed;
-	    int secondsCounter;
+        int secondsCounter;
         Vec box[20];
         Global() {
             displayScore=0;
@@ -498,25 +507,25 @@ void init() {
 }
 
 /*
-void playTime(int x, int y)
-{
+   void playTime(int x, int y)
+   {
 
-    Rect D;
-    unsigned int c = 0x00ffff44;
+   Rect D;
+   unsigned int c = 0x00ffff44;
 
-    D.bot = y;
-    D.left = x;
-    D.center = 0;
-    timers.recordTime(&timers.playTimeEnd);
+   D.bot = y;
+   D.left = x;
+   D.center = 0;
+   timers.recordTime(&timers.playTimeEnd);
 
-    double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
-    &timers.playTimeEnd);
-    timeSpan = timeSpan + g.secondsCounter;
-    g.minutesPlayed = round(timeSpan/60);
-    cout << "Time: " << timeSpan << endl;
-    ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
-}
-*/
+   double timeSpan = timers.timeDiff(&timers.playTimeBegin, 
+   &timers.playTimeEnd);
+   timeSpan = timeSpan + g.secondsCounter;
+   g.minutesPlayed = round(timeSpan/60);
+   cout << "Time: " << timeSpan << endl;
+   ggprint8b(&D, 0, c,  "Time: %i", (int)timeSpan);
+   }
+ */
 
 void checkMouse(XEvent *e)
 {
@@ -564,16 +573,28 @@ int checkKeys(XEvent *e)
     (void)shift;
     switch (key) {
         case XK_w://up for some reason up wont go up
-            g.movebyte = g.movebyte | 2;
+            if(!g.depressx){
+                g.movebyte = g.movebyte | 2;
+                player.dir = 0;
+            }
             break;
         case XK_a://left
-            g.movebyte = g.movebyte | 4;
+            if(!g.depressx){
+                g.movebyte = g.movebyte | 4;
+                player.dir = 3;
+            }
             break;
         case XK_s://down moves down and right at the same time
-            g.movebyte = g.movebyte | 8;
+            if(!g.depressx){
+                g.movebyte = g.movebyte | 8;
+                player.dir = 1;
+            }
             break;
         case XK_d://right
-            g.movebyte = g.movebyte | 16;
+            if(!g.depressx){
+                g.movebyte = g.movebyte | 16;
+                player.dir = 2;
+            }
             break;
         case XK_p:
             g.pause ^= 1;
@@ -594,6 +615,10 @@ int checkKeys(XEvent *e)
         case XK_c:
             if (g.pause) 
                 g.displayCredits ^=1;
+            break;
+        case XK_x:
+            g.needprocessattack = true;
+            g.depressx = 1;
             break;
         case XK_Left:
             break;
@@ -682,25 +707,44 @@ void physics(void)
         double timeSpan = timers.timeDiff(&timers.walkTime, 
                 &timers.timeCurrent);
         if (timeSpan > g.delay*3) {
-	    g.walkFrame = 0;
+            g.walkFrame = 0;
             timers.recordTime(&timers.walkTime);
+        }
+    }
+    if(g.depressx){
+        timers.recordTime(&timers.timeCurrent);
+        double timeSpan = timers.timeDiff(&timers.attackTime, 
+                &timers.timeCurrent);
+        //cout<< "after timespan calculate" << endl;
+        if(timeSpan > g.delay){
+            //drawSword(g.atkframe++);
+            g.atkframe++;
+            if(g.atkframe > 1){
+                g.depressx = 0;
+                g.atkframe = -1;
+            }
+            timers.recordTime(&timers.attackTime);
         }
     }
     incx*=player.moveSpeed;
     incy*=player.moveSpeed;
-    
+
     //check x
     if(!collision(player.x+incx + 10, player.y))
         player.x += incx;
     //check y
     if(!collision(player.x, player.y+incy + 10 ))
         player.y += incy;
-    
+
     //temporary   
     //player.x += incx;
     //player.y += incy;
     //end temp
     g.movebyte = 0;
+    if(g.needprocessattack){
+        processAttack();
+        g.needprocessattack = false;
+    }
 }
 
 //Drake took code from the beginning of the render function
@@ -708,7 +752,7 @@ void physics(void)
 //The purpose was to make the rnder function more concise
 void renderGame()
 {
-	//Rect r;
+    //Rect r;
     //Clear the screen
     glColor3f(1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -722,8 +766,8 @@ void renderGame()
     //int which part of the map
     //remove this
     /*
-    glBindTexture(GL_TEXTURE_2D, g.backgroundTexture);
-    glBegin(GL_QUADS);
+       glBindTexture(GL_TEXTURE_2D, g.backgroundTexture);
+       glBegin(GL_QUADS);
     //0,1|0,0|1,0|1,1
     glTexCoord2f(0.0f,      1.0f);
     glVertex2i(0, 0);
@@ -735,7 +779,7 @@ void renderGame()
     glVertex2i(800, 0);
     glEnd();
     //to this
-    */
+     */
     drawMap(g.tilemapTexture);
     glPushMatrix();
     //
@@ -772,9 +816,12 @@ void renderGame()
     glDisable(GL_ALPHA_TEST);
     //
     checkPlayerPos();
-	//
-    
-	Rect r;
+    if(g.depressx){
+        drawSword(g.atkframe, player.dir);
+    }
+    //
+
+    Rect r;
     unsigned int c =  0x00ffff44;
     r.bot = g.yres - 20;
     r.left = 10;
@@ -782,28 +829,28 @@ void renderGame()
     ggprint8b(&r, 16, c, "[p] - pause game");
 
 
-/*
-	This code moved to diplayInstructions()	
+    /*
+       This code moved to diplayInstructions()	
 
-    unsigned int c = 0x00ffff44;
-    r.bot = g.yres - 20;
-    r.left = 10;
-    r.center = 0;
-    ggprint8b(&r, 16, c, "w   move up");
-    ggprint8b(&r, 16, c, "s   walk down");
-    ggprint8b(&r, 16, c, "d   walk right");
-    ggprint8b(&r, 16, c, "a   walk left");
-    ggprint8b(&r, 16, c, "c   display credits");
-    ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
+       unsigned int c = 0x00ffff44;
+       r.bot = g.yres - 20;
+       r.left = 10;
+       r.center = 0;
+       ggprint8b(&r, 16, c, "w   move up");
+       ggprint8b(&r, 16, c, "s   walk down");
+       ggprint8b(&r, 16, c, "d   walk right");
+       ggprint8b(&r, 16, c, "a   walk left");
+       ggprint8b(&r, 16, c, "c   display credits");
+       ggprint8b(&r, 16, c, "player local: %i,%i", player.x,player.y);
 
-*/
+     */
 
 }
 
 void displayInstructions() 
 {
-	Rect r;
-	unsigned int c = 0x00119944;
+    Rect r;
+    unsigned int c = 0x00119944;
     r.bot = g.yres - 20;
     r.left = 350;
     r.center = 0;
@@ -818,20 +865,20 @@ void displayInstructions()
 
 void render(void)
 {
-	renderGame();
+    renderGame();
     //this is for drawing names on screen for credits on "c" button press
     if (g.pause) {
         createScene(texturearray);
         pauseGame();
-		if (g.displayCredits) {
+        if (g.displayCredits) {
             g.howToPlay =0;
             g.displayScore=0;
-        	displayAlejandroH(350, 518, g.fakeMarioTexture);
-        	drawDY_Credits(350, 556);
-        	tjcredits(350, 537);
-        	displayCD(350, 575);
-			pausePlus();
-    	}
+            displayAlejandroH(350, 518, g.fakeMarioTexture);
+            drawDY_Credits(350, 556);
+            tjcredits(350, 537);
+            displayCD(350, 575);
+            pausePlus();
+        }
         if (g.howToPlay) {
             g.displayCredits = 0;
             g.displayScore =0;
@@ -846,22 +893,22 @@ void render(void)
         }
     }
 
-    
+
     makeItRain();
     //displayTimeUI(g.displayTime, g.displayCredits);
-/*
+    /*
     //this is for drawing the prompt for time and logic is for displaying
     //while time is not displayed and while not in credits screen
     if (!g.displayTime && !g.displayCredits) {
-	ggprint8b(&r, 16, c, "press \"t\" to display time");
+    ggprint8b(&r, 16, c, "press \"t\" to display time");
     }
 
     //Display Time elapsed during gameplay button = "t"
     if (g.displayTime) {
-        playTime(15,484); 
-        g.minutesPlayed = playTime(0,0);
+    playTime(15,484); 
+    g.minutesPlayed = playTime(0,0);
     }
-*/
+     */
 }
 
 int deltaTime()
