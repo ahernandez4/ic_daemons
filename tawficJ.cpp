@@ -127,7 +127,7 @@ void makeItRain()
 		movement();
 		renderRain();
 }
-void bulletMovement()
+void bulletMovement(int dir)
 { 
     if (t.n <= 0)
         return;
@@ -135,13 +135,20 @@ void bulletMovement()
         Particle *p = &t.particle[i];
         p->s.center.x += p->velocity.x;
         p->s.center.y += p->velocity.y;
-        p->velocity.x += 20;
+        if(dir == 0)//right
+            p->velocity.x += 20;
+        else if(dir == 1)//left
+            p->velocity.x -= 20;
+        else if(dir == 2)//up
+            p->velocity.y += 20;
+        else if(dir == 3)//down
+            p->velocity.y -= 20;
     }
 }
-void bullet(int x, int y)
+void bullet(int x, int y, int dir)
 {
     makeParticle(x,y);
-    bulletMovement();
+    bulletMovement(dir);
     renderRain();
 }
 ////////////////////////////////////////////////////////////////////////////
