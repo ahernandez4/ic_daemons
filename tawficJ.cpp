@@ -127,6 +127,23 @@ void makeItRain()
 		movement();
 		renderRain();
 }
+void bulletMovement()
+{ 
+    if (t.n <= 0)
+        return;
+    for (int i = 0; i<t.n; i++) {
+        Particle *p = &t.particle[i];
+        p->s.center.x += p->velocity.x;
+        p->s.center.y += p->velocity.y;
+        p->velocity.x += 20;
+    }
+}
+void bullet(int x, int y)
+{
+    makeParticle(x,y);
+    bulletMovement();
+    renderRain();
+}
 ////////////////////////////////////////////////////////////////////////////
 bool collision(int x, int y)
 {

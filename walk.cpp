@@ -51,6 +51,7 @@ extern void drawMap(GLuint);
 extern void loadMapFile();
 extern void displayTimeUI(int displayTime, int displayCredits);
 extern int makeItRain();
+extern void bullet(int x, int y);
 
 //defined types
 typedef double Flt;
@@ -625,6 +626,7 @@ int checkKeys(XEvent *e)
         case XK_Right:
             break;
         case XK_Up:
+            bullet(player.x,player.y);
             break;
         case XK_Down:
             break;
