@@ -41,7 +41,7 @@ int CONTAINS_ENEMIES[8][10] = {
     0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,1,0,0,0,0,0,
-    0,0,0,1,0,1,0,0,0,0,
+    0,0,1,1,0,1,1,0,0,0,
 };
 //externs
 extern std::vector<Enemy> enemies;
@@ -60,12 +60,11 @@ static int *playerptrsy = 0;
 class MyScene : public GameScene{
     int prev_playerx;
     int prev_playery;
-    GLuint *gltextures;
     Rect *other;
     Rect *player;
     public:
     bool deleteSoon;
-    MyScene(int *x, int *y, GLuint[]);
+    MyScene(int *x, int *y);
     void Draw();
 };
 
@@ -98,7 +97,7 @@ AlexGlobal* AlexGlobal::instance = 0;
 AlexGlobal * ag = AlexGlobal::GetInstance();
 //to here
 //myscene function definitions
-MyScene::MyScene(int *x, int*y,GLuint gltexture[]){
+MyScene::MyScene(int *x, int*y){
     this->prev_playerx = *x;
     this->prev_playery = *y;
     //this->playertexture = gltexture;
@@ -145,8 +144,8 @@ void Enemy::Draw(){
     float h = 32/2;
     float w = h*0.8;
 #ifdef DEBUG_A
-    //std::cout << "my enemy x: " << this->xpos << std::endl;
-    //std::cout << "my enemy y: " << this->ypos << std::endl;
+    std::cout << "my enemy x: " << this->xpos << std::endl;
+    std::cout << "my enemy y: " << this->ypos << std::endl;
 #endif
     //glColor3f(0.8, 0.8, 0.6);
     glColor3f(1.0,1.0,1.0);
@@ -209,7 +208,7 @@ void displayAlejandroH(int x, int y, GLuint atexture)
     //black screen
     glClearColor(0.1,0.1,0.1,0.1);
     glClear(GL_COLOR_BUFFER_BIT);
-    int resy = 600;
+    int resy = 600-64;
     int resx = 800-64;
     Rect r;
     r.bot = y;
@@ -406,7 +405,7 @@ void checkPlayerPos()
     ag->mapcelly = mapy;
 }
 GameScene* createScene(GLuint atexture[]){
-    return new MyScene(ag->playerx,ag->playery,atexture);
+    return new MyScene(ag->playerx,ag->playery);
 }
 GameScene* checkscene(GameScene* scene){
     if (scene == nullptr)
