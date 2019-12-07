@@ -56,14 +56,11 @@ struct PlayerPtrs{
 static PlayerPtrs *playerptrs = NULL;
 static int *playerptrsx = 0;
 static int *playerptrsy = 0;
-//MyScene
+//MyScene other and player will probably not work
 class MyScene : public GameScene{
-    int prev_playerx;
-    int prev_playery;
     Rect *other;
     Rect *player;
     public:
-    bool deleteSoon;
     MyScene(int *x, int *y);
     void Draw();
 };
@@ -85,7 +82,6 @@ class AlexGlobal{
         int *playery;
         int mapcellx;
         int mapcelly;
-        MyScene *mygs = nullptr;
         static AlexGlobal *GetInstance(){
             if(!instance){
                 instance = new AlexGlobal();
@@ -99,9 +95,7 @@ AlexGlobal * ag = AlexGlobal::GetInstance();
 //myscene function definitions
 MyScene::MyScene(int *x, int*y){
     this->prev_playerx = *x;
-    this->prev_playery = *y;
-    //this->playertexture = gltexture;
-    this->gltextures = gltexture;
+    this->prev_playery = (*y)-32;
     *(ag->playerx) = 400;
     *(ag->playery) = 300;
 #ifdef DEBUG_A
@@ -126,7 +120,10 @@ void MyScene::Draw(){
     glEnd();
 
     //glColor3f(1.0f,0.0f,0.0f);
-
+    if ((*(ag->playerx) > 350 && *(ag->playerx) < 450)  &&
+        (*(ag->playery) > 144 && *(ag->playery) < 200)) {
+             this->deleteSoon = true;
+    }
     return;
 }
 //------------Enemy-------------
