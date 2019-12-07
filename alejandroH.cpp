@@ -73,7 +73,6 @@ class AlexGlobal{
         AlexGlobal() {
             playerx = nullptr;
             playery = nullptr;
-            mygs = nullptr;
         }
         AlexGlobal(AlexGlobal const& copy);
         AlexGlobal & operator = (AlexGlobal const& copy);
@@ -401,7 +400,7 @@ void checkPlayerPos()
     ag->mapcellx = mapx;
     ag->mapcelly = mapy;
 }
-GameScene* createScene(GLuint atexture[]){
+GameScene* createScene(){
     return new MyScene(ag->playerx,ag->playery);
 }
 GameScene* checkscene(GameScene* scene){

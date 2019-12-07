@@ -33,7 +33,8 @@ extern int playTime(int x, int y);
 extern void beginTime();
 extern void pauseGame();
 extern void pausePlus();
-extern void createScene(GLuint[]);
+extern GameScene* createScene();
+extern GameScene* checkscene(GameScene*);
 extern void displayAlejandroH(int, int, GLuint);
 extern void displayCD(int x, int y);
 extern void tjcredits(int x, int y);//,GLuint texid);
@@ -785,7 +786,13 @@ void renderGame()
     glEnd();
     //to this
      */
-    drawMap(g.tilemapTexture);
+    if(currentscene != nullptr){
+        currentscene->Draw();
+        currentscene = checkscene(currentscene);
+    }
+    else{
+        drawMap(g.tilemapTexture);
+    }
     glPushMatrix();
     //
     float h = 32/2;
@@ -873,7 +880,6 @@ void render(void)
     renderGame();
     //this is for drawing names on screen for credits on "c" button press
     if (g.pause) {
-        createScene(texturearray);
         pauseGame();
         if (g.displayCredits) {
             g.howToPlay =0;
