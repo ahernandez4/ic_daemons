@@ -93,6 +93,7 @@ AlexGlobal * ag = AlexGlobal::GetInstance();
 //to here
 //myscene function definitions
 MyScene::MyScene(int *x, int*y){
+    this->deleteSoon = false;
     this->prev_playerx = *x;
     this->prev_playery = (*y)-32;
     *(ag->playerx) = 400;
