@@ -325,11 +325,11 @@ void drawMap(GLuint mapTexture)
     glTexCoord2f(tx,      1.0f);
     glVertex2i(0, 0);
     glTexCoord2f(tx,      0.0f);
-    glVertex2i(0, 600);
+    glVertex2i(0, 4800);
     glTexCoord2f(tx+0.1f,      0.0f);
-    glVertex2i(800, 600);
+    glVertex2i(20000, 4800);
     glTexCoord2f(tx+0.1f,      1.0f);
-    glVertex2i(800, 0);
+    glVertex2i(20000, 0);
     glEnd();
     glPushMatrix();
     //as long as logic works out
