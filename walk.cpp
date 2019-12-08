@@ -480,10 +480,13 @@ void initOpengl(void)
 
 void init() {
     //player.x = 48;
-    //player.x = 128;
-    //player.y = 240;
+#ifdef WORLDRAIN    
+    player.x = 128;
+    player.y = 240;
+#else    
     player.x = 3328;
     player.y = 240;
+#endif    
     player.moveSpeed = 6.75;
     //testing
     //player.x = 3540; 
