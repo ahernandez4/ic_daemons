@@ -33,7 +33,7 @@ extern int playTime(int x, int y);
 extern void beginTime();
 extern void pauseGame();
 extern void pausePlus();
-extern GameScene* createScene();
+extern GameScene* createScene(int);
 extern GameScene* checkscene(GameScene*);
 extern void displayAlejandroH(int, int, GLuint);
 extern void displayCD(int x, int y);
@@ -480,11 +480,14 @@ void initOpengl(void)
 
 void init() {
     //player.x = 48;
-    player.x = 128;
-    player.y = 240;
-    //player.x = 3328;
+    //player.x = 128;
     //player.y = 240;
-    player.moveSpeed = 3.75;
+    player.x = 3328;
+    player.y = 240;
+    player.moveSpeed = 6.75;
+    //testing
+    //player.x = 3540; 
+    //player.y = 2704;
     //
     initInternalAlexStuff();
     passPlayerPtrs2Alex(&player.x,&player.y,&player.moveSpeed);
@@ -736,10 +739,10 @@ void physics(void)
     incy*=player.moveSpeed;
 
     //check x
-    if(!collision(player.x+incx + 10, player.y))
+    if(!collision(player.x+incx, player.y))
         player.x += incx;
     //check y
-    if(!collision(player.x, player.y+incy + 10 ))
+    if(!collision(player.x, player.y+incy))
         player.y += incy;
 
     //temporary   
@@ -750,6 +753,17 @@ void physics(void)
     if(g.needprocessattack){
         processAttack(player.dir);
         g.needprocessattack = false;
+    }
+    if (((player.x) > 224 && (player.x) < 304)  &&
+        ((player.y) > 480 && (player.y) < 554)) {
+        currentscene = createScene(1);
+        //currentscene = nullptr;
+    }
+
+    if (((player.x) > 3488 && (player.x) < 3556)  &&
+        ((player.y) > 2672 && (player.y) < 2704)){
+        currentscene = createScene(2);
+        //currentscene = nullptr;
     }
 }
 

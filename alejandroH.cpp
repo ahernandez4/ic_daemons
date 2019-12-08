@@ -36,11 +36,11 @@ unsigned int maparray[MAP_TILE_ROWS][MAP_TILE_COLUMNS];
 int CONTAINS_ENEMIES[8][10] = {
     0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,1,0,0,0,0,0,
+    0,1,1,0,0,0,0,0,0,0,
+    1,0,0,1,0,1,0,1,0,1,
+    1,1,1,1,0,1,0,0,1,0,
+    1,0,0,1,0,1,0,1,0,1,
+    0,0,0,0,0,1,1,0,0,0,
     0,0,1,1,0,1,1,0,0,0,
 };
 //externs
@@ -64,7 +64,11 @@ class MyScene : public GameScene{
     MyScene(int *x, int *y);
     void Draw();
 };
-
+class BossScene : public GameScene{
+    public:
+    BossScene(int *x, int *y);
+    void Draw();
+};
 
 // This is my Friday code
 class AlexGlobal{
@@ -126,6 +130,42 @@ void MyScene::Draw(){
     }
     return;
 }
+
+BossScene::BossScene(int *x, int*y){
+    this->deleteSoon = false;
+    this->prev_playerx = *x;
+    this->prev_playery = (*y)-32;
+    *(ag->playerx) = 400;
+    *(ag->playery) = 300;
+#ifdef DEBUG_A
+    std::cout << "myscene constructor(ag->player)" << std::endl;
+    std::cout << *(ag->playerx) << std::endl;
+    std::cout << *(ag->playery) << std::endl;
+    std::cout << "myscene constructor(myscene->pre_player)" << std::endl;
+    std::cout << (this->prev_playerx) << std::endl;
+    std::cout << (this->prev_playery) << std::endl;
+#endif
+    moveMapFocus(0,0);
+}
+void BossScene::Draw(){
+    //here we draw the scene
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+    glColor3f(0.0f,0.0f,0.0f);
+    glVertex2i(0, 0);
+    glVertex2i(0, 600);
+    glVertex2i(800, 600);
+    glVertex2i(800, 0);
+    glEnd();
+
+    //glColor3f(1.0f,0.0f,0.0f);
+    if ((*(ag->playerx) > 350 && *(ag->playerx) < 450)  &&
+        (*(ag->playery) > 144 && *(ag->playery) < 200)) {
+             this->deleteSoon = true;
+    }
+    return;
+}
+
 //------------Enemy-------------
 void Enemy::Spawn(int x,int y){
     //return;
@@ -401,8 +441,12 @@ void checkPlayerPos()
     ag->mapcellx = mapx;
     ag->mapcelly = mapy;
 }
-GameScene* createScene(){
-    return new MyScene(ag->playerx,ag->playery);
+GameScene* createScene(int which){
+    if(which ==1)
+        return new MyScene(ag->playerx,ag->playery);
+    if(which == 2)        
+        return new BossScene(ag->playerx,ag->playery);
+    return nullptr;        
 }
 GameScene* checkscene(GameScene* scene){
     if (scene == nullptr)
