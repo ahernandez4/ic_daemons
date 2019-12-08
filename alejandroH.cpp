@@ -46,7 +46,7 @@ int CONTAINS_ENEMIES[8][10] = {
 //externs
 extern std::vector<Enemy> enemies;
 extern bool collision(int,int);
-extern GLuint texturearray[6];
+extern GLuint texturearray[7];
 struct PlayerPtrs{
     int* x = NULL;
     int* y = NULL;
@@ -56,7 +56,13 @@ struct PlayerPtrs{
 static PlayerPtrs *playerptrs = NULL;
 static int *playerptrsx = 0;
 static int *playerptrsy = 0;
-//MyScene other and player will probably not work
+
+class Boss : public Enemy{
+    public:
+        void Draw();
+};
+//prototype
+void spawnBoss(Boss*);
 class MyScene : public GameScene{
     Rect *other;
     Rect *player;
@@ -66,10 +72,10 @@ class MyScene : public GameScene{
 };
 class BossScene : public GameScene{
     public:
-    BossScene(int *x, int *y);
-    void Draw();
+        Boss* boss;
+        BossScene(int *x, int *y);
+        void Draw();
 };
-
 // This is my Friday code
 class AlexGlobal{
     private:
@@ -125,13 +131,15 @@ void MyScene::Draw(){
 
     //glColor3f(1.0f,0.0f,0.0f);
     if ((*(ag->playerx) > 350 && *(ag->playerx) < 450)  &&
-        (*(ag->playery) > 144 && *(ag->playery) < 200)) {
-             this->deleteSoon = true;
+            (*(ag->playery) > 144 && *(ag->playery) < 200)) {
+        this->deleteSoon = true;
     }
     return;
 }
 
 BossScene::BossScene(int *x, int*y){
+    this->boss = new Boss();
+    spawnBoss(this->boss);
     this->deleteSoon = false;
     this->prev_playerx = *x;
     this->prev_playery = (*y)-32;
@@ -146,6 +154,8 @@ BossScene::BossScene(int *x, int*y){
     std::cout << (this->prev_playery) << std::endl;
 #endif
     moveMapFocus(0,0);
+    checkPlayerPos();
+    //CONTAINS_ENEMIES[7][0] = 1;
 }
 void BossScene::Draw(){
     //here we draw the scene
@@ -157,11 +167,31 @@ void BossScene::Draw(){
     glVertex2i(800, 600);
     glVertex2i(800, 0);
     glEnd();
-
+//
+    //glColor3f(1.0f,1.0f,1.0f);
+    glClearColor(1.0,1.0,1.0,1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindTexture(GL_TEXTURE_2D, texturearray[3]);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.40,      1.0f);
+    glVertex2i(32, 32);
+    glTexCoord2f(0.40,      0.0f);
+    glVertex2i(32, 568);
+    glTexCoord2f(0.40+0.1f,      0.0f);
+    glVertex2i(768, 568);
+    glTexCoord2f(0.40+0.1f,      1.0f);
+    glVertex2i(768, 32);
+    glEnd();
+//
     //glColor3f(1.0f,0.0f,0.0f);
     if ((*(ag->playerx) > 350 && *(ag->playerx) < 450)  &&
-        (*(ag->playery) > 144 && *(ag->playery) < 200)) {
-             this->deleteSoon = true;
+            (*(ag->playery) > 144 && *(ag->playery) < 200)) {
+        this->deleteSoon = true;
+        //CONTAINS_ENEMIES[7][0] = 0;
+        delete this->boss;
+    }
+    else{
+        this->boss->Draw();
     }
     return;
 }
@@ -200,7 +230,6 @@ void Enemy::Draw(){
     glEnd();
 }
 
-
 bool Enemy::isMoving(){
     return false;
 }
@@ -234,6 +263,30 @@ bool Enemy::checkAreaCollision(int x1, int x2, int y1, int y2){
         return false;
     }
     return false;
+}
+//-------Boss-------------------
+void Boss::Draw(){
+    //temp height and width
+    float h = 64/2;
+    float w = h*0.8;
+#ifdef DEBUG_A
+    std::cout << "my enemy x: " << this->xpos << std::endl;
+    std::cout << "my enemy y: " << this->ypos << std::endl;
+#endif
+    //glColor3f(0.8, 0.8, 0.6);
+    glColor3f(1.0,1.0,1.0);
+    glEnable(GL_ALPHA_TEST);
+    glBindTexture(GL_TEXTURE_2D, texturearray[6]);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f,      1.0f);
+    glVertex2i(this->xpos-w, this->ypos-h);
+    glTexCoord2f(0.0f,      0.0f);
+    glVertex2i(this->xpos-w, this->ypos+h);
+    glTexCoord2f(1.0f,      0.0f);
+    glVertex2i(this->xpos+w, this->ypos+h);
+    glTexCoord2f(1.0f,      1.0f);
+    glVertex2i(this->xpos+w, this->ypos-h);
+    glEnd();
 }
 //-------------------------------
 void displayAlejandroH(int x, int y, GLuint atexture)
@@ -441,14 +494,16 @@ void checkPlayerPos()
     ag->mapcellx = mapx;
     ag->mapcelly = mapy;
 }
-GameScene* createScene(int which){
+GameScene* createScene(int which)
+{
     if(which ==1)
         return new MyScene(ag->playerx,ag->playery);
     if(which == 2)        
         return new BossScene(ag->playerx,ag->playery);
     return nullptr;        
 }
-GameScene* checkscene(GameScene* scene){
+GameScene* checkscene(GameScene* scene)
+{
     if (scene == nullptr)
         return nullptr;
     else if (scene->deleteSoon) {
@@ -461,13 +516,14 @@ GameScene* checkscene(GameScene* scene){
     else
         return scene;
 }
-void spawnEnemies(int mapposx, int mapposy){
+void spawnEnemies(int mapposx, int mapposy)
+{
     srand(time(NULL));
     enemies.clear();
-    enemies.push_back(Enemy());
-    enemies.push_back(Enemy());
-    enemies.push_back(Enemy());
-    enemies.push_back(Enemy());
+    enemies.push_back(Boss());
+    enemies.push_back(Boss());
+    enemies.push_back(Boss());
+    enemies.push_back(Boss());
     //only some areas spawn enemies
     if(CONTAINS_ENEMIES[mapposy][mapposx]){
         int offsetx = mapposx*800;
@@ -487,7 +543,20 @@ void spawnEnemies(int mapposx, int mapposy){
     }
     return;
 }
-void drawEnemies(){
+void spawnBoss(Boss* b)
+{
+    srand(time(NULL));
+    int atx = (rand() % 700)+50;
+    int aty = (rand() % 500)+50;
+    b->Spawn(atx, aty);
+    while(collision(enemies[0].xpos,enemies[0].ypos)){
+        atx = (rand() % 700)+50;
+        aty = (rand() % 500)+50;
+        b->Spawn(atx, aty);
+    }
+}
+void drawEnemies()
+{
     for (unsigned int i = 0; i < enemies.size(); i++) {
         if(enemies[i].isMoving()){
             enemies[i].updatePosition();
@@ -499,7 +568,8 @@ void drawEnemies(){
     return;
 }
 
-void drawSword(int frame, int dir){
+void drawSword(int frame, int dir)
+{
     //return;
     int posx = *(ag->playerx);// + 32;
     int posy = *(ag->playery);// + 32;
@@ -563,27 +633,28 @@ void drawSword(int frame, int dir){
     }
 
 }
-void processAttack(int dir){
+void processAttack(int dir)
+{
     int swordx = *(ag->playerx);
     int swordy = *(ag->playery);
     switch(dir){
         case 0:
-        swordy += 32;
-        break;
+            swordy += 32;
+            break;
         case 1:
-        swordy -= 32;
-        break;
+            swordy -= 32;
+            break;
         case 2:
-        swordx += 32;
-        break;
+            swordx += 32;
+            break;
         case 3:
-        swordx -= 32;
-        break;
+            swordx -= 32;
+            break;
     }
     for (unsigned int i = 0; i < enemies.size(); i++) {
         if (enemies[i].isAlive() && 
-            enemies[i].checkAreaCollision(swordx-16,swordx+16,
-            swordy-16,swordy+16)) {
+                enemies[i].checkAreaCollision(swordx-16,swordx+16,
+                    swordy-16,swordy+16)) {
         }
 #ifdef DEBUG_A
         std::cout << "we hit an ememies" << std::endl;
