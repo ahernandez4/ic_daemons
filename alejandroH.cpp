@@ -569,7 +569,9 @@ void drawEnemies()
 {
     for (unsigned int i = 0; i < enemies.size(); i++) {
         if(enemies[i].isMoving()){
+#ifdef MOBFOLLOWSU            
             enemies[i].updatePosition();
+#endif            
         }
         if(enemies[i].isAlive()){
             enemies[i].Draw();
