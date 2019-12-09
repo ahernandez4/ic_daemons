@@ -191,6 +191,7 @@ void BossScene::Draw(){
         delete this->boss;
     }
     else{
+        boss->updatePosition();
         this->boss->Draw();
     }
     return;
@@ -231,12 +232,21 @@ void Enemy::Draw(){
 }
 
 bool Enemy::isMoving(){
-    return false;
+    return true;//false;
 }
 bool Enemy::isAlive(){
     return this->alive;
 }
 void Enemy::updatePosition(){
+    if(this->xpos > *(ag->playerx))
+            this->xpos = this->xpos - 1;
+    else
+            this->xpos = this->xpos + 1;
+
+    if(this->ypos > *(ag->playery))
+            this->ypos = this->ypos - 1;
+    else
+            this->ypos = this->ypos+1;
     return;
 }
 void Enemy::hit(int h){
@@ -655,6 +665,7 @@ void processAttack(int dir)
         if (enemies[i].isAlive() && 
                 enemies[i].checkAreaCollision(swordx-16,swordx+16,
                     swordy-16,swordy+16)) {
+            enemies[i].hit(100);
         }
 #ifdef DEBUG_A
         std::cout << "we hit an ememies" << std::endl;
