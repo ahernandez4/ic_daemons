@@ -3,6 +3,10 @@
  * 
 */
 
+//includes for colro scenes
+#include <GL/glx.h>
+
+
 #include "fonts.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -19,12 +23,76 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <unistd.h>
+
 #define USERAGENT "CMPS-3350"
 #define PORT 443
+
 const int MAX_READ_ERRORS = 100;
 //inlcudes for odinGetTime() end here
 extern int playTime(int x, int y);
 
+
+//funciton for changing color in scene for day night cycle
+
+int changingSceneColor(int color) { 
+     
+/*
+     //uses incrementor from main to cycle through day night
+     if ((incrementor % 200) == 0) {
+	   if (color != 6) {
+		color++;
+	   }
+	   else {
+		color = 0;
+	   }
+     }  
+*/
+     //this if all colors for day night cycle
+     //clear
+     if (color == 0) {
+         glColor3f(1.0, 1.0, 1.0);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+         
+     }
+     //yellow
+     else if (color == 1) {
+         glColor3f(1.0f, 1.0f, 0.0f);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     }
+     //magenta
+     else if (color == 2) {
+         glColor3f(1.0f, 0.0f, 1.0f);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     }
+     //purple
+     else if (color == 3) {
+         glColor3f(0.5f, 0.0f, 1.0f);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     }
+     //blue
+     else if (color == 4) {
+         glColor3f(0.0f, 0.0f, 1.0f);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     }
+        
+     //purple
+     else if (color == 4) {
+         glColor3f(0.5f, 0.0f, 1.0f);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     }
+     //magenta
+     else if (color == 5) {
+         glColor3f(1.0f, 0.0f, 1.0f);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     }
+     //yellow
+     else if (color == 6) {
+         glColor3f(1.0f, 1.0f, 0.0f);
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     }
+
+     return color;
+}
 
 
 //This is mh Friday code

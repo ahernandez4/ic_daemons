@@ -53,6 +53,7 @@ extern void loadMapFile();
 extern void displayTimeUI(int displayTime, int displayCredits);
 extern int makeItRain();
 extern void bullet(int x, int y,int dir);
+extern int changingSceneColor(int color);
 
 //defined types
 typedef double Flt;
@@ -183,6 +184,9 @@ class Global {
         //int startTime;
         //int displayTime;
         int done;
+	///////////////////////////////change here;
+	int color;
+	int incrementor;
         int xres, yres;
         int walk;
         int walkFrame;
@@ -210,6 +214,10 @@ class Global {
             pause=0;
             movebyte = 0;
             done=0;
+	    ///////////////////////////change here cody
+	    color=0;
+            incrementor=0;
+
             xres=800;
             yres=600;
             walk=0;
@@ -321,8 +329,8 @@ int main(void)
         while (x11.getXPending()) {
             XEvent e = x11.getXNextEvent();
             x11.checkResize(&e);
-            checkMouse(&e);
-            done = checkKeys(&e);
+            checkMouse(&e);	    
+            done = checkKeys(&e);// keep this
         }
         physics();
         render();
@@ -777,8 +785,31 @@ void renderGame()
 {
     //Rect r;
     //Clear the screen
-    glColor3f(1.0, 1.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+
+    		
+    g.incrementor++;	    
+    //uses incrementor from main to cycle through day night
+    if ((g.incrementor % 200) == 0) {
+          if (g.color != 6) {
+               g.color++;
+          }
+          else {
+               g.color = 0;
+          }
+    }  
+    g.color = changingSceneColor(g.color);
+
+/*
+    if (g.color == -1) {
+    	glColor3f(1.5, 1.0, 1.0);
+    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+    else if (g.color == 0) {
+    	glColor3f(0.5f, 0.0f, 1.0f);
+    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+    }
+*/
+
     //remove this: old way to put character in the middle
     //float cx = g.xres/2.0;
     //float cy = g.yres/2.0;
@@ -920,9 +951,11 @@ void render(void)
             pausePlus();
         }
     }
-
-
+    
+    
+    
     makeItRain();
+
     //displayTimeUI(g.displayTime, g.displayCredits);
     /*
     //this is for drawing the prompt for time and logic is for displaying
