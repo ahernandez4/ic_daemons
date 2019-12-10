@@ -59,11 +59,6 @@ int changingSceneColor(int color) {
          glColor3f(1.0f, 1.0f, 0.0f);
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      }
-     //magenta
-     else if (color == 2) {
-         glColor3f(1.0f, 0.0f, 1.0f);
-         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     }
      //purple
      else if (color == 3) {
          glColor3f(0.5f, 0.0f, 1.0f);
@@ -78,11 +73,6 @@ int changingSceneColor(int color) {
      //purple
      else if (color == 4) {
          glColor3f(0.5f, 0.0f, 1.0f);
-         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     }
-     //magenta
-     else if (color == 5) {
-         glColor3f(1.0f, 0.0f, 1.0f);
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      }
      //yellow
