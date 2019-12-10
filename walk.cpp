@@ -79,7 +79,7 @@ const float gravity = -0.2f;
 int deltaTime();
 //
 //------------------
-GLuint texturearray[6];
+GLuint texturearray[7];
 GameScene *currentscene;
 vector<Enemy> enemies;
 //------------------
@@ -128,14 +128,15 @@ class Image {
         }
 };
 
-Image img[7] = {
+Image img[8] = {
     "images/girl.png",
     "images/castlemap.gif",
     "images/tj.jpg",
     "images/fakeMario.png",
     "images/tilemap.png",
     "images/enemy.png",
-    "images/sword.png" };
+    "images/sword.png",
+    "images/boss_spider.png" };
 
 struct PlayerOne{
     //north = 0, south = 1, east = 2, west = 3
@@ -204,6 +205,7 @@ class Global {
         GLuint tilemapTexture;
         GLuint enemyTexture;
         GLuint swordTexture;
+        GLuint bossTexture;
         //playtime
         int minutesPlayed;
         int secondsCounter;
@@ -406,6 +408,7 @@ void initOpengl(void)
     glGenTextures(1, &g.fakeMarioTexture);
     glGenTextures(1, &g.enemyTexture);
     glGenTextures(1, &g.swordTexture);
+    glGenTextures(1, &g.bossTexture);
     //-------------------------------------------------------------------------
     //silhouette
     //this is similar to a sprite graphic
@@ -484,6 +487,18 @@ void initOpengl(void)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
             GL_RGBA, GL_UNSIGNED_BYTE, swordData);
     free(swordData);
+    //-----------------------------------------------------------
+    glBindTexture(GL_TEXTURE_2D, g.bossTexture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    w = img[7].width;
+    h = img[7].height;
+    //must build a new set of data...
+    unsigned char *bossData = buildAlphaData(&img[7]);    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, bossData);
+    free(bossData);
+
 }
 
 void init() {
@@ -520,6 +535,7 @@ void init() {
     texturearray[3] = g.tilemapTexture;
     texturearray[4] = g.enemyTexture;
     texturearray[5] = g.swordTexture;
+    texturearray[6] = g.bossTexture;
 }
 
 /*
