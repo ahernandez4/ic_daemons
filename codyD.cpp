@@ -35,18 +35,6 @@ extern int playTime(int x, int y);
 //funciton for changing color in scene for day night cycle
 
 int changingSceneColor(int color) { 
-     
-/*
-     //uses incrementor from main to cycle through day night
-     if ((incrementor % 200) == 0) {
-	   if (color != 6) {
-		color++;
-	   }
-	   else {
-		color = 0;
-	   }
-     }  
-*/
      //this if all colors for day night cycle
      //clear
      if (color == 0) {
@@ -60,12 +48,12 @@ int changingSceneColor(int color) {
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      }
      //purple
-     else if (color == 3) {
+     else if (color == 2) {
          glColor3f(0.5f, 0.0f, 1.0f);
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      }
      //blue
-     else if (color == 4) {
+     else if (color == 3) {
          glColor3f(0.0f, 0.0f, 1.0f);
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      }
@@ -76,7 +64,7 @@ int changingSceneColor(int color) {
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      }
      //yellow
-     else if (color == 6) {
+     else if (color == 5) {
          glColor3f(1.0f, 1.0f, 0.0f);
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      }
