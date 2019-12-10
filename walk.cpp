@@ -805,7 +805,7 @@ void renderGame()
     		
     g.incrementor++;	    
     //uses incrementor from main to cycle through day night
-    if ((g.incrementor % 200) == 0) {
+    if ((g.incrementor % 400) == 0) {
           if (g.color != 5) {
                g.color++;
           }
